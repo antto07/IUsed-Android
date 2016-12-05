@@ -118,7 +118,7 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
         img_product_donate= (ImageView) findViewById(R.id.img_product_image_donate);
         btn_republish_product= (Button) findViewById(R.id.btn_republish_product);
 
-        txt_count_donate_request.setText(intent.getStringExtra("count")+" Response from the Buyer(s)");
+        txt_count_donate_request.setText(intent.getStringExtra("count")+" buyer(s) Responded");
 
         try {
             Picasso.with(getApplicationContext())
