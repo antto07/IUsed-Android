@@ -50,11 +50,11 @@ public class SoldProductsAdapter extends RecyclerView.Adapter<SoldProductsAdapte
                 holder.txt_title.setText(main_Products_Bean.get(position).getProductName());
             }
 
-            if(main_Products_Bean.get(position).getInt_arr_count()==0){
+            if(main_Products_Bean.get(position).getCount().equalsIgnoreCase("0")){
                 holder.txt_no_of_requests.setVisibility(View.GONE);
             }
             else {
-                holder.txt_no_of_requests.setText(main_Products_Bean.get(position).getInt_arr_count()+" Response(s)");
+                holder.txt_no_of_requests.setText(main_Products_Bean.get(position).getCount()+" Response(s)");
             }
 
             if(main_Products_Bean.get(position).getStatus().equalsIgnoreCase("0")){

@@ -772,6 +772,14 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                                 ed.putString("shortname_country", short_name);
                                 ed.commit();
                             }
+                            else if (Type.equalsIgnoreCase("locality")) {
+//                                Country = short_name;
+                                Log.e("locality",zero2.getString("long_name"));
+                                mpref = getSharedPreferences("user_details", MODE_PRIVATE);
+                                SharedPreferences.Editor ed = mpref.edit();
+                                ed.putString("current_location", zero2.getString("long_name"));
+                                ed.commit();
+                            }
 
                         }
 

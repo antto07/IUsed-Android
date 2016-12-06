@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -176,6 +177,8 @@ public class MainActivity extends AppCompatActivity
     public static String str_upper_distance="";
     public static String str_posted_in="";
     String short_name = "";
+    private TextView txt_location=null;
+    private LinearLayout card_location=null;
 //    public static SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -306,6 +309,8 @@ public class MainActivity extends AppCompatActivity
         layoutLocationSearch = (RelativeLayout) findViewById(R.id.layout_location_search);
         edtLocationSearch = (EditText) findViewById(R.id.edt_location);
         listLocation = (ListView) findViewById(R.id.list_location);
+        txt_location= (TextView) findViewById(R.id.txt_location);
+        card_location= (LinearLayout) findViewById(R.id.card_location);
 
         layoutLocationFilter = (RelativeLayout) findViewById(R.id.layout_location_filter);
         scalingAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.scaling_logo);
@@ -316,6 +321,16 @@ public class MainActivity extends AppCompatActivity
         slideUp_Location = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bottom_up);
         slideDown_Location = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bottom_down);
 
+        try {
+            if(mpref.getString("current_location","").equalsIgnoreCase(null)){
+                card_location.setVisibility(View.GONE);
+            }
+            else {
+                txt_location.setText(mpref.getString("current_location",""));
+            }
+        }catch (Exception e){
+            card_location.setVisibility(View.GONE);
+        }
 
         seekbar_price.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
             @Override
@@ -1300,9 +1315,14 @@ public class MainActivity extends AppCompatActivity
                                 SharedPreferences.Editor ed = mpref.edit();
                                 ed.putString("shortname_country", short_name);
                                 ed.commit();
-
-
-
+                            }
+                            else if (Type.equalsIgnoreCase("locality")) {
+//                                Country = short_name;
+                                Log.e("locality",zero2.getString("long_name"));
+                                mpref = getSharedPreferences("user_details", MODE_PRIVATE);
+                                SharedPreferences.Editor ed = mpref.edit();
+                                ed.putString("current_location", zero2.getString("long_name"));
+                                ed.commit();
                             }
 
                         }
@@ -1345,6 +1365,16 @@ public class MainActivity extends AppCompatActivity
                             new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
 
 
+                            try {
+                                if(mpref.getString("current_location","").equalsIgnoreCase("")){
+                                    card_location.setVisibility(View.GONE);
+                                }
+                                else {
+                                    txt_location.setText(mpref.getString("current_location",""));
+                                }
+                            }catch (Exception e){
+                                card_location.setVisibility(View.GONE);
+                            }
 
 //                            nextActivity();
                         }catch (Exception e){

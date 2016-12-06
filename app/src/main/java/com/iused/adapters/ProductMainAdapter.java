@@ -84,7 +84,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(600,200)
                     .fit().centerInside()
-                    .into(holder.img_product);
+                    .into(holder.img_product,new PicassoCallback(main_Products_Bean.get(position).getImage(),holder));
         }catch (Exception e){
             Picasso.with(context)
                     .load("http://52.41.70.254/pics/user.jpg")
@@ -92,7 +92,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(600,200)
                     .fit().centerInside()
-                    .into(holder.img_product);
+                    .into(holder.img_product,new PicassoCallback(main_Products_Bean.get(position).getImage(),holder));
         }
 
     }

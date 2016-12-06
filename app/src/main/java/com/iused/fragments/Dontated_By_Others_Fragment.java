@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,7 @@ public class Dontated_By_Others_Fragment extends Fragment implements AsyncTaskLi
 
         list_ordered_products= (RecyclerView) view.findViewById(R.id.list_donated_by_others);
         list_ordered_products.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         list_ordered_products.setLayoutManager(layoutManager);
         list_ordered_products.setNestedScrollingEnabled(false);
 

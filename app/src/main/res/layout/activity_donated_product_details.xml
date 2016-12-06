@@ -45,7 +45,6 @@
             android:layout_marginBottom="10dp"
             android:text="Re-publish Product"
             android:textColor="@color/white"
-            android:visibility="gone"
             android:background="@drawable/settings_corner"
             android:layout_centerHorizontal="true"
             android:layout_height="35dp" />
