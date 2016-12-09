@@ -155,7 +155,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 
     GridView gridGallery;
     Handler handler;
-    GalleryAdapter adapter;
+    public static GalleryAdapter adapter;
     public static ArrayList<CustomGallery> dataT = new ArrayList<CustomGallery>();
     String action;
 //    ViewSwitcher viewSwitcher;
@@ -919,8 +919,18 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                     intent.setType("image/*");
 
                     startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
+                            intent,
                             SELECT_FILE);
+
+//                    Intent i = new Intent(Action.ACTION_MULTIPLE_PICK);
+//                    startActivityForResult(i, SELECT_FILE);
+
+//                    Intent intent = new Intent();
+//                    intent.setType("image/*");
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(intent,
+//                            "Select file to upload "), SELECT_FILE);
+
                 } else if (items[item].equals("Cancel")) {
                     RESULT_OK=0;
                     dialog.dismiss();
@@ -1120,13 +1130,27 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
 //        Log.e("rotated",bitmap.toString());
 
+        if (scaled != null) {
+            // encodeTobase64(bitmap);
+            mCurrentPhotoPath = getRealPathFromURI(getImageUri(getApplicationContext(), scaled));
+            Log.e("real_pic_path", mCurrentPhotoPath);
+            file_logo = new File(mCurrentPhotoPath);
+            Log.e("file_picture",file_logo.toString());
+
+            str_file_logo=file_logo.toString();
+
+        }
+
         Matrix mtx = new Matrix();
-        mtx.postRotate(90);
+//        mtx.postRotate(90);
         // Rotating Bitmap
         Bitmap rotatedBMP = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mtx, true);
         Log.e("rotated",rotatedBMP.toString());
+//        Bitmap converetdImage = getResizedBitmap(rotatedBMP, 512);
 
         if (rotatedBMP != bitmap)
             bitmap.recycle();
@@ -1201,6 +1225,20 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 //        }
     }
 
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1328,11 +1366,20 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             if (resultCode == Activity.RESULT_OK){
 
                 try {
-
+                    String tempPath =null;
                     Uri selectedImageUri = data.getData();
+                    Log.e("temp_path_init",selectedImageUri.toString());
+//                    Log.e("temp_trimmed",selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(":///")+4));
 
-                    String tempPath = getPath(selectedImageUri, Sell_Products_Activity.this);
-                    Log.e("temp_path",tempPath);
+                    if(selectedImageUri.toString().startsWith("file:///")){
+                        tempPath = selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(":///")+4);
+                        Log.e("temp_path_gal",tempPath);
+                    }
+                    else {
+                        tempPath = getPath(selectedImageUri, Sell_Products_Activity.this);
+                        Log.e("temp_path_pho",tempPath);
+                    }
+
 //                Bitmap bm;
                     BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 //                bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
@@ -1463,6 +1510,14 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             }
         }
 
+    }
+
+    public String getPathNew(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     public static void UploadObject(URL url) throws IOException

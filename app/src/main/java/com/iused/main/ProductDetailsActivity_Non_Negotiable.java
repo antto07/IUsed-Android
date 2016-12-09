@@ -63,7 +63,7 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
     private Button btn_want_to_buy= null;
 
     private HashMap<String, String> para = null;
-    private HashMap<String, String> para_buy_request = null;
+    public static HashMap<String, String> para_buy_request = null;
     private AsyncTaskListener listener = null;
     public SharedPreferences mpref = null;
     private ProgressDialog progressDialog= null;
@@ -173,19 +173,23 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
                     Toast.makeText(getApplicationContext(),"Deadline must be between 2-23 hours",Toast.LENGTH_LONG).show();
                 }
                 else {
+
+                    para_buy_request = new HashMap<>();
+                    para_buy_request.put("UserId", mpref.getString("user_id",""));
+                    para_buy_request.put("ProductId", intent.getStringExtra("product_id"));
+                    para_buy_request.put("Datetime",currentDateTimeString);
+                    para_buy_request.put("Amount",intent.getStringExtra("price"));
+                    para_buy_request.put("OfferTill",Integer.parseInt(edt_offer_minutes.getText().toString())*60+"");
+                    para_buy_request.put("Qty",intent.getStringExtra("qty_remaining"));
+
                     if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra("offer_negotiable","non-negotiable");
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
                     else {
-                        para_buy_request = new HashMap<>();
-                        para_buy_request.put("UserId", mpref.getString("user_id",""));
-                        para_buy_request.put("ProductId", intent.getStringExtra("product_id"));
-                        para_buy_request.put("Datetime",currentDateTimeString);
-                        para_buy_request.put("Amount",intent.getStringExtra("price"));
-                        para_buy_request.put("OfferTill",Integer.parseInt(edt_offer_minutes.getText().toString())*60+"");
-                        para_buy_request.put("Qty",intent.getStringExtra("qty_remaining"));
+
                         progressDialog.setMessage("Loading...");
                         progressDialog.setCancelable(false);
                         progressDialog.show();

@@ -9,10 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/TagsEditText" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/rangeseekbar" />
-            <option value="$PROJECT_DIR$/tedpicker" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

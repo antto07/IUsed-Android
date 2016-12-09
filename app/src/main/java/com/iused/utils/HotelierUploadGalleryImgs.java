@@ -39,6 +39,7 @@ public class HotelierUploadGalleryImgs extends AsyncTask<String, String, String>
     String auth = null;
     String response;
     String str_file_path;
+    String str_img_url_final;
 
     public HotelierUploadGalleryImgs(Context context, String picturePath,String file_path) {
         this.context = context;
@@ -54,7 +55,7 @@ public class HotelierUploadGalleryImgs extends AsyncTask<String, String, String>
     protected void onPreExecute() {
         super.onPreExecute();
         progressLoadingDialog = new ProgressDialog(context);
-        progressLoadingDialog.setMessage("Uploading");
+        progressLoadingDialog.setMessage("Uploading...");
         progressLoadingDialog.setCancelable(false);
         progressLoadingDialog.show();
 
@@ -62,26 +63,35 @@ public class HotelierUploadGalleryImgs extends AsyncTask<String, String, String>
 
     @Override
     protected String doInBackground(String... params) {
-        AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
+
+        try {
+
+            AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
 //				s3Client.createBucket( "mymarketbucket" );
-        File filePath = new File(str_file_path);
-        PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picturePath, filePath);
-        por.setCannedAcl(CannedAccessControlList.PublicRead);
-        s3Client.putObject( por );
+            File filePath = new File(str_file_path);
+            PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picturePath, filePath);
+            por.setCannedAcl(CannedAccessControlList.PublicRead);
+            s3Client.putObject( por );
 
 //                ResponseHeaderOverrides override = new ResponseHeaderOverrides();
 //                override.setContentType( "image/jpeg" );
 
-        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picturePath);
+            GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picturePath);
 //                urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
 //                urlRequest.setResponseHeaders( override );
-        urlRequest.setMethod(HttpMethod.PUT);
+            urlRequest.setMethod(HttpMethod.PUT);
 
-        URL url = s3Client.generatePresignedUrl( urlRequest );
-        Log.e("url_final",url.toString());
-        String str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picturePath;
-        Log.e("url_final_server",str_img_url_final);
-        Sell_Products_Activity.image_uris.add(str_img_url_final);
+            URL url = s3Client.generatePresignedUrl( urlRequest );
+            Log.e("url_final",url.toString());
+            str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picturePath;
+            Log.e("url_final_server",str_img_url_final);
+            Sell_Products_Activity.image_uris.add(str_img_url_final);
+        }catch (Exception e){
+
+            progressLoadingDialog.dismiss();
+//            Toast.makeText(context,"Oops! Please try again",Toast.LENGTH_SHORT).show();
+        }
+
 
         return str_img_url_final;
     }

@@ -68,7 +68,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
     private EditText edt_offer_minutes= null;
 
     private HashMap<String, String> para = null;
-    private HashMap<String, String> para_buy_request = null;
+    public static HashMap<String, String> para_buy_request = null;
     private AsyncTaskListener listener = null;
     private int offer_min_price=0;
     public SharedPreferences mpref = null;
@@ -194,19 +194,22 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
                 }
                 else {
 
+                    para_buy_request = new HashMap<>();
+                    para_buy_request.put("UserId", mpref.getString("user_id",""));
+                    para_buy_request.put("ProductId", intent.getStringExtra("product_id"));
+                    para_buy_request.put("Datetime",currentDateTimeString);
+                    para_buy_request.put("Amount",edt_offer_price.getText().toString());
+                    para_buy_request.put("OfferTill",Integer.parseInt(edt_offer_minutes.getText().toString())*60+"");
+                    para_buy_request.put("Qty",intent.getStringExtra("qty_remaining"));
+
                     if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra("offer_negotiable","negotiable");
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
                     else {
-                        para_buy_request = new HashMap<>();
-                        para_buy_request.put("UserId", mpref.getString("user_id",""));
-                        para_buy_request.put("ProductId", intent.getStringExtra("product_id"));
-                        para_buy_request.put("Datetime",currentDateTimeString);
-                        para_buy_request.put("Amount",edt_offer_price.getText().toString());
-                        para_buy_request.put("OfferTill",Integer.parseInt(edt_offer_minutes.getText().toString())*60+"");
-                        para_buy_request.put("Qty",intent.getStringExtra("qty_remaining"));
+
                         progressDialog.setMessage("Loading...");
                         progressDialog.setCancelable(false);
                         progressDialog.show();
@@ -373,6 +376,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
 //                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
 
                             AlertDialog alertDialog=new AlertDialog.Builder(ProductDetailsActivity_Negotiable.this).setMessage(jsonObject.getString("errMsg"))
+                                    .setCancelable(false)
                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

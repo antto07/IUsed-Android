@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -35,6 +36,7 @@ public class DonateUploadGalleryImgs extends AsyncTask<String, String, String> {
     String response;
     String str_file_path;
     private ProgressDialog progressLoadingDialog = null;
+    String str_img_url_final;
 
     public DonateUploadGalleryImgs(Context context, String picture_path_trimmed_camera, String mCurrentPhotoPath) {
         this.context = context;
@@ -54,26 +56,34 @@ public class DonateUploadGalleryImgs extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
+
+        try {
+            AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
 //				s3Client.createBucket( "mymarketbucket" );
-        File filePath = new File(str_file_path);
-        PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picturePath, filePath);
-        por.setCannedAcl(CannedAccessControlList.PublicRead);
-        s3Client.putObject( por );
+            File filePath = new File(str_file_path);
+            PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picturePath, filePath);
+            por.setCannedAcl(CannedAccessControlList.PublicRead);
+            s3Client.putObject( por );
 
 //                ResponseHeaderOverrides override = new ResponseHeaderOverrides();
 //                override.setContentType( "image/jpeg" );
 
-        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picturePath);
+            GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picturePath);
 //                urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
 //                urlRequest.setResponseHeaders( override );
-        urlRequest.setMethod(HttpMethod.PUT);
+            urlRequest.setMethod(HttpMethod.PUT);
 
-        URL url = s3Client.generatePresignedUrl( urlRequest );
-        Log.e("url_final",url.toString());
-        String str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picturePath;
-        Log.e("url_final_server",str_img_url_final);
-        Donate_Product_Activity.image_uris.add(str_img_url_final);
+            URL url = s3Client.generatePresignedUrl( urlRequest );
+            Log.e("url_final",url.toString());
+            str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picturePath;
+            Log.e("url_final_server",str_img_url_final);
+            Donate_Product_Activity.image_uris.add(str_img_url_final);
+        }catch (Exception e){
+//            Toast.makeText(context,"Oops! Please try again",Toast.LENGTH_SHORT).show();
+            progressLoadingDialog.dismiss();
+//            Donate_Product_Activity.dataT.clear();
+
+        }
 
         return str_img_url_final;
     }

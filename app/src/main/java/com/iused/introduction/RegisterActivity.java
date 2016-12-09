@@ -421,7 +421,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-
+            Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
         }
         else {
             if(tag.equalsIgnoreCase("sign_up")){
@@ -438,22 +438,105 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
 
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
-                            intent.putExtra("user_id",jsonObject.getString("UserId"));
-                            intent.putExtra("mobile",edt_mobile_number.getText().toString());
-                            intent.putExtra("email",edt_email.getText().toString());
-                            intent.putExtra("photo",str_photo);
-                            intent.putExtra("user_name",edt_name.getText().toString());
-                            intent.putExtra("regid",regId);
-                            intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
-                            intent.putExtra("timezone",timezone);
-                            intent.putExtra("created_at",currentDateTimeString);
-                            intent.putExtra("fbid",str_fbid);
-                            intent.putExtra("signup",str_signup_by);
+
+                            if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("negotiable")){
+
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","negotiable");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
 //                            Log.e("intent_reg",intent.toString());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("sell_product")){
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","sell_product");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
+//                            Log.e("intent_reg",intent.toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_product")){
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","donate_product");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
+//                            Log.e("intent_reg",intent.toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("non-negotiable")){
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","non-negotiable");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
+//                            Log.e("intent_reg",intent.toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("none")){
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","none");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
+//                            Log.e("intent_reg",intent.toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+
+
                         }
                         else {
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();

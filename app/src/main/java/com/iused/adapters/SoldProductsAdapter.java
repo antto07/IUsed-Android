@@ -50,7 +50,7 @@ public class SoldProductsAdapter extends RecyclerView.Adapter<SoldProductsAdapte
                 holder.txt_title.setText(main_Products_Bean.get(position).getProductName());
             }
 
-            if(main_Products_Bean.get(position).getCount().equalsIgnoreCase("0")){
+            if(main_Products_Bean.get(position).getCount().equalsIgnoreCase("0")) {
                 holder.txt_no_of_requests.setVisibility(View.GONE);
             }
             else {

@@ -51,6 +51,7 @@ import com.iused.adapters.LocationAdapter;
 import com.iused.bean.LocationBean;
 import com.iused.bean.MainProductsBeanCategories;
 import com.iused.dialog.BottomSheetDialogView;
+import com.iused.fragments.Donate_Product_Activity;
 import com.iused.fragments.ExampleFragments;
 import com.iused.fragments.DonateFragment;
 import com.iused.fragments.OrdersFragments;
@@ -65,7 +66,6 @@ import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,10 +141,10 @@ public class MainActivity extends AppCompatActivity
 
     private TextView txt_filter_cancel=null;
     private TextView txt_filter_done=null;
-    private DiscreteSeekBar seekBar_distance=null;
+//    private DiscreteSeekBar seekBar_distance=null;
     private TextView txt_start_seekbar_distance=null;
     private TextView txt_seekbar_distance=null;
-    private DiscreteSeekBar seekbar_price=null;
+//    private DiscreteSeekBar seekbar_price=null;
     private SeekBar seekbar_distance_new=null;
     private TextView txt_seekbar_start_price=null;
     private TextView txt_seekbar_price=null;
@@ -296,9 +296,9 @@ public class MainActivity extends AppCompatActivity
         txt_filter_done= (TextView) findViewById(R.id.txt_filter_done);
         radioGroupMain_posted_within= (RadioGroup) findViewById(R.id.radioGroup_posted_within);
         radioGroupMain_sort_by= (RadioGroup) findViewById(R.id.radioGroup_sort);
-        seekBar_distance= (DiscreteSeekBar) findViewById(R.id.seekBar_distance);
+//        seekBar_distance= (DiscreteSeekBar) findViewById(R.id.seekBar_distance);
         seekbar_distance_new= (SeekBar) findViewById(R.id.seekbar_distance_new);
-        seekbar_price= (DiscreteSeekBar) findViewById(R.id.seekBar_price);
+//        seekbar_price= (DiscreteSeekBar) findViewById(R.id.seekBar_price);
         txt_seekbar_start_price= (TextView) findViewById(R.id.txt_start_price);
         txt_seekbar_price= (TextView) findViewById(R.id.txt_seekbar_price);
         txt_start_seekbar_distance= (TextView) findViewById(R.id.txt_start_distance);
@@ -332,22 +332,22 @@ public class MainActivity extends AppCompatActivity
             card_location.setVisibility(View.GONE);
         }
 
-        seekbar_price.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
-            @Override
-            public int transform(int value) {
-                txt_seekbar_price.setText(""+String.valueOf(value));
-                return value;
-            }
-        });
+//        seekbar_price.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
+//            @Override
+//            public int transform(int value) {
+//                txt_seekbar_price.setText(""+String.valueOf(value));
+//                return value;
+//            }
+//        });
 
 //        seekBar_distance.setProgress(500);
-        seekBar_distance.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
-            @Override
-            public int transform(int value) {
-//                txt_seekbar_distance.setText(String.valueOf(value)+"");
-                return value;
-            }
-        });
+//        seekBar_distance.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
+//            @Override
+//            public int transform(int value) {
+////                txt_seekbar_distance.setText(String.valueOf(value)+"");
+//                return value;
+//            }
+//        });
 
         seekbar_distance_new.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -699,16 +699,16 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
 
 //                swipeRefreshLayout.setRefreshing(false);
-                if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                else {
+//                if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+//                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+//                }
+//                else {
                     Intent intent=new Intent(getApplicationContext(),Sell_Products_Activity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                }
+//                }
 
  //               finish();
 
@@ -744,6 +744,7 @@ public class MainActivity extends AppCompatActivity
 
                 if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.putExtra("offer_negotiable","none");
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
@@ -779,7 +780,7 @@ public class MainActivity extends AppCompatActivity
                 imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
 //                swipeRefreshLayout.setRefreshing(false);
                 if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
@@ -821,10 +822,10 @@ public class MainActivity extends AppCompatActivity
 
                 }
 
-                img_categories.setImageResource(R.drawable.categories_gray);
-                img_sell.setImageResource(R.drawable.sell_gray);
-                img_orders.setImageResource(R.drawable.orders_gray);
-                img_donate.setImageResource(R.drawable.donate_gray);
+                img_categories.setImageResource(R.drawable.buy_black);
+                img_sell.setImageResource(R.drawable.sell_black);
+                img_orders.setImageResource(R.drawable.orders_black);
+                img_donate.setImageResource(R.drawable.donate_black);
                 img_wishlist.setImageResource(R.drawable.wishlist_blue);
 
                 txt_categories.setTextColor(Color.parseColor(colorblack));
@@ -987,16 +988,16 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
 
-            if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-            else {
+//            if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+//            }
+//            else {
                 Intent intent=new Intent(getApplicationContext(),Sell_Products_Activity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            }
+//            }
 
 
 
@@ -1023,6 +1024,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_profile) {
             if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra("offer_negotiable","none");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

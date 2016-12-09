@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
     private TextView txt_terms_conditions;
+    Intent intent_direct=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         txtName = (TextView) findViewById(R.id.txtName);
         txtEmail = (TextView) findViewById(R.id.txtEmail);
         txt_terms_conditions= (TextView) findViewById(R.id.txt_terms_and_conditions);
+
+        intent_direct=getIntent();
+//        Log.e("intent_direct",intent_direct.getStringExtra("offer_negotiable"));
+//        Log.e("intent_direct1","done");
 
         txt_terms_conditions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,15 +257,68 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 String profilePicUrl_fb = object.getJSONObject("picture").getJSONObject("data").getString("url");
                                 Log.e("image",profilePicUrl_fb);
 //                                String profilePicUrl_fb ="";
-                                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
-                                intent.putExtra("name",personName_fb);
-                                intent.putExtra("email",email_fb);
-                                intent.putExtra("photo",profilePicUrl_fb);
-                                intent.putExtra("id",fb_id);
-                                intent.putExtra("Type","Facebook");
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
+
+                                if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("negotiable")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","negotiable");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("sell_product")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","sell_product");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_product")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","donate_product");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("non-negotiable")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","non-negotiable");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("none")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","none");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
 
 //                                getDetails();
 //                                String birthday = object.getString("birthday");
@@ -348,15 +406,67 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imgProfilePic);
 
-            Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
-            intent.putExtra("name",personName);
-            intent.putExtra("email",email);
-            intent.putExtra("photo",personPhotoUrl);
-            intent.putExtra("id","");
-            intent.putExtra("Type","Gmail");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("negotiable")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","negotiable");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("sell_product")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","sell_product");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_product")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","donate_product");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("non-negotiable")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","non-negotiable");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("none")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","none");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+
 
             updateUI(true);
         } else {

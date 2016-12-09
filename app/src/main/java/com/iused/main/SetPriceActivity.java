@@ -54,7 +54,7 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
     private Button btn_sell=null;
     Intent intent=null;
 
-    private HashMap<String, String> para = null;
+    public static HashMap<String, String> para = null;
     private AsyncTaskListener listener = null;
     public SharedPreferences mpref = null;
     private ProgressDialog progressDialog= null;
@@ -179,29 +179,33 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                         Toast.makeText(getApplicationContext(),"Please enter price",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        if(mpref.getString("user_id","").equalsIgnoreCase("")){
+
+                        para = new HashMap<>();
+                        para.put("UserId", mpref.getString("user_id",""));
+                        para.put("Name", intent.getStringExtra("item_name"));
+                        para.put("Description",intent.getStringExtra("decription"));
+                        para.put("Price",edt_price_negotiable.getText().toString());
+                        para.put("Qty","1");
+                        para.put("UsedFor",intent.getStringExtra("used_for"));
+                        para.put("OfferPer","");
+                        para.put("OfferMins","");
+                        para.put("VideoLinks",intent.getStringExtra("video_url"));
+                        para.put("ExchangeOffer","");
+                        para.put("Created_dt",currentDateTimeString);
+                        para.put("Type","2");
+                        para.put("Condition",intent.getStringExtra("condition"));
+                        para.put("ImageLinks",Sell_Products_Activity.image_uris.toString().substring(1, Sell_Products_Activity.image_uris.toString().length()-1));
+                        para.put("CategoryId",intent.getStringExtra("category_id"));
+                        para.put("Currency",mpref.getString("currency_symbol",""));
+
+                        if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            intent.putExtra("offer_negotiable","sell_product");
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
                         else {
-                            para = new HashMap<>();
-                            para.put("UserId", mpref.getString("user_id",""));
-                            para.put("Name", intent.getStringExtra("item_name"));
-                            para.put("Description",intent.getStringExtra("decription"));
-                            para.put("Price",edt_price_negotiable.getText().toString());
-                            para.put("Qty","1");
-                            para.put("UsedFor",intent.getStringExtra("used_for"));
-                            para.put("OfferPer","");
-                            para.put("OfferMins","");
-                            para.put("VideoLinks",intent.getStringExtra("video_url"));
-                            para.put("ExchangeOffer","");
-                            para.put("Created_dt",currentDateTimeString);
-                            para.put("Type","2");
-                            para.put("Condition",intent.getStringExtra("condition"));
-                            para.put("ImageLinks",Sell_Products_Activity.image_uris.toString().substring(1, Sell_Products_Activity.image_uris.toString().length()-1));
-                            para.put("CategoryId",intent.getStringExtra("category_id"));
-                            para.put("Currency",mpref.getString("currency_symbol",""));
+
                             progressDialog.setMessage("Loading...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
@@ -244,12 +248,22 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                             }
                             para.put("CategoryId",intent.getStringExtra("category_id"));
                             para.put("Currency",mpref.getString("currency_symbol",""));
-                            progressDialog.setMessage("Loading...");
-                            progressDialog.setCancelable(false);
-                            progressDialog.show();
-                            Log.e("sell_product", para.toString());
-                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
-                            httpAsync1.execute();
+
+                            if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.putExtra("offer_negotiable","sell_product");
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                            else {
+                                progressDialog.setMessage("Loading...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+                                Log.e("sell_product", para.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
+                                httpAsync1.execute();
+                            }
+
                         }
 
                     }

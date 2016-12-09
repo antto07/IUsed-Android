@@ -143,11 +143,19 @@ public class GalleryAdapter_Donate extends BaseAdapter{
                 public void onClick(View view) {
 //					String j=data.get(position).toString();
 //					Log.e("url_del_path",j);
-                    Donate_Product_Activity.dataT.remove(position);
-                    data.remove(position);
+                    if(Donate_Product_Activity.image_uris.size()==0){
+                        Donate_Product_Activity.dataT.clear();
+                        data.clear();
+                        notifyDataSetChanged();
+                    }
+                    else {
+                        Donate_Product_Activity.dataT.remove(position);
+                        data.remove(position);
 //					data.clear();
-                    Donate_Product_Activity.image_uris.remove(position);
-                    notifyDataSetChanged();
+                        Donate_Product_Activity.image_uris.remove(position);
+                        notifyDataSetChanged();
+                    }
+
                 }
             });
 

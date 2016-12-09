@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/iused_mobile_icon"/>
+        android:drawable="@drawable/splash"/>
 
     <!--<item>-->
         <!--<bitmap-->

@@ -142,11 +142,19 @@ public class GalleryAdapter extends BaseAdapter {
 				public void onClick(View view) {
 //					String j=data.get(position).toString();
 //					Log.e("url_del_path",j);
-					Sell_Products_Activity.dataT.remove(position);
-					data.remove(position);
+					if(Sell_Products_Activity.image_uris.size()==0){
+						Sell_Products_Activity.dataT.clear();
+						data.clear();
+						notifyDataSetChanged();
+					}
+					else {
+						Sell_Products_Activity.dataT.remove(position);
+						data.remove(position);
 //					data.clear();
-					Sell_Products_Activity.image_uris.remove(position);
-					notifyDataSetChanged();
+						Sell_Products_Activity.image_uris.remove(position);
+						notifyDataSetChanged();
+					}
+
 				}
 		});
 

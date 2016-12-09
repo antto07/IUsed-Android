@@ -136,7 +136,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
     private static final int MY_PERMISSIONS_CAMERA_VIDEO = 108;
     private static final int MY_PERMISSIONS_STORAGE_VIDEO = 109;
 
-    private HashMap<String, String> para = null;
+    public static HashMap<String, String> para = null;
     private AsyncTaskListener listener = null;
     public SharedPreferences mpref = null;
     private ProgressDialog progressDialog= null;
@@ -534,12 +534,12 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
 //                }
                 else {
 
-                    if(mpref.getString("user_id","").equalsIgnoreCase("")){
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                    else {
+//                    if(mpref.getString("user_id","").equalsIgnoreCase("")){
+//                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivity(intent);
+//                    }
+//                    else {
                         para = new HashMap<>();
                         para.put("UserId", mpref.getString("user_id",""));
                         para.put("Name", edt_item_name.getText().toString());
@@ -566,14 +566,24 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                         }
                         para.put("CategoryId",str_category_id);
                         para.put("Message",edt_message.getText().toString());
-                        progressDialog.setMessage("Posting...");
-                        progressDialog.setCancelable(false);
-                        progressDialog.show();
 
-                        Log.e("sell_product", para.toString());
-                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
-                        httpAsync1.execute();
-                    }
+
+                        if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            intent.putExtra("offer_negotiable","donate_product");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                        else {
+                            progressDialog.setMessage("Posting...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+                            Log.e("sell_product", para.toString());
+                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
+                            httpAsync1.execute();
+                        }
+
+//                    }
 
                 }
             }
@@ -873,10 +883,24 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+//        Log.e("rotated",bitmap.toString());
+
+        if (scaled != null) {
+            // encodeTobase64(bitmap);
+            mCurrentPhotoPath = getRealPathFromURI(getImageUri(getApplicationContext(), scaled));
+            Log.e("real_pic_path", mCurrentPhotoPath);
+            file_logo = new File(mCurrentPhotoPath);
+            Log.e("file_picture",file_logo.toString());
+
+            str_file_logo=file_logo.toString();
+
+        }
 //        Log.e("rotated",bitmap.toString());
         Log.e("done1","entered1");
         Matrix mtx = new Matrix();
-        mtx.postRotate(90);
+//        mtx.postRotate(90);
         // Rotating Bitmap
         Bitmap rotatedBMP = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mtx, true);
         Log.e("rotated",rotatedBMP.toString());
@@ -968,10 +992,17 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
 
                 try {
 
+                    String tempPath =null;
                     Uri selectedImageUri = data.getData();
 
-                    String tempPath = getPath(selectedImageUri, Donate_Product_Activity.this);
-                    Log.e("temp_path",tempPath);
+                    if(selectedImageUri.toString().startsWith("file:///")){
+                        tempPath = selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(":///")+4);
+                        Log.e("temp_path_gal",tempPath);
+                    }
+                    else {
+                        tempPath = getPath(selectedImageUri, Donate_Product_Activity.this);
+                        Log.e("temp_path_pho",tempPath);
+                    }
 //                Bitmap bm;
                     BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 //                bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
@@ -1100,7 +1131,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                     intent.setType("image/*");
 
                     startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
+                            intent,
                             SELECT_FILE);
                 } else if (items[item].equals("Cancel")) {
                     RESULT_OK=0;

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.adapters.DonorOptionsAdapter;
@@ -117,7 +118,7 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-
+            Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
         }
         else {
             if(tag.equalsIgnoreCase("my_orders")){

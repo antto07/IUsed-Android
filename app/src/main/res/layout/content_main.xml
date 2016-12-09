@@ -463,13 +463,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-                                android:id="@+id/seekBar_distance"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:dsb_max="500"
-                                android:visibility="gone"
-                                app:dsb_min="1" />
+                            <!--<org.adw.library.widgets.discreteseekbar.DiscreteSeekBar-->
+                                <!--android:id="@+id/seekBar_distance"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--app:dsb_max="500"-->
+                                <!--android:visibility="gone"-->
+                                <!--app:dsb_min="1" />-->
 
                             <SeekBar
                                 android:id="@+id/seekbar_distance_new"
@@ -765,12 +765,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-                            android:id="@+id/seekBar_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:dsb_max="100000"
-                            app:dsb_min="100" />
+                        <!--<org.adw.library.widgets.discreteseekbar.DiscreteSeekBar-->
+                            <!--android:id="@+id/seekBar_price"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--app:dsb_max="100000"-->
+                            <!--app:dsb_min="100" />-->
 
                     </LinearLayout>
 
@@ -876,6 +876,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:layout_margin="4dp"
                     >
 
@@ -899,6 +900,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:background="@color/gray"></LinearLayout>
 
                 <EditText

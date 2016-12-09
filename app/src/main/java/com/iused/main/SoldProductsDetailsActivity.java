@@ -202,7 +202,7 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
         });
 
         if(intent.getStringExtra("type").equalsIgnoreCase("2")){
-            if(intent.getStringExtra("status").equalsIgnoreCase("1")){
+            if(intent.getStringExtra("status").equalsIgnoreCase("0")){
                 btn_republish_product.setVisibility(View.VISIBLE);
             }
             else {

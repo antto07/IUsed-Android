@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.adapters.DonatedByOthersAdapter;
@@ -91,7 +92,7 @@ public class Dontated_By_Others_Fragment extends Fragment implements AsyncTaskLi
     public void onTaskComplete(String result, String tag) {
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-
+            Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
         }
         else{
             if(tag.equalsIgnoreCase("donations")){

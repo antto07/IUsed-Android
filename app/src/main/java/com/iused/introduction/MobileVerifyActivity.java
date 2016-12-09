@@ -1,7 +1,9 @@
 package com.iused.introduction;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iused.R;
+import com.iused.fragments.Donate_Product_Activity;
 import com.iused.main.MainActivity;
+import com.iused.main.ProductDetailsActivity_Negotiable;
+import com.iused.main.ProductDetailsActivity_Non_Negotiable;
+import com.iused.main.SetPriceActivity;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.HttpAsync;
 
@@ -37,6 +43,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     private EditText edt_verify_code=null;
     private Button btn_submit=null;
     private HashMap<String, String> para = null;
+    private HashMap<String, String> para_negotiable = new HashMap<>();
+    private HashMap<String, String> para_sell_product = new HashMap<>();
+    private HashMap<String, String> para_donate_product = new HashMap<>();
+    private HashMap<String, String> para_non_negotiable = new HashMap<>();
     private HashMap<String, String> para_profile = null;
     private AsyncTaskListener listener = null;
     private SharedPreferences pref = null;
@@ -46,6 +56,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     private Button btn_resend_code=null;
     private static MobileVerifyActivity ins;
     private TextView txt_mobile_verify_text=null;
+    private Intent intent_direct=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +83,8 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
         pref = getSharedPreferences("user_details", MODE_PRIVATE);
 
         listener = MobileVerifyActivity.this;
+
+        intent_direct=getIntent();
 
         txt_mobile_verify_text.setText("Enter verification code that sent to the mobile number ending "+intent_data.getStringExtra("mobile").substring(Math.max(intent_data.getStringExtra("mobile").length() - 4, 0)));
 //        edt_verify_code.setText("jhghghhkjjk");
@@ -177,7 +190,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-
+            Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
         }
         else{
             if(tag.equalsIgnoreCase("verify")){
@@ -218,15 +231,6 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 //                    str_json_message= jsonObject.getString("errMsg");
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
 
-
-                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-
-                            Log.e("phhh",intent_data.getStringExtra("photo"));
-
                             pref= getSharedPreferences("user_details", MODE_PRIVATE);
                             SharedPreferences.Editor edit = pref.edit();
                             edit.putString("user_id",intent_data.getStringExtra("user_id"));
@@ -239,6 +243,149 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 
                             Log.e("user_id_verify",intent_data.getStringExtra("user_id"));
 
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+
+                            if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("negotiable")){
+
+                                para_negotiable= ProductDetailsActivity_Negotiable.para_buy_request;
+                                ProductDetailsActivity_Negotiable.para_buy_request.put("UserId",intent_data.getStringExtra("user_id"));
+                                progressDialog.setMessage("Loading...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+//                                Log.e("products_details", para_negotiable.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_negotiable, 2, "buy_request");
+                                httpAsync1.execute();
+
+                            }
+                            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("sell_product")){
+
+                                para_sell_product= SetPriceActivity.para;
+                                SetPriceActivity.para.put("UserId",intent_data.getStringExtra("user_id"));
+                                progressDialog.setMessage("Posting...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+//                                Log.e("sell_product", para.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para_sell_product, 2, "sell_product");
+                                httpAsync1.execute();
+                            }
+                            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_product")){
+
+                                para_donate_product= Donate_Product_Activity.para;
+                                Donate_Product_Activity.para.put("UserId",intent_data.getStringExtra("user_id"));
+                                progressDialog.setMessage("Posting...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+//                                Log.e("sell_product", para.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para_donate_product, 2, "donate_product");
+                                httpAsync1.execute();
+                            }
+                            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("non-negotiable")){
+
+                                para_non_negotiable= ProductDetailsActivity_Non_Negotiable.para_buy_request;
+                                ProductDetailsActivity_Non_Negotiable.para_buy_request.put("UserId",intent_data.getStringExtra("user_id"));
+                                progressDialog.setMessage("Loading...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+//                                Log.e("products_details", para_buy_request.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_non_negotiable, 2, "buy_request_non");
+                                httpAsync1.execute();
+                            }
+                            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("none")){
+                                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+
+//                            Log.e("phhh",intent_data.getStringExtra("photo"));
+
+
+
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else if(tag.equalsIgnoreCase("buy_request_non")){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject != null){
+                        if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else if(tag.equalsIgnoreCase("buy_request")){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject != null){
+                        if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else if(tag.equalsIgnoreCase("donate_product")){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject != null){
+                        if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else if(tag.equalsIgnoreCase("sell_product")){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject != null){
+                        if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                         }
                         else {
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
