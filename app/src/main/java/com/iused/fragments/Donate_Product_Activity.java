@@ -58,6 +58,7 @@ import com.iused.introduction.LoginActivity;
 import com.iused.main.DonatedProductsDetailsActivity;
 import com.iused.main.MainActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.DonateUploadGalleryImgs;
 import com.iused.utils.HotelierUploadGalleryImgs;
 import com.iused.utils.HttpAsync;
@@ -579,7 +580,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                             progressDialog.setCancelable(false);
                             progressDialog.show();
                             Log.e("sell_product", para.toString());
-                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
+                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"sellProduct", para, 2, "sell_product");
                             httpAsync1.execute();
                         }
 
@@ -1405,7 +1406,12 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         progressDialog.dismiss();
 
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
+
         }
         else {
             if(tag.equalsIgnoreCase("sell_product")){

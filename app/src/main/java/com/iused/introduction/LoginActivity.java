@@ -318,6 +318,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     startActivity(intent);
                                     finish();
                                 }
+                                else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_offer")){
+                                    Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                    intent.putExtra("offer_negotiable","donate_offer");
+                                    intent.putExtra("name",personName_fb);
+                                    intent.putExtra("email",email_fb);
+                                    intent.putExtra("photo",profilePicUrl_fb);
+                                    intent.putExtra("id",fb_id);
+                                    intent.putExtra("Type","Facebook");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
 
 
 //                                getDetails();
@@ -458,6 +470,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
                 intent.putExtra("name",personName);
                 intent.putExtra("offer_negotiable","none");
+                intent.putExtra("email",email);
+                intent.putExtra("photo",personPhotoUrl);
+                intent.putExtra("id","");
+                intent.putExtra("Type","Gmail");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_offer")){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                intent.putExtra("name",personName);
+                intent.putExtra("offer_negotiable","donate_offer");
                 intent.putExtra("email",email);
                 intent.putExtra("photo",personPhotoUrl);
                 intent.putExtra("id","");

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +25,12 @@ import android.widget.Toast;
 import com.iused.R;
 import com.iused.fragments.Donate_Product_Activity;
 import com.iused.main.MainActivity;
+import com.iused.main.ProductDetailsActivity_Donate;
 import com.iused.main.ProductDetailsActivity_Negotiable;
 import com.iused.main.ProductDetailsActivity_Non_Negotiable;
 import com.iused.main.SetPriceActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONException;
@@ -47,6 +50,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     private HashMap<String, String> para_sell_product = new HashMap<>();
     private HashMap<String, String> para_donate_product = new HashMap<>();
     private HashMap<String, String> para_non_negotiable = new HashMap<>();
+    private HashMap<String, String> para_donate_request= new HashMap<>();
     private HashMap<String, String> para_profile = null;
     private AsyncTaskListener listener = null;
     private SharedPreferences pref = null;
@@ -54,9 +58,12 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     Intent intent_data= null;
     private ProgressDialog progressDialog= null;
     private Button btn_resend_code=null;
+    private Button btn_resend_code_gray=null;
     private static MobileVerifyActivity ins;
     private TextView txt_mobile_verify_text=null;
     private Intent intent_direct=null;
+    private TextView txt_timer_mobile_verify=null;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +84,13 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
         edt_verify_code= (EditText) findViewById(R.id.edt_code);
         btn_submit= (Button) findViewById(R.id.btn_submit);
         btn_resend_code= (Button) findViewById(R.id.btn_resend_code);
+        btn_resend_code_gray= (Button) findViewById(R.id.btn_resend_code_gray);
         txt_mobile_verify_text= (TextView) findViewById(R.id.txt_verify_message);
+        txt_timer_mobile_verify= (TextView) findViewById(R.id.txt_timer_mobile_verify);
+
+        countDownTimer = new MyCountDownTimer(30*1000, 1*1000);
+        txt_timer_mobile_verify.setText(txt_timer_mobile_verify.getText()+ String.valueOf(30*1000 / 1000));
+        countDownTimer.start();
 
         intent_data=getIntent();
         pref = getSharedPreferences("user_details", MODE_PRIVATE);
@@ -105,7 +118,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                     progressDialog.setMessage("Verifying...");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/verificationcode", para, 2, "verify");
+                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"verificationcode", para, 2, "verify");
                     httpAsync1.execute();
                 }
             }
@@ -132,7 +145,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 Log.e("para_sign_up_resend", para.toString());
-                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/customerSignup", para, 2, "sign_up");
+                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"customerSignup", para, 2, "sign_up");
                 httpAsync1.execute();
             }
         });
@@ -158,7 +171,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                         progressDialog.setMessage("Verifying...");
                         progressDialog.setCancelable(false);
                         progressDialog.show();
-                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/verificationcode", para, 2, "verify");
+                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"verificationcode", para, 2, "verify");
                         httpAsync1.execute();
                     }
                     else {
@@ -176,6 +189,36 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        countDownTimer.cancel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        countDownTimer.cancel();
+    }
+
+    public class MyCountDownTimer extends CountDownTimer {
+        public MyCountDownTimer(long startTime, long interval) {
+            super(startTime, interval);
+        }
+
+        @Override
+        public void onFinish() {
+            txt_timer_mobile_verify.setText("00");
+            btn_resend_code_gray.setVisibility(View.GONE);
+            btn_resend_code.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            txt_timer_mobile_verify.setText("" + millisUntilFinished / 1000);
+        }
+    }
+
     public static MobileVerifyActivity  getInstace(){
         return ins;
     }
@@ -189,11 +232,17 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     public void onTaskComplete(String result, String tag) {
 
         progressDialog.dismiss();
+
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else{
             if(tag.equalsIgnoreCase("verify")){
+
                 JSONObject jsonObject = null;
                 try {
 
@@ -201,7 +250,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                     if (jsonObject != null){
                         str_json_message= jsonObject.getString("errMsg");
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
-
+                            countDownTimer.cancel();
                             para_profile = new HashMap<>();
                             para_profile.put("UserId",intent_data.getStringExtra("user_id"));
                             para_profile.put("Name",intent_data.getStringExtra("user_name"));
@@ -210,7 +259,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                             progressDialog.setCancelable(false);
                             progressDialog.show();
                             Log.e("para_profile_update", para_profile.toString());
-                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/updatecustomerprofile", para_profile, 2, "profile");
+                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"updatecustomerprofile", para_profile, 2, "profile");
                             httpAsync1.execute();
 
                         }
@@ -253,7 +302,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
 //                                Log.e("products_details", para_negotiable.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_negotiable, 2, "buy_request");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"PurchaseRequests", para_negotiable, 2, "buy_request");
                                 httpAsync1.execute();
 
                             }
@@ -265,7 +314,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
 //                                Log.e("sell_product", para.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para_sell_product, 2, "sell_product");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"sellProduct", para_sell_product, 2, "sell_product");
                                 httpAsync1.execute();
                             }
                             else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_product")){
@@ -276,7 +325,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
 //                                Log.e("sell_product", para.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para_donate_product, 2, "donate_product");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"sellProduct", para_donate_product, 2, "donate_product");
                                 httpAsync1.execute();
                             }
                             else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("non-negotiable")){
@@ -287,7 +336,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
 //                                Log.e("products_details", para_buy_request.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_non_negotiable, 2, "buy_request_non");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"PurchaseRequests", para_non_negotiable, 2, "buy_request_non");
                                 httpAsync1.execute();
                             }
                             else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("none")){
@@ -295,6 +344,16 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 finish();
+                            }
+                            else if(intent_direct.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_offer")){
+                                para_donate_request= ProductDetailsActivity_Donate.para_buy_request;
+                                ProductDetailsActivity_Donate.para_buy_request.put("UserId",intent_data.getStringExtra("user_id"));
+                                progressDialog.setMessage("Loading...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+//                                Log.e("products_details", para_buy_request.toString());
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"PurchaseRequests", para_donate_request, 2, "buy_request_donate");
+                                httpAsync1.execute();
                             }
 
 //                            Log.e("phhh",intent_data.getStringExtra("photo"));
@@ -311,6 +370,27 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                 }
             }
             else if(tag.equalsIgnoreCase("buy_request_non")){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    if (jsonObject != null){
+                        if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else if(tag.equalsIgnoreCase("buy_request_donate")){
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(result);

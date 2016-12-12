@@ -34,6 +34,7 @@ import com.iused.adapters.SoldProductsDetailsAdapter;
 import com.iused.bean.SoldProductsBean;
 import com.iused.dialog.DonatedByOthersContactDialog;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -192,7 +193,7 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
                                 progressDialog.setMessage("Processing...");
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/RespondToRequest", para, 2, "republish");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"RespondToRequest", para, 2, "republish");
                                 httpAsync1.execute();
 //                            }
 //                        });
@@ -240,7 +241,7 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
                                                 progressDialog.setMessage("Processing...");
                                                 progressDialog.setCancelable(false);
                                                 progressDialog.show();
-                                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/RespondToRequest", para, 2, "respond");
+                                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"RespondToRequest", para, 2, "respond");
                                                 httpAsync1.execute();
                                                 dialog.dismiss();
                                             }
@@ -426,7 +427,11 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else {
             if(tag.equalsIgnoreCase("respond")){

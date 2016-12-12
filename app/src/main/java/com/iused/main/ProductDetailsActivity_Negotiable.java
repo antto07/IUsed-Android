@@ -28,6 +28,7 @@ import com.iused.R;
 import com.iused.adapters.FullImageAdapter;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -214,7 +215,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
                         progressDialog.setCancelable(false);
                         progressDialog.show();
                         Log.e("products_details", para_buy_request.toString());
-                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_buy_request, 2, "buy_request");
+                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"PurchaseRequests", para_buy_request, 2, "buy_request");
                         httpAsync1.execute();
                     }
 
@@ -230,7 +231,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         progressDialog.setCancelable(false);
         progressDialog.show();
         Log.e("products_details", para.toString());
-        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/ProductDetail", para, 2, "product_details");
+        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"ProductDetail", para, 2, "product_details");
         httpAsync1.execute();
 
     }
@@ -251,7 +252,11 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else {
             if(tag.equalsIgnoreCase("product_details")){

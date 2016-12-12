@@ -26,6 +26,7 @@ import com.iused.bean.DonatedByOthersBean;
 import com.iused.dialog.DonatedByOthersContactDialog;
 import com.iused.main.ProductDetailsActivity_Donate;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONArray;
@@ -77,7 +78,7 @@ public class Dontated_By_Others_Fragment extends Fragment implements AsyncTaskLi
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, "http://54.191.146.243:8088/GetDonations", para, 2, "donations");
+        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetDonations", para, 2, "donations");
         httpAsync1.execute();
 
         return view;
@@ -92,7 +93,11 @@ public class Dontated_By_Others_Fragment extends Fragment implements AsyncTaskLi
     public void onTaskComplete(String result, String tag) {
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else{
             if(tag.equalsIgnoreCase("donations")){

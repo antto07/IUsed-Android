@@ -195,6 +195,11 @@
             android:layout_marginTop="5dp"
             android:orientation="vertical">
 
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh_compete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
@@ -208,50 +213,70 @@
 
             </android.support.v7.widget.RecyclerView>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_non_negotiable"
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh_fixed"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F2F2F2"
-                android:contentDescription="@string/app_name"
-                android:drawSelectorOnTop="true"
                 android:visibility="gone"
-                >
+                android:layout_height="match_parent">
 
-            </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_non_negotiable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#F2F2F2"
+                    android:contentDescription="@string/app_name"
+                    android:drawSelectorOnTop="true"
+                    >
 
-            <LinearLayout
-                android:id="@+id/linear_no_products"
+                </android.support.v7.widget.RecyclerView>
+
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh_no_products"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:visibility="gone"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/linear_no_products"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="No items found at this location now"
-                    android:textSize="16dp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/txt_sell_product"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:text="Do you want to sell any item(s)?"
-                    android:textStyle="italic"
-                    android:textColor="@color/colorPrimary"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No items found at this location now"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/txt_sell_product"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="Do you want to sell any item(s)?"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
 
 
-            </LinearLayout>
+                </LinearLayout>
+
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
 
 
         </LinearLayout>

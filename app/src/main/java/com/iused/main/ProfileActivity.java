@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -139,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskListe
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 Log.e("products_details", para.toString());
-                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/updatecustomerprofile", para, 2, "profile");
+                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"updatecustomerprofile", para, 2, "profile");
                 httpAsync1.execute();
 
             }
@@ -182,7 +183,11 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskListe
     public void onTaskComplete(String result, String tag) {
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
 
+            }
         }
         else {
             if(tag.equalsIgnoreCase("profile")){

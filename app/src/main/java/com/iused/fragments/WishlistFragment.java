@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONException;
@@ -83,7 +84,7 @@ public class WishlistFragment extends Fragment implements AsyncTaskListener{
                     progressDialog.setCancelable(false);
                     progressDialog.show();
                     Log.e("para_wishlist", para.toString());
-                    HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, "http://54.191.146.243:8088/UpdateWishList", para, 2, "wishlist");
+                    HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"UpdateWishList", para, 2, "wishlist");
                     httpAsync1.execute();
                 }
             }
@@ -103,7 +104,11 @@ public class WishlistFragment extends Fragment implements AsyncTaskListener{
         progressDialog.dismiss();
 
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getActivity(),"Check internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getActivity(),"Check internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else {
             if(tag.equalsIgnoreCase("wishlist")){

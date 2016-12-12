@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.adapters.FullImageAdapter;
+import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -62,7 +64,7 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
     private Button btn_want_to_buy= null;
 
     private HashMap<String, String> para = null;
-    private HashMap<String, String> para_buy_request = null;
+    public static HashMap<String, String> para_buy_request = null;
     private AsyncTaskListener listener = null;
     public SharedPreferences mpref = null;
         private ProgressDialog progressDialog= null;
@@ -169,6 +171,7 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
                     Toast.makeText(getApplicationContext(),"Enter a message",Toast.LENGTH_SHORT).show();
                 }
                 else {
+
                     para_buy_request = new HashMap<>();
                     para_buy_request.put("UserId", mpref.getString("user_id",""));
                     para_buy_request.put("ProductId", intent.getStringExtra("product_id"));
@@ -177,12 +180,23 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
                     para_buy_request.put("OfferTill","");
                     para_buy_request.put("Qty",intent.getStringExtra("qty_remaining"));
                     para_buy_request.put("Message",edt_message.getText().toString());
-                    progressDialog.setMessage("Loading...");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
-                    Log.e("products_details", para_buy_request.toString());
-                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/PurchaseRequests", para_buy_request, 2, "buy_request");
-                    httpAsync1.execute();
+
+                    if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra("offer_negotiable","donate_offer");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                    else {
+                        progressDialog.setMessage("Loading...");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+                        Log.e("products_details", para_buy_request.toString());
+                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"PurchaseRequests", para_buy_request, 2, "buy_request");
+                        httpAsync1.execute();
+                    }
+
+
                 }
 
             }
@@ -198,7 +212,7 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
         progressDialog.setCancelable(false);
         progressDialog.show();
         Log.e("products_details", para.toString());
-        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/ProductDetail", para, 2, "product_details");
+        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"ProductDetail", para, 2, "product_details");
         httpAsync1.execute();
 
     }
@@ -220,7 +234,11 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else {
             if(tag.equalsIgnoreCase("product_details")){

@@ -34,6 +34,7 @@ import com.iused.R;
 import com.iused.fcm.Config;
 import com.iused.fcm.NotificationUtils;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -159,7 +160,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
         }catch (Exception e){
             edt_country.setText("India");
         }
-        txt_mobile_code.setText("+"+pref.getString("country_code",""));
+        txt_mobile_code.setText(pref.getString("country_code",""));
 //        Log.e("curr_code",pref.getString("country_code",""));
 
 
@@ -231,7 +232,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
                         progressDialog.setCancelable(false);
                         progressDialog.show();
                         Log.e("para_sign_up", para.toString());
-                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/customerSignup", para, 2, "sign_up");
+                        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"customerSignup", para, 2, "sign_up");
                         httpAsync1.execute();
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -284,7 +285,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
             progressDialog.setCancelable(false);
             progressDialog.show();
             Log.e("para_sign_up", para.toString());
-            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/customerSignup", para, 2, "sign_up");
+            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"customerSignup", para, 2, "sign_up");
             httpAsync1.execute();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -327,7 +328,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
                     progressDialog.setCancelable(false);
                     progressDialog.show();
                     Log.e("para_sign_up", para.toString());
-                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/customerSignup", para, 2, "sign_up");
+                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"customerSignup", para, 2, "sign_up");
                     httpAsync1.execute();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -535,7 +536,25 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskList
                                 startActivity(intent);
                                 finish();
                             }
-
+                            else if(intent.getStringExtra("offer_negotiable").equalsIgnoreCase("donate_offer")){
+                                Intent intent = new Intent(getApplicationContext(),MobileVerifyActivity.class);
+                                intent.putExtra("offer_negotiable","donate_offer");
+                                intent.putExtra("user_id",jsonObject.getString("UserId"));
+                                intent.putExtra("mobile",edt_mobile_number.getText().toString());
+                                intent.putExtra("email",edt_email.getText().toString());
+                                intent.putExtra("photo",str_photo);
+                                intent.putExtra("user_name",edt_name.getText().toString());
+                                intent.putExtra("regid",regId);
+                                intent.putExtra("mobile_code",txt_mobile_code.getText().toString());
+                                intent.putExtra("timezone",timezone);
+                                intent.putExtra("created_at",currentDateTimeString);
+                                intent.putExtra("fbid",str_fbid);
+                                intent.putExtra("signup",str_signup_by);
+//                            Log.e("intent_reg",intent.toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
 
                         }
                         else {

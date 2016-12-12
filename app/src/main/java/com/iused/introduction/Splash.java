@@ -690,7 +690,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                                     parameters_guest = new HashMap<>();
                                     parameters_guest.put("DeviceId", imei);
                                     Log.e("products_guest", parameters_guest.toString());
-                                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, "http://54.191.146.243:8088/Guest", parameters_guest, 2, "guest");
+                                    HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, Constants.BASE_URL+"Guest", parameters_guest, 2, "guest");
                                     httpAsync1.execute();
                                 }
                                 else {
@@ -703,7 +703,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 //                                    progressDialog.setMessage("Loading...");
 //                                    progressDialog.setCancelable(false);
 //                                    progressDialog.show();
-                                    new HttpAsync(getApplicationContext(), listener1,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                                    new HttpAsync(getApplicationContext(), listener1,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
                                 }
                             }
@@ -814,7 +814,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                                 parameters_guest = new HashMap<>();
                                 parameters_guest.put("DeviceId", imei);
                                 Log.e("products_guest", parameters_guest.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, "http://54.191.146.243:8088/Guest", parameters_guest, 2, "guest");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, Constants.BASE_URL+"Guest", parameters_guest, 2, "guest");
                                 httpAsync1.execute();
                             }
                             else {
@@ -827,7 +827,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 //                                progressDialog.setMessage("Loading...");
 //                                progressDialog.setCancelable(false);
 //                                progressDialog.show();
-                                new HttpAsync(getApplicationContext(), listener1,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                                new HttpAsync(getApplicationContext(), listener1,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
                             }
 
@@ -850,7 +850,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                                 parameters_guest = new HashMap<>();
                                 parameters_guest.put("DeviceId", imei);
                                 Log.e("products_guest", parameters_guest.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, "http://54.191.146.243:8088/Guest", parameters_guest, 2, "guest");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, Constants.BASE_URL+"Guest", parameters_guest, 2, "guest");
                                 httpAsync1.execute();
                             }
                             else {
@@ -863,7 +863,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 //                                progressDialog.setMessage("Loading...");
 //                                progressDialog.setCancelable(false);
 //                                progressDialog.show();
-                                new HttpAsync(getApplicationContext(), listener1,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                                new HttpAsync(getApplicationContext(), listener1,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
                             }
 
@@ -938,7 +938,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 //                            progressDialog.setMessage("Loading...");
 //                            progressDialog.setCancelable(false);
 //                            progressDialog.show();
-                            new HttpAsync(getApplicationContext(), listener1,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                            new HttpAsync(getApplicationContext(), listener1,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
 
 //                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -1147,7 +1147,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
             parameters_guest = new HashMap<>();
             parameters_guest.put("DeviceId", imei);
             Log.e("products_guest", parameters_guest.toString());
-            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, "http://54.191.146.243:8088/Guest", parameters_guest, 2, "guest");
+            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener1, Constants.BASE_URL+"Guest", parameters_guest, 2, "guest");
             httpAsync1.execute();
         }
         else {

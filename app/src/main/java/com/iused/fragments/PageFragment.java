@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.iused.main.ProductDetailsActivity_Negotiable;
 import com.iused.main.ProductDetailsActivity_Non_Negotiable;
 import com.iused.main.Sell_Products_Activity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.EndlessRecyclerOnScrollListener;
 import com.iused.utils.HttpAsync;
 
@@ -96,6 +98,9 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
     private GridLayoutManager mLayoutManager;
     private TextView txt_sell_product=null;
     private LinearLayout linear_product=null;
+    private SwipeRefreshLayout swipeRefreshLayout_compete=null;
+    private SwipeRefreshLayout swipeRefreshLayout_fixed=null;
+    private SwipeRefreshLayout swipeRefreshLayout_no_products=null;
 
     // on scroll
 
@@ -133,6 +138,10 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
             str_arr_dp_text_final = ar_dp_text.toArray(str_arr_dp_text_final);
 
         }
+
+        swipeRefreshLayout_compete= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_compete);
+        swipeRefreshLayout_fixed= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_fixed);
+        swipeRefreshLayout_no_products= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_no_products);
 
         mainProductsBean = new ArrayList<MainProductsBean>();
         mainProductsBean_non_negotiable = new ArrayList<MainProductsBean>();
@@ -174,10 +183,82 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
         para.put("PostedWithin", MainActivity.str_posted_in);
         para.put("Latitude",mpref.getString("user_lat",""));
         para.put("Longitude",mpref.getString("user_lang",""));
-
-        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, "http://54.191.146.243:8088/GetProducts", para, 2, "products");
+        swipeRefreshLayout_compete.setRefreshing(true);
+        swipeRefreshLayout_fixed.setRefreshing(true);
+        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProducts", para, 2, "products");
         httpAsync1.execute();
 
+        swipeRefreshLayout_compete.setColorSchemeColors(Color.RED);
+        swipeRefreshLayout_fixed.setColorSchemeColors(Color.RED);
+        swipeRefreshLayout_no_products.setColorSchemeColors(Color.RED);
+
+        swipeRefreshLayout_compete.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                para = new HashMap<>();
+                para.put("UserId", mpref.getString("user_id", ""));
+                para.put("Page", "0");
+                para.put("SortBy", MainActivity.str_sort_by);
+                para.put("CategoryId", ids[mPage]);
+                para.put("LowerPriceRange", MainActivity.str_lower_range_price);
+                para.put("UpperPriceRange", MainActivity.str_upper_range_price);
+                para.put("LowerDistance", MainActivity.str_lower_distance);
+                para.put("UpperDistance", MainActivity.str_upper_distance);
+                para.put("PostedWithin", MainActivity.str_posted_in);
+                para.put("Latitude",mpref.getString("user_lat",""));
+                para.put("Longitude",mpref.getString("user_lang",""));
+                swipeRefreshLayout_compete.setRefreshing(true);
+                swipeRefreshLayout_fixed.setRefreshing(true);
+                HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProducts", para, 2, "products");
+                httpAsync1.execute();
+            }
+        });
+
+        swipeRefreshLayout_fixed.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                para = new HashMap<>();
+                para.put("UserId", mpref.getString("user_id", ""));
+                para.put("Page", "0");
+                para.put("SortBy", MainActivity.str_sort_by);
+                para.put("CategoryId", ids[mPage]);
+                para.put("LowerPriceRange", MainActivity.str_lower_range_price);
+                para.put("UpperPriceRange", MainActivity.str_upper_range_price);
+                para.put("LowerDistance", MainActivity.str_lower_distance);
+                para.put("UpperDistance", MainActivity.str_upper_distance);
+                para.put("PostedWithin", MainActivity.str_posted_in);
+                para.put("Latitude",mpref.getString("user_lat",""));
+                para.put("Longitude",mpref.getString("user_lang",""));
+                swipeRefreshLayout_compete.setRefreshing(true);
+                swipeRefreshLayout_fixed.setRefreshing(true);
+                swipeRefreshLayout_no_products.setRefreshing(true);
+                HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProducts", para, 2, "products");
+                httpAsync1.execute();
+            }
+        });
+
+        swipeRefreshLayout_no_products.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                para = new HashMap<>();
+                para.put("UserId", mpref.getString("user_id", ""));
+                para.put("Page", "0");
+                para.put("SortBy", MainActivity.str_sort_by);
+                para.put("CategoryId", ids[mPage]);
+                para.put("LowerPriceRange", MainActivity.str_lower_range_price);
+                para.put("UpperPriceRange", MainActivity.str_upper_range_price);
+                para.put("LowerDistance", MainActivity.str_lower_distance);
+                para.put("UpperDistance", MainActivity.str_upper_distance);
+                para.put("PostedWithin", MainActivity.str_posted_in);
+                para.put("Latitude",mpref.getString("user_lat",""));
+                para.put("Longitude",mpref.getString("user_lang",""));
+                swipeRefreshLayout_compete.setRefreshing(true);
+                swipeRefreshLayout_fixed.setRefreshing(true);
+                swipeRefreshLayout_no_products.setRefreshing(true);
+                HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProducts", para, 2, "products");
+                httpAsync1.execute();
+            }
+        });
 
         grid_item = (RecyclerView) view.findViewById(R.id.list);
 //        adapter = new ProductMainAdapter(getActivity(), mainProductsBean);
@@ -209,16 +290,16 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
         rad_negotiable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                grid_item.setVisibility(View.VISIBLE);
-                grid_item_non_negotiable.setVisibility(View.GONE);
+                swipeRefreshLayout_compete.setVisibility(View.VISIBLE);
+                swipeRefreshLayout_fixed.setVisibility(View.GONE);
             }
         });
 
         rad_non_negotiable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                grid_item.setVisibility(View.GONE);
-                grid_item_non_negotiable.setVisibility(View.VISIBLE);
+                swipeRefreshLayout_compete.setVisibility(View.GONE);
+                swipeRefreshLayout_fixed.setVisibility(View.VISIBLE);
             }
         });
 
@@ -237,14 +318,14 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
                 txt_fixed_price.setTextColor(Color.parseColor("#B3B3B3"));
 
                 if(int_negotiable==0){
-                    linear_product.setVisibility(View.VISIBLE);
-                    grid_item.setVisibility(View.GONE);
-                    grid_item_non_negotiable.setVisibility(View.GONE);
+                    swipeRefreshLayout_no_products.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout_compete.setVisibility(View.GONE);
+                    swipeRefreshLayout_fixed.setVisibility(View.GONE);
                 }
                 else {
-                    grid_item.setVisibility(View.VISIBLE);
-                    grid_item_non_negotiable.setVisibility(View.GONE);
-                    linear_product.setVisibility(View.GONE);
+                    swipeRefreshLayout_compete.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout_fixed.setVisibility(View.GONE);
+                    swipeRefreshLayout_no_products.setVisibility(View.GONE);
                 }
 //                linear_compete_down.setVisibility(View.VISIBLE);
 //                linear_fixed_price_down.setVisibility(View.GONE);
@@ -259,14 +340,14 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
                 txt_fixed_price.setTextColor(Color.parseColor("#F14D57"));
 
                 if(int_non_negotiable==0){
-                    linear_product.setVisibility(View.VISIBLE);
-                    grid_item.setVisibility(View.GONE);
-                    grid_item_non_negotiable.setVisibility(View.GONE);
+                    swipeRefreshLayout_no_products.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout_compete.setVisibility(View.GONE);
+                    swipeRefreshLayout_fixed.setVisibility(View.GONE);
                 }
                 else {
-                    grid_item.setVisibility(View.GONE);
-                    grid_item_non_negotiable.setVisibility(View.VISIBLE);
-                    linear_product.setVisibility(View.GONE);
+                    swipeRefreshLayout_compete.setVisibility(View.GONE);
+                    swipeRefreshLayout_fixed.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout_no_products.setVisibility(View.GONE);
                 }
 //                linear_compete_down.setVisibility(View.GONE);
 //                linear_fixed_price_down.setVisibility(View.VISIBLE);
@@ -284,6 +365,15 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 ////                showViews();
 //            }
 //        });
+
+        grid_item_non_negotiable.setOnScrollListener(new EndlessRecyclerOnScrollListener(
+                mLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                // do somthing...
+                loadMoreData(current_page);
+            }
+        });
 
         grid_item.setOnScrollListener(new EndlessRecyclerOnScrollListener(
                 mLayoutManager) {
@@ -316,8 +406,10 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
             para.put("PostedWithin", MainActivity.str_posted_in);
             para.put("Latitude",mpref.getString("user_lat",""));
             para.put("Longitude",mpref.getString("user_lang",""));
-
-            HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, "http://54.191.146.243:8088/GetProducts", para, 2, "products_loadmore");
+            swipeRefreshLayout_compete.setRefreshing(true);
+            swipeRefreshLayout_fixed.setRefreshing(true);
+            swipeRefreshLayout_no_products.setRefreshing(true);
+            HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProducts", para, 2, "products_loadmore");
             httpAsync1.execute();
 
             ival++;
@@ -361,14 +453,21 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 
     @Override
     public void onTaskComplete(String result, String tag) {
-
+        swipeRefreshLayout_compete.setRefreshing(false);
+        swipeRefreshLayout_fixed.setRefreshing(false);
+        swipeRefreshLayout_no_products.setRefreshing(false);
         if (result.equalsIgnoreCase("fail")) {
-            Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
+
         } else {
             if (tag.equalsIgnoreCase("products")) {
                 JSONObject jsonObject = null;
-//                mainProductsBean.clear();
-//                mainProductsBean_non_negotiable.clear();
+                mainProductsBean.clear();
+                mainProductsBean_non_negotiable.clear();
 
                 try {
 
@@ -411,6 +510,15 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 
                                         grid_item.setAdapter(adapter);
                                         ival = 1;
+
+                                        grid_item.setOnScrollListener(new EndlessRecyclerOnScrollListener(
+                                                mLayoutManager) {
+                                            @Override
+                                            public void onLoadMore(int current_page) {
+                                                // do somthing...
+                                                loadMoreData(current_page);
+                                            }
+                                        });
 //                                        grid_item.scrollToPosition(mainProductsBean.size()-4);
 //                                        grid_item.smoothScrollToPosition(mainProductsBean.size());
 //                                        grid_item.setVisibility(View.VISIBLE);
@@ -458,8 +566,8 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 
                             }
                             else {
-                                linear_product.setVisibility(View.VISIBLE);
-                                grid_item.setVisibility(View.GONE);
+                                swipeRefreshLayout_no_products.setVisibility(View.VISIBLE);
+                                swipeRefreshLayout_compete.setVisibility(View.GONE);
                             }
 
                             JSONArray jsonsendarr1 = jsonObject.optJSONArray("NonNegotiable");
@@ -499,6 +607,15 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 
                                         grid_item_non_negotiable.setAdapter(adapter_non_negotiable);
                                         ival = 1;
+
+                                        grid_item_non_negotiable.setOnScrollListener(new EndlessRecyclerOnScrollListener(
+                                                mLayoutManager) {
+                                            @Override
+                                            public void onLoadMore(int current_page) {
+                                                // do somthing...
+                                                loadMoreData(current_page);
+                                            }
+                                        });
 //                                        grid_item_non_negotiable.scrollToPosition(mainProductsBean_non_negotiable.size()-4);
 //                                        grid_item_non_negotiable.smoothScrollToPosition(mainProductsBean_non_negotiable.size());
 //                                        grid_item_non_negotiable.setVisibility(View.VISIBLE);
@@ -544,8 +661,8 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 
                             }
                             else {
-                                linear_product.setVisibility(View.VISIBLE);
-                                grid_item_non_negotiable.setVisibility(View.GONE);
+                                swipeRefreshLayout_no_products.setVisibility(View.VISIBLE);
+                                swipeRefreshLayout_fixed.setVisibility(View.GONE);
                             }
 
                         }

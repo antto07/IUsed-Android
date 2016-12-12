@@ -28,6 +28,7 @@ import com.iused.main.DonatedProductsDetailsActivity;
 import com.iused.main.DonorResponsesDetailsActivity;
 import com.iused.main.SoldProductsDetailsActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONArray;
@@ -101,7 +102,7 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
         progressDialog.setCancelable(false);
         progressDialog.show();
         Log.e("para_get_products", para.toString());
-        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, "http://54.191.146.243:8088/GetProductPurchaseRequests", para, 2, "my_orders");
+        HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
         httpAsync1.execute();
 
         return view;
@@ -118,7 +119,12 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
+
         }
         else {
             if(tag.equalsIgnoreCase("my_orders")){

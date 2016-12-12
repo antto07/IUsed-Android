@@ -5,6 +5,7 @@ package com.iused.utils;
  */
 public class Constants {
 
+    public static final String BASE_URL="http://iusedapp.com:8088/";
 
     public static final String FAIL = "fail";
 }

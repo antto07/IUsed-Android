@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.iused.R;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.iused.utils.MyTagHandler;
 
@@ -58,7 +59,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements AsyncTas
         progressDialog.setCancelable(false);
         progressDialog.show();
         Log.e("products_details", para.toString());
-        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/Terms", para, 2, "terms");
+        HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"Terms", para, 2, "terms");
         httpAsync1.execute();
 
     }
@@ -94,7 +95,11 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements AsyncTas
         progressDialog.dismiss();
 
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else {
             if(tag.equalsIgnoreCase("terms")){

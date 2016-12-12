@@ -52,6 +52,7 @@ import com.iused.bean.LocationBean;
 import com.iused.bean.MainProductsBeanCategories;
 import com.iused.dialog.BottomSheetDialogView;
 import com.iused.fragments.Donate_Product_Activity;
+import com.iused.fragments.Dontated_By_Others_Fragment;
 import com.iused.fragments.ExampleFragments;
 import com.iused.fragments.DonateFragment;
 import com.iused.fragments.OrdersFragments;
@@ -62,6 +63,7 @@ import com.iused.introduction.LoginActivity;
 import com.iused.introduction.RegisterActivity;
 import com.iused.introduction.Splash;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -462,7 +464,7 @@ public class MainActivity extends AppCompatActivity
                         progressDialog.setMessage("Loading...");
                         progressDialog.setCancelable(false);
                         progressDialog.show();
-                        new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                        new HttpAsync(getApplicationContext(), listener,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
                     }
 
@@ -480,7 +482,7 @@ public class MainActivity extends AppCompatActivity
                     progressDialog.setMessage("Loading...");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                    new HttpAsync(getApplicationContext(), listener,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
                 }
 
@@ -780,9 +782,16 @@ public class MainActivity extends AppCompatActivity
                 imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
 //                swipeRefreshLayout.setRefreshing(false);
                 if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+                    try {
+                        menu_filter.findItem(R.id.filter).setVisible(false);
+                        changeFragment(new Dontated_By_Others_Fragment());
+
+                    }catch (Exception e){
+
+                    }
                 }
                 else {
                     try {
@@ -863,7 +872,7 @@ public class MainActivity extends AppCompatActivity
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+        new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
     }
 
@@ -1136,7 +1145,11 @@ public class MainActivity extends AppCompatActivity
 //        swipeRefreshLayout.setRefreshing(false);
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
-            Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(),"Check your internet connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         }
         else{
             if(tag.equalsIgnoreCase("products")){
@@ -1263,7 +1276,7 @@ public class MainActivity extends AppCompatActivity
                             progressDialog.setMessage("Loading...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
-                            new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/GetCategories" , parameters, 2, "products").execute();
+                            new HttpAsync(getApplicationContext(), listener,Constants.BASE_URL+"GetCategories" , parameters, 2, "products").execute();
 
 
                         }
@@ -1364,7 +1377,7 @@ public class MainActivity extends AppCompatActivity
                             progressDialog.setMessage("Loading...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
-                            new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                            new HttpAsync(getApplicationContext(), listener,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
 
                             try {
@@ -1402,7 +1415,7 @@ public class MainActivity extends AppCompatActivity
                             progressDialog.setMessage("Loading...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
-                            new HttpAsync(getApplicationContext(), listener,"http://54.191.146.243:8088/UpdateLocation" , parameters_location, 2, "location").execute();
+                            new HttpAsync(getApplicationContext(), listener,Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
 //                            nextActivity();
                         }

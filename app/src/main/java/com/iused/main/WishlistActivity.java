@@ -32,6 +32,7 @@ import com.iused.bean.WishListProductsBeanNegotiable;
 import com.iused.bean.WishListProductsBeanNonNegotiable;
 import com.iused.fragments.FaqPagerAdapter;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONArray;
@@ -112,7 +113,7 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
                 progressDialog.setMessage("Loading...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/UpdateWishList", para, 2, "products");
+                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"UpdateWishList", para, 2, "products");
                 httpAsync1.execute();
 
                 return true;
@@ -136,7 +137,11 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
 
         progressDialog.dismiss();
         if (result.equalsIgnoreCase("fail")) {
-            Toast.makeText(getApplicationContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getApplicationContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+
+            }
         } else {
             if (tag.equalsIgnoreCase("products")) {
                 JSONObject jsonObject = null;

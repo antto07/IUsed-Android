@@ -26,6 +26,7 @@ import com.iused.R;
 import com.iused.fragments.SellFragment;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
+import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONException;
@@ -210,7 +211,7 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                             progressDialog.setCancelable(false);
                             progressDialog.show();
                             Log.e("sell_product", para.toString());
-                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
+                            HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"sellProduct", para, 2, "sell_product");
                             httpAsync1.execute();
                         }
 
@@ -260,7 +261,7 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
                                 Log.e("sell_product", para.toString());
-                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, "http://54.191.146.243:8088/sellProduct", para, 2, "sell_product");
+                                HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"sellProduct", para, 2, "sell_product");
                                 httpAsync1.execute();
                             }
 
@@ -293,7 +294,11 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
 
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
+            try {
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
 
+            }
         }
         else {
             if(tag.equalsIgnoreCase("sell_product")){
