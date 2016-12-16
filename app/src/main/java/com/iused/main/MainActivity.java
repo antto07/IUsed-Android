@@ -388,30 +388,48 @@ public class MainActivity extends AppCompatActivity
                 sort_by_int = radioGroupMain_sort_by.getCheckedRadioButtonId();
                 radiobutton_sort_by = (RadioButton) findViewById(sort_by_int);
 
-                Log.e("posted_within",radiobutton_posted_within.getText().toString());
-                Log.e("sort_by",radiobutton_sort_by.getText().toString());
+//                Log.e("posted_within",radiobutton_posted_within.getText().toString());
+//                Log.e("sort_by",radiobutton_sort_by.getText().toString());
 
-                if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Price: high to low")){
-                    str_sort_by="2";
+                if (radioGroupMain_sort_by.getCheckedRadioButtonId() == -1){
+                    str_sort_by="";
                 }
-                else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Price: low to high")){
-                    str_sort_by="1";
-                }
-                else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Closest First")){
-                    str_sort_by="3";
-                }
-                else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Newest First")){
-                    str_sort_by="4";
+                else {
+                    if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Price: high to low")){
+                        str_sort_by="2";
+                    }
+                    else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Price: low to high")){
+                        str_sort_by="1";
+                    }
+                    else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Closest First")){
+                        str_sort_by="3";
+                    }
+                    else if(radiobutton_sort_by.getText().toString().equalsIgnoreCase("Newest First")){
+                        str_sort_by="4";
+                    }
+                    else {
+                        str_sort_by="";
+                    }
                 }
 
-                if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 24h")){
-                    str_posted_in="1";
+
+                if (radioGroupMain_posted_within.getCheckedRadioButtonId() == -1){
+                    str_posted_in="";
                 }
-                else if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 7 days")){
-                    str_posted_in="7";
-                }
-                else if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 30 days")){
-                    str_posted_in="30";
+                else {
+                    if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 24h")){
+                        str_posted_in="1";
+                    }
+                    else if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 7 days")){
+                        str_posted_in="7";
+                    }
+                    else if(radiobutton_posted_within.getText().toString().equalsIgnoreCase("The last 30 days")){
+                        str_posted_in="30";
+                    }
+                    else {
+                        str_posted_in="";
+                    }
+
                 }
 
                 str_lower_range_price=edt_price_from.getText().toString();
@@ -455,6 +473,13 @@ public class MainActivity extends AppCompatActivity
                         layoutLocationFilter.startAnimation(slideDown);
                         linear_main.setVisibility(View.VISIBLE);
 
+                        try {
+                            radioGroupMain_sort_by.clearCheck();
+                            radioGroupMain_posted_within.clearCheck();
+                        }catch (Exception e){
+
+                        }
+
                         parameters_location = new HashMap<>();
                         parameters_location.put("UserId",mpref.getString("user_id",""));
                         parameters_location.put("Longitude",mpref.getString("user_lang",""));
@@ -496,6 +521,14 @@ public class MainActivity extends AppCompatActivity
                 layoutLocationFilter.setAnimation(slideDown);
                 layoutLocationFilter.startAnimation(slideDown);
                 linear_main.setVisibility(View.VISIBLE);
+
+                try {
+                    radioGroupMain_sort_by.clearCheck();
+                    radioGroupMain_posted_within.clearCheck();
+                }catch (Exception e){
+
+                }
+
             }
         });
 
@@ -1143,6 +1176,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTaskComplete(String result, String tag) {
 //        swipeRefreshLayout.setRefreshing(false);
+
         progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
             try {

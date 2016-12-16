@@ -90,15 +90,6 @@
             android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="@color/colorPrimary"
-                android:text="00:"/>
-
-            <TextView
 
                 android:id="@+id/txt_timer_mobile_verify"
                 android:layout_width="wrap_content"

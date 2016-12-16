@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -303,12 +305,14 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
         TextView txt_posted_by_name= (TextView) dialog.findViewById(R.id.txt_posted_by_name);
         txt_posted_by_contact= (TextView) dialog.findViewById(R.id.txt_posted_by_phone);
         LinearLayout linear_call= (LinearLayout) dialog.findViewById(R.id.linear_call);
+        ImageView img_call_phone= (ImageView) dialog.findViewById(R.id.img_call_phone);
+        ImageView img_whatsapp_call= (ImageView) dialog.findViewById(R.id.img_whatsapp_call);
 
         txt_posted_by_name.setText(username);
         txt_posted_by_contact.setText(userphone);
 
         Button button_ok= (Button) dialog.findViewById(R.id.btn_ok);
-        button_ok.setOnClickListener(new View.OnClickListener() {
+        img_call_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= 23) {
@@ -336,6 +340,49 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
             }
         });
 
+        img_whatsapp_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNumberExist=isContactExist(txt_posted_by_contact.getText().toString());
+
+                if (isNumberExist) {
+                    Uri uri = Uri.parse("smsto:" + txt_posted_by_contact.getText());
+                    Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+                    i.setPackage("com.whatsapp");
+                    startActivity(Intent.createChooser(i, ""));
+                }
+                else {
+                    final CharSequence[] items = { "Send Message", "Save Contact",
+                            "Cancel" };
+
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SoldProductsDetailsActivity.this);
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            dialog.dismiss();
+                            if (items[item].equals("Send Message")) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + txt_posted_by_contact.getText().toString()));
+                                intent.putExtra("sms_body", "");
+                                startActivity(intent);
+
+                            } else if (items[item].equals("Save Contact")) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT, Uri.parse("tel:" + txt_posted_by_contact.getText())); //currentNum is my TextView, you can replace it with the number directly such as Uri.parse("tel:1293827")
+                                intent.putExtra(ContactsContract.Intents.EXTRA_FORCE_CREATE, true); //skips the dialog box that asks the user to confirm creation of contacts
+                                startActivity(intent);
+
+                            } else if (items[item].equals("Cancel")) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+            }
+        });
+
         Button button = (Button) dialog.findViewById(R.id.btn_cancel);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -343,13 +390,26 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
                 dialog.dismiss();
 
 
-               /* String phone = "8904212604";
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                startActivity(intent);*/
+
             }
         });
 
 
+    }
+
+    private boolean isContactExist(String number) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        String[] mPhoneNumer = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME};
+        Cursor cursor = this.getContentResolver().query(uri, mPhoneNumer, null, null, null);
+        try {
+            if (cursor.moveToFirst()) {
+                return true;
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return false;
     }
 
     private void marshmellowPermission() {

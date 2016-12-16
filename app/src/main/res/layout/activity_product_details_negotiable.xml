@@ -105,6 +105,24 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:padding="5dip" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_marginBottom="3dp"
+                        android:layout_above="@+id/indicator">
+
+                        <ImageView
+                            android:id="@+id/img_play_video"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:visibility="gone"
+                            android:src="@drawable/video_button"/>
+
+                    </LinearLayout>
+
+
                 </RelativeLayout>
 
 

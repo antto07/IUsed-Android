@@ -14,6 +14,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +61,7 @@ import com.iused.adapters.GridviewAdapter;
 import com.iused.bean.CustomGallery;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.HotelierUploadGalleryImgs;
+import com.iused.utils.UploadSellProductVideo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -135,6 +138,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
+    private final int VIDEO_REQUEST_CODE=10;
     private static int RESULT_OK=-1;
     String url;
     String picturePath;
@@ -168,6 +172,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
     LinearLayout linear_add_images= null;
     public View view=null;
 
+    private RelativeLayout relativelayout_video=null;
+    private ImageView img_video_image=null;
+    private ImageView img_delete_video=null;
+    public static String str_video_url=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -192,6 +200,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         image=new ImageView(getApplicationContext());
         image_delete=new ImageView(getApplicationContext());
         view=new View(getApplicationContext());
+
+        relativelayout_video= (RelativeLayout) findViewById(R.id.thumbview_video);
+        img_video_image= (ImageView) findViewById(R.id.img_video);
+        img_delete_video= (ImageView) findViewById(R.id.img_delete_video);
 
         list_images= new ArrayList<String>();
         dataT.clear();
@@ -291,18 +303,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                     // demo();
                     marshmellowPermission_video();
                     //  mainTask();
-                } else {
+                } else if (Build.VERSION.SDK_INT >= 23){
 
                     marshmellowPermissionStorage_video();
 
-//                        Config config = new Config();
-//                        config.setCameraHeight(R.dimen.app_camera_height);
-//                        config.setToolbarTitleRes(R.string.custom_title);
-//                        config.setSelectionMin(1);
-//                        config.setSelectionLimit(10);
-//                        config.setSelectedBottomHeight(R.dimen.bottom_height);
-//                        config.setFlashOn(true);
-//                        getImages(config);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 //                            // TODO: Consider calling
@@ -315,6 +319,9 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 //                            return;
 //                        }
                     }
+                }
+                else {
+                    addvideo();
                 }
 
 
@@ -542,7 +549,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     try {
                         intent.putExtra("image_urls",image_uris.toString());
-                        intent.putExtra("video_url",mVideoUri.toString());
+                        intent.putExtra("video_url",str_video_url.toString());
                     }catch (Exception e){
                         intent.putExtra("image_urls","");
                         intent.putExtra("video_url","");
@@ -600,7 +607,8 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 //            config.setSelectedBottomHeight(R.dimen.bottom_height);
 //            config.setFlashOn(true);
 //            getImages(config);
-            dispatchTakeVideoIntent();
+//            dispatchTakeVideoIntent();
+            addvideo();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 //                    // TODO: Consider calling
@@ -794,7 +802,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    dispatchTakeVideoIntent();
+                    addvideo();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 //                            // TODO: Consider calling
@@ -938,6 +946,14 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             }
         });
         builder.show();
+    }
+
+    private void addvideo(){
+        Intent calVideo = new Intent();
+        calVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT,30);
+        calVideo.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,1);
+        calVideo.setAction(MediaStore.ACTION_VIDEO_CAPTURE);
+        startActivityForResult(calVideo, VIDEO_REQUEST_CODE);
     }
 
     private void buildDialog() {
@@ -1389,31 +1405,6 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                     Bitmap scaled = Bitmap.createScaledBitmap(bitmapImage, 512, nh, true);
 
 
-//                    linear_add_images=new LinearLayout(getApplicationContext());
-//                    linear_add_images.setOrientation(LinearLayout.HORIZONTAL);
-//
-//                    image = new ImageView(getApplicationContext());
-//                    image.setImageBitmap(scaled);
-//                    image.setLayoutParams(new android.view.ViewGroup.LayoutParams(150,150));
-//                    image.setMaxHeight(150);
-//                    image.setMaxWidth(150);
-//
-//                    image_delete=new ImageView(getApplicationContext());
-//                    image_delete.setBackgroundResource(android.R.drawable.ic_delete);
-//                    image_delete.setLayoutParams(new android.view.ViewGroup.LayoutParams(30,30));
-//                    image_delete.setMaxHeight(30);
-//                    image_delete.setMaxWidth(30);
-////                    image_delete.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-//
-//                    linear_add_images.addView(image);
-//                    linear_add_images.addView(image_delete);
-//
-//                    int indexValue = mSelectedImagesContainer.indexOfChild(image_delete);
-//                    image_delete.setTag(Integer.toString(indexValue));
-//
-//                    // Adds the view to the layout
-//                    mSelectedImagesContainer.addView(linear_add_images);
-
                     item = new CustomGallery();
                     item.sdcardPath = scaled;
 
@@ -1500,6 +1491,32 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             else if (resultCode == Activity.RESULT_CANCELED) {
 
             }
+        }
+        else if (requestCode == VIDEO_REQUEST_CODE ) {
+            if (resultCode == Activity.RESULT_OK){
+
+//                String tempPath =null;
+                Uri video_uri = data.getData();
+                Log.e("video_uri",video_uri.toString());
+
+                String path = getRealPathFromURI(video_uri);
+                Log.e("video_path",path);
+//                Toast.makeText(getApplicationContext(),path, Toast.LENGTH_LONG).show();
+
+                String picture_path_trimmed=path.substring(path.lastIndexOf("/") + 1);
+                Log.e("trimmed",picture_path_trimmed);
+
+                new UploadSellProductVideo(Sell_Products_Activity.this, picture_path_trimmed,path).execute();
+
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(path,
+                        MediaStore.Images.Thumbnails.MINI_KIND);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
+                img_video_image.setBackgroundDrawable(bitmapDrawable);
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+
+            }
+
         }
         else if(requestCode == ACTION_TAKE_VIDEO){
             if (resultCode == Activity.RESULT_OK){

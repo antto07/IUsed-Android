@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Antto on 06-10-2016.
@@ -63,7 +64,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     private TextView txt_mobile_verify_text=null;
     private Intent intent_direct=null;
     private TextView txt_timer_mobile_verify=null;
-    private CountDownTimer countDownTimer;
+    private static CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,9 +89,27 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
         txt_mobile_verify_text= (TextView) findViewById(R.id.txt_verify_message);
         txt_timer_mobile_verify= (TextView) findViewById(R.id.txt_timer_mobile_verify);
 
-        countDownTimer = new MyCountDownTimer(30*1000, 1*1000);
-        txt_timer_mobile_verify.setText(txt_timer_mobile_verify.getText()+ String.valueOf(30*1000 / 1000));
-        countDownTimer.start();
+        countDownTimer = new CountDownTimer(60000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long millis = millisUntilFinished;
+                //Convert milliseconds into hour,minute and seconds
+                String hms = String.format("%02d:%02d",TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                txt_timer_mobile_verify.setText(hms);//set text
+            }
+
+            public void onFinish() {
+
+//                        Intent intent=new Intent(context, MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        context.startActivity(intent);
+
+                txt_timer_mobile_verify.setText("00:00");
+                btn_resend_code_gray.setVisibility(View.GONE);
+                btn_resend_code.setVisibility(View.VISIBLE);//On finish change timer text
+                countDownTimer = null;//set CountDownTimer to null
+//                startTimer.setText(getString(R.string.start_timer));//Change button text
+            }
+        }.start();
 
         intent_data=getIntent();
         pref = getSharedPreferences("user_details", MODE_PRIVATE);
@@ -192,32 +211,14 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     @Override
     protected void onStop() {
         super.onStop();
-        countDownTimer.cancel();
+//        countDownTimer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        countDownTimer.cancel();
     }
 
-    public class MyCountDownTimer extends CountDownTimer {
-        public MyCountDownTimer(long startTime, long interval) {
-            super(startTime, interval);
-        }
-
-        @Override
-        public void onFinish() {
-            txt_timer_mobile_verify.setText("00");
-            btn_resend_code_gray.setVisibility(View.GONE);
-            btn_resend_code.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            txt_timer_mobile_verify.setText("" + millisUntilFinished / 1000);
-        }
-    }
 
     public static MobileVerifyActivity  getInstace(){
         return ins;
@@ -250,7 +251,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                     if (jsonObject != null){
                         str_json_message= jsonObject.getString("errMsg");
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
-                            countDownTimer.cancel();
+//                            countDownTimer.cancel();
                             para_profile = new HashMap<>();
                             para_profile.put("UserId",intent_data.getStringExtra("user_id"));
                             para_profile.put("Name",intent_data.getStringExtra("user_name"));
@@ -480,6 +481,31 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                 try {
                     jsonObject = new JSONObject(result);
                     if (jsonObject != null){
+
+                        countDownTimer = new CountDownTimer(60000, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                                long millis = millisUntilFinished;
+                                //Convert milliseconds into hour,minute and seconds
+                                String hms = String.format("%02d:%02d",TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                                txt_timer_mobile_verify.setText(hms);//set text
+                                btn_resend_code_gray.setVisibility(View.VISIBLE);
+                                btn_resend_code.setVisibility(View.GONE);
+                            }
+
+                            public void onFinish() {
+
+//                        Intent intent=new Intent(context, MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        context.startActivity(intent);
+
+                                txt_timer_mobile_verify.setText("00:00");
+                                btn_resend_code_gray.setVisibility(View.GONE);
+                                btn_resend_code.setVisibility(View.VISIBLE);//On finish change timer text
+                                countDownTimer = null;//set CountDownTimer to null
+//                startTimer.setText(getString(R.string.start_timer));//Change button text
+                            }
+                        }.start();
+
                         str_json_message= jsonObject.getString("errFlag");
                         if(str_json_message.equalsIgnoreCase("0")){
 

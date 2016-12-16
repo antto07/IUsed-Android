@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -119,6 +120,8 @@
         <activity android:name=".main.OrderedProductsDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".main.UpadteSellProductActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".main.FullVideoUserActivity"
             android:screenOrientation="portrait"/>
 
 

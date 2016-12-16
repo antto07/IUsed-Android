@@ -1121,7 +1121,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
         if(layoutLocationSearch.getVisibility() == View.VISIBLE){
             layoutLocationSearch.setAnimation(slideDown);
             layoutLocationSearch.startAnimation(slideDown);
-            Splashtask();
+//            Splashtask();
         }
         else {
             super.onBackPressed();

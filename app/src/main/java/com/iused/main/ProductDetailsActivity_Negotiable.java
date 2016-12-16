@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +90,8 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private CircleImageView img_seller_image=null;
+    private ImageView img_play_video=null;
+    public String str_video_link=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,6 +129,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         txt_distance= (TextView) findViewById(R.id.txt_distance);
         img_seller_image= (CircleImageView) findViewById(R.id.img_seller_image);
         txt_condition= (TextView) findViewById(R.id.txt_condition);
+        img_play_video= (ImageView) findViewById(R.id.img_play_video);
 
 //        gallery=new ArrayList<String>();
 
@@ -234,6 +239,22 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         HttpAsync httpAsync1 = new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"ProductDetail", para, 2, "product_details");
         httpAsync1.execute();
 
+        img_play_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                File file = new File(str_video_link);
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setDataAndType(Uri.fromFile(file), "video/*");
+//                startActivity(intent);
+
+                Intent intent=new Intent(getApplicationContext(),FullVideoUserActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("video_url",str_video_link);
+                startActivity(intent);
+
+            }
+        });
+
     }
 
     @Override
@@ -278,6 +299,14 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
 //                                        gallery.add(volumobject.getString("ImageLinks"));
                                         gallery=new ArrayList<String>( Arrays.asList(volumobject.getString("ImageLinks").split("\\s*,\\s*")));
                                         gallery_images=new ArrayList<>(gallery);
+
+                                        str_video_link=volumobject.getString("VideoLinks");
+                                        if(str_video_link.equalsIgnoreCase("")){
+                                            img_play_video.setVisibility(View.GONE);
+                                        }
+                                        else {
+                                            img_play_video.setVisibility(View.VISIBLE);
+                                        }
 
                                         if(gallery_images!=null && gallery_images.size()>0) {
 

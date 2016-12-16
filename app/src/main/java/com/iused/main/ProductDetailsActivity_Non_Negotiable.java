@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,6 +84,8 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private CircleImageView img_seller_image_non=null;
+    private ImageView img_play_video=null;
+    public String str_video_link=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,6 +120,7 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         img_seller_image_non= (CircleImageView) findViewById(R.id.img_seller_image_non);
         txt_condition= (TextView) findViewById(R.id.txt_condition);
+        img_play_video= (ImageView) findViewById(R.id.img_play_video);
 
         txt_product_name.setText(intent.getStringExtra("name"));
         txt_used_for.setText(intent.getStringExtra("used_for")+" Old");
@@ -204,6 +209,16 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
             }
         });
 
+        img_play_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File file = new File(str_video_link);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "video/*");
+                startActivity(intent);
+            }
+        });
+
 
         para = new HashMap<>();
         para.put("UserId", mpref.getString("user_id",""));
@@ -259,6 +274,15 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
 
                                         gallery=new ArrayList<String>( Arrays.asList(volumobject.getString("ImageLinks").split("\\s*,\\s*")));
                                         gallery_images=new ArrayList<>(gallery);
+
+//                                        Log.e("video_link",volumobject.getString("VideoLinks"));
+                                        str_video_link=volumobject.getString("VideoLinks");
+                                        if(str_video_link.equalsIgnoreCase("")){
+                                            img_play_video.setVisibility(View.GONE);
+                                        }
+                                        else {
+                                            img_play_video.setVisibility(View.VISIBLE);
+                                        }
 
                                         if(gallery_images!=null && gallery_images.size()>0) {
 

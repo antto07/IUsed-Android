@@ -522,7 +522,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:checked="true"
                                 android:gravity="center"
                                 android:padding="5dp"
                                 android:text="Newest First"
@@ -576,7 +575,6 @@
                                 android:text="Price: high to low"
                                 android:textColor="@color/black" />
 
-
                         </RadioGroup>
 
 
@@ -620,7 +618,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:checked="true"
                                 android:gravity="center"
                                 android:padding="5dp"
                                 android:text="The last 24h"
