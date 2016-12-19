@@ -12,6 +12,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.iused.bean.CustomGallery;
+import com.iused.main.MainActivity;
 import com.iused.main.Sell_Products_Activity;
 
 
@@ -90,6 +92,7 @@ public class HotelierUploadGalleryImgs extends AsyncTask<String, String, String>
 
             progressLoadingDialog.dismiss();
 //            Toast.makeText(context,"Oops! Please try again",Toast.LENGTH_SHORT).show();
+
         }
 
 

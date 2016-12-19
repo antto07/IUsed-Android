@@ -556,7 +556,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                             para.put("VideoLinks","");
                         }
 
-                        para.put("ExchangeOffer","0");
+                        para.put("ExchangeOffer","1");
                         para.put("Created_dt",currentDateTimeString);
                         para.put("Type","3");
                         para.put("Condition",edt_condition.getText().toString());
@@ -1427,6 +1427,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
 //                            finish();
 
                             AlertDialog alertDialog=new AlertDialog.Builder(Donate_Product_Activity.this).setMessage(jsonObject.getString("errMsg"))
+                                    .setCancelable(false)
                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

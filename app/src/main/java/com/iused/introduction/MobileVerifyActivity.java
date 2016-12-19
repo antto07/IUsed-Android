@@ -95,6 +95,8 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                 //Convert milliseconds into hour,minute and seconds
                 String hms = String.format("%02d:%02d",TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
                 txt_timer_mobile_verify.setText(hms);//set text
+                btn_resend_code_gray.setVisibility(View.VISIBLE);
+                btn_resend_code.setVisibility(View.GONE);
             }
 
             public void onFinish() {
@@ -131,7 +133,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                 else {
                     para = new HashMap<>();
                     para.put("code", edt_verify_code.getText().toString());
-                    para.put("phone", "+91"+intent_data.getStringExtra("mobile"));
+                    para.put("phone", intent_data.getStringExtra("mobile_code")+intent_data.getStringExtra("mobile"));
                     para.put("UserId",intent_data.getStringExtra("user_id"));
                     Log.e("para_verify", para.toString());
                     progressDialog.setMessage("Verifying...");

@@ -78,6 +78,7 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
     private Button btn_republish_product=null;
     private static final int MY_PERMISSIONS_CALL = 104;
     private TextView txt_posted_by_contact=null;
+    int recycle_count=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,14 +207,24 @@ public class SoldProductsDetailsActivity extends AppCompatActivity implements As
 
         if(intent.getStringExtra("type").equalsIgnoreCase("2")){
             if(intent.getStringExtra("status").equalsIgnoreCase("0")){
-                btn_republish_product.setVisibility(View.VISIBLE);
+                if(Integer.parseInt(intent.getStringExtra("count"))<5){
+                    btn_republish_product.setVisibility(View.GONE);
+                }
+                else {
+                    btn_republish_product.setVisibility(View.VISIBLE);
+                }
             }
             else {
                 btn_republish_product.setVisibility(View.GONE);
             }
         }
         else {
-            btn_republish_product.setVisibility(View.VISIBLE);
+            if(Integer.parseInt(intent.getStringExtra("count"))<5){
+                btn_republish_product.setVisibility(View.GONE);
+            }
+            else {
+                btn_republish_product.setVisibility(View.VISIBLE);
+            }
         }
 
 

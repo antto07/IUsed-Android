@@ -29,6 +29,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -157,7 +159,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
     private ArrayList<String> ar_category_name = new ArrayList<String>();
     private ArrayList<String> ar_category_id = new ArrayList<String>();
 
-    GridView gridGallery;
+    public static GridView gridGallery;
     Handler handler;
     public static GalleryAdapter adapter;
     public static ArrayList<CustomGallery> dataT = new ArrayList<CustomGallery>();
@@ -176,6 +178,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
     private ImageView img_video_image=null;
     private ImageView img_delete_video=null;
     public static String str_video_url=null;
+    private Button btn_next_gray=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,6 +207,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         relativelayout_video= (RelativeLayout) findViewById(R.id.thumbview_video);
         img_video_image= (ImageView) findViewById(R.id.img_video);
         img_delete_video= (ImageView) findViewById(R.id.img_delete_video);
+        btn_next_gray= (Button) findViewById(R.id.btn_next_gray);
 
         list_images= new ArrayList<String>();
         dataT.clear();
@@ -387,6 +391,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         edt_used_for_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Sell_Products_Activity.this);
                 builder.setTitle("Select a Type");
                 builder.setSingleChoiceItems(str_array_duration_type, pos_duration_type, new DialogInterface.OnClickListener() {
@@ -407,6 +415,9 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         edt_used_for.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
 
                 if(edt_used_for_type.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Select a duration type",Toast.LENGTH_SHORT).show();
@@ -474,6 +485,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         edt_condition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Sell_Products_Activity.this);
                 builder.setTitle("Select Condition");
                 builder.setSingleChoiceItems(str_array_condition, pos_condition, new DialogInterface.OnClickListener() {
@@ -492,6 +507,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         edt_select_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Sell_Products_Activity.this);
                 builder.setTitle("Select a Category");
                 builder.setSingleChoiceItems(str_array_categories, pos_category, new DialogInterface.OnClickListener() {
@@ -505,6 +524,55 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 });
 
                 builder.show();
+            }
+        });
+
+
+        edt_item_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(edt_used_for_type.getText().toString().equalsIgnoreCase("")||edt_used_for.getText().toString().equalsIgnoreCase("")||edt_condition.getText().toString().equalsIgnoreCase("")||edt_select_category.getText().toString().equalsIgnoreCase("")||edt_description.getText().toString().equalsIgnoreCase("")){
+                    btn_next.setVisibility(View.GONE);
+                    btn_next_gray.setVisibility(View.VISIBLE);
+                }
+                else {
+                    btn_next.setVisibility(View.VISIBLE);
+                    btn_next_gray.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        edt_description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(edt_item_name.getText().toString().equalsIgnoreCase("")){
+                    btn_next.setVisibility(View.GONE);
+                    btn_next_gray.setVisibility(View.VISIBLE);
+                }
+                else {
+                    btn_next.setVisibility(View.VISIBLE);
+                    btn_next_gray.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -1172,36 +1240,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             bitmap.recycle();
 
 
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins(5, 5, 5, 5);
-//        image.setLayoutParams(lp);
-
-//        linear_add_images=new LinearLayout(getApplicationContext());
-//        linear_add_images.setOrientation(LinearLayout.HORIZONTAL);
-//
-//        image.setImageBitmap(rotatedBMP);
-//
-////        image_delete=new ImageView(getApplicationContext());
-//        image_delete.setBackgroundResource(android.R.drawable.ic_delete);
-//        image_delete.setLayoutParams(new android.view.ViewGroup.LayoutParams(30,30));
-//        image_delete.setMaxHeight(30);
-//        image_delete.setMaxWidth(30);
-////                    image_delete.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-//
-//        linear_add_images.addView(image);
-//        linear_add_images.addView(image_delete);
-//
-//        mSelectedImagesContainer.addView(linear_add_images);
-
-//        try {
-//            sendPhoto(rotatedBMP);
-
             Log.e("trimmed_new",mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf("/") + 1));
             String picture_path_trimmed_camera=mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf("/") + 1);
 
-//                handler.postDelayed(new Runnable(){
-//                    @Override
-//                    public void run(){
+
 
         new HotelierUploadGalleryImgs(Sell_Products_Activity.this, picture_path_trimmed_camera,mCurrentPhotoPath).execute();
 
@@ -1210,35 +1252,9 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         item.sdcardPath = rotatedBMP;
 
         dataT.add(item);
-//                    viewSwitcher.setDisplayedChild(0);
         adapter.addAll(dataT);
         gridGallery.setAdapter(adapter);
-//            AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
-////				s3Client.createBucket( "mymarketbucket" );
-//                        File filePath = new File(mCurrentPhotoPath);
-//            PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picture_path_trimmed_camera, filePath);
-//            por.setCannedAcl(CannedAccessControlList.PublicRead);
-//            s3Client.putObject( por );
-//
-//            ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-//            override.setContentType( "image/jpeg" );
-//
-//            GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picture_path_trimmed_camera);
-////                        urlRequest.setExpiration(null);  // Added an hour's worth of milliseconds to the current time.
-////                        urlRequest.setResponseHeaders( override );
-//
-//            URL url = s3Client.generatePresignedUrl( urlRequest );
-//            Log.e("url_final",url.toString());
-//            String str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picture_path_trimmed_camera;
-//            Log.e("url_final_server",str_img_url_final);
-//            image_uris.add(str_img_url_final);
 
-
-
-//        } catch (Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
     }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
@@ -1270,105 +1286,6 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 }catch (Exception e){
 
                 }
-
-
-//                    File f = new File(Environment.getExternalStorageDirectory()
-//                            .toString());
-//                    for (File temp : f.listFiles()) {
-//                        if (temp.getName().equals("temp.jpg")) {
-//                            f = temp;
-//                            break;
-//                        }
-//                    }
-//
-//                    Bitmap scaled;
-//                    BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-//
-//                    scaled = BitmapFactory.decodeFile(f.getAbsolutePath(),
-//                            btmapOptions);
-//
-////                    Bitmap bitmapImage = BitmapFactory.decodeFile(f.getAbsolutePath(),
-////                            btmapOptions);
-////                    int nh = (int) ( bitmapImage.getHeight() * (512.0 / bitmapImage.getWidth()) );
-////                    Bitmap scaled = Bitmap.createScaledBitmap(bitmapImage, 512, nh, true);
-////                your_imageview.setImageBitmap(scaled);
-//
-////                Uri selectedImageUri = data.getData();
-////
-////                String tempPath = getPath(selectedImageUri, Sell_Products_Activity.this);
-////                Bitmap bm;
-////                BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-////                bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
-////                image_company_logo.setImageBitmap(bm);
-//                    image = new ImageView(getApplicationContext());
-//                    image.setImageBitmap(scaled);
-//                    image.setLayoutParams(new android.view.ViewGroup.LayoutParams(150,150));
-//                    image.setMaxHeight(150);
-//                    image.setMaxWidth(150);
-//
-//                    // Adds the view to the layout
-//                    mSelectedImagesContainer.addView(image);
-//
-////                Uri u = data.getData();
-//                    Log.e("uiri",fileUri.getPath());
-////
-////                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-////                Cursor cursor = getApplicationContext().getContentResolver().query(u,
-////                        filePathColumn, null, null, null);
-////                cursor.moveToFirst();
-////
-////                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                    String picturePath_camera = fileUri.getPath();
-//                    Log.e("picturePath", picturePath_camera);
-//
-////                    if (scaled != null) {
-////                        // encodeTobase64(bitmap);
-////                        picturePath_camera = getRealPathFromURI(getImageUri(getApplicationContext(), scaled));
-////                        Log.e("real_pic_path", picturePath_camera);
-//                        file_logo = new File(picturePath_camera);
-//                        Log.e("file_picture",file_logo.toString());
-//
-//                        str_file_logo=file_logo.toString();
-//                        // PASS "file" AS YOUR IMAGE PARAMETER IN JSON
-////                new HotelierUploadGalleryImgs(HotelierUploadGallery.this, file, picturePath, auth_token).execute();
-////                new HttpAsync(getApplicationContext(), listener, URL, parameters, 1, null).execute();
-////                    }
-//
-//                    Log.e("trimmed",picturePath_camera.substring(picturePath_camera.lastIndexOf("/") + 1));
-//                    String picture_path_trimmed_camera=picturePath_camera.substring(picturePath_camera.lastIndexOf("/") + 1);
-//
-////                handler.postDelayed(new Runnable(){
-////                    @Override
-////                    public void run(){
-//
-//                    AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
-////				s3Client.createBucket( "mymarketbucket" );
-////                        File filePath = new File(picturePath_camera);
-//                    PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picture_path_trimmed_camera, file_logo);
-//                    por.setCannedAcl(CannedAccessControlList.PublicRead);
-//                    s3Client.putObject( por );
-//
-//                    ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-//                    override.setContentType( "image/jpeg" );
-//
-//                    GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picture_path_trimmed_camera);
-////                        urlRequest.setExpiration(null);  // Added an hour's worth of milliseconds to the current time.
-////                        urlRequest.setResponseHeaders( override );
-//
-//                    URL url = s3Client.generatePresignedUrl( urlRequest );
-//                    Log.e("url_final",url.toString());
-//                    String str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picture_path_trimmed_camera;
-//                    Log.e("url_final_server",str_img_url_final);
-//                    image_uris.add(str_img_url_final);
-//                    }
-//                }, 2000);
-
-
-
-//                }catch (Exception e){
-//
-//                }
 
             }
 
@@ -1407,18 +1324,10 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 
                     item = new CustomGallery();
                     item.sdcardPath = scaled;
-
                     dataT.add(item);
-//                    viewSwitcher.setDisplayedChild(0);
                     adapter.addAll(dataT);
-
-//                    Log.e("arr_data_image",dataT.toString());
-
-//                    mAdapter = new GridviewAdapter(this,list_images);
-//                    list_images.add(scaled.toString());
                     gridGallery.setAdapter(adapter);
 
-//                Bitmap bitmap = BitmapFactory.decodeFile(tempPath);
                     if (scaled != null) {
                         // encodeTobase64(bitmap);
                         tempPath = getRealPathFromURI(getImageUri(getApplicationContext(), scaled));
@@ -1428,60 +1337,16 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 
                         str_file_logo=file_logo.toString();
                         // PASS "file" AS YOUR IMAGE PARAMETER IN JSON
-//                new HotelierUploadGalleryImgs(HotelierUploadGallery.this, file, picturePath, auth_token).execute();
-//                new HttpAsync(getApplicationContext(), listener, URL, parameters, 1, null).execute();
+
                     }
 
-//                Uri selectedImage = data.getData();
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//                Cursor cursor = getApplicationContext().getContentResolver().query(selectedImageUri,
-//                        filePathColumn, null, null, null);
-//                cursor.moveToFirst();
-
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                picturePath = cursor.getString(columnIndex);
-//                Log.e("picturePath", picturePath);
 
                     String picture_path_trimmed=tempPath.substring(tempPath.lastIndexOf("/") + 1);
                     Log.e("trimmed",picture_path_trimmed);
-//                image_uris.add("https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picture_path_trimmed);
 
 
                     new HotelierUploadGalleryImgs(Sell_Products_Activity.this, picture_path_trimmed,tempPath).execute();
 
-//                    AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( "AKIAJ3YGIVONBRYID3VA", "XDaZKNMTGO+Ap4ICF877oP1MhEQQYV8I/aySbV50" ) );
-////				s3Client.createBucket( "mymarketbucket" );
-//                    File filePath = new File(tempPath);
-//                    PutObjectRequest por = new PutObjectRequest( "mymarketbucket",picture_path_trimmed, filePath);
-//                    por.setCannedAcl(CannedAccessControlList.PublicRead);
-//                    s3Client.putObject( por );
-//
-////                ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-////                override.setContentType( "image/jpeg" );
-//
-//                    GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "mymarketbucket", picture_path_trimmed);
-////                urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
-////                urlRequest.setResponseHeaders( override );
-//                    urlRequest.setMethod(HttpMethod.PUT);
-//
-//                    URL url = s3Client.generatePresignedUrl( urlRequest );
-//                    Log.e("url_final",url.toString());
-//                    String str_img_url_final="https://s3-us-west-2.amazonaws.com/mymarketbucket/"+picture_path_trimmed;
-//                    Log.e("url_final_server",str_img_url_final);
-//                    image_uris.add(str_img_url_final);
-
-
-
-//                try {
-//                    UploadObject(url);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-
-//                Toast.makeText(getActivity(), "picturePath :" + picturePath, Toast.LENGTH_LONG).show();
-//                cursor.close();
 
                 }catch (Exception e){
 
@@ -1512,6 +1377,7 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
                 img_video_image.setBackgroundDrawable(bitmapDrawable);
+                relativelayout_video.setVisibility(View.VISIBLE);
             }
             else if(resultCode == Activity.RESULT_CANCELED){
 

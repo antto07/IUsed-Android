@@ -684,6 +684,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                                 mpref = getSharedPreferences("user_details", MODE_PRIVATE);
                                 SharedPreferences.Editor ed = mpref.edit();
                                 ed.putString("shortname_country", short_name);
+                                ed.putString("current_location", City);
                                 ed.commit();
 
                                 if(str_user_id.equalsIgnoreCase("")){
@@ -1040,7 +1041,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 //                    nextActivity();
 
                 }
-            }, 5000);
+            }, 1000);
 
         }catch (Exception e){
 

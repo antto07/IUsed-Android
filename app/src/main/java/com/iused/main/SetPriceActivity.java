@@ -96,6 +96,9 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
         txt_currency_code_nego.setText(mpref.getString("currency_symbol",""));
         txt_currency_code_non_nego.setText(mpref.getString("currency_symbol",""));
 
+        edt_price_negotiable.setEnabled(true);
+        edt_price_non_negotiable.setEnabled(false);
+
         chk_negotiable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,12 +108,16 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                     edt_price_non_negotiable.setText("");
                     edt_percentage.setText("");
                     edt_duration.setText("");
+                    edt_price_negotiable.setEnabled(true);
+                    edt_price_non_negotiable.setEnabled(false);
                 }
                 else{
                     chk_non_negotiable.setChecked(false);
                     edt_price_non_negotiable.setText("");
                     edt_percentage.setText("");
                     edt_duration.setText("");
+                    edt_price_negotiable.setEnabled(true);
+                    edt_price_non_negotiable.setEnabled(false);
                 }
 
             }
@@ -123,11 +130,15 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                     //Case 1
                     chk_negotiable.setChecked(false);
                     edt_price_negotiable.setText("");
+                    edt_price_negotiable.setEnabled(false);
+                    edt_price_non_negotiable.setEnabled(true);
                 }
                 else{
 
                     chk_negotiable.setChecked(false);
                     edt_price_negotiable.setText("");
+                    edt_price_negotiable.setEnabled(false);
+                    edt_price_non_negotiable.setEnabled(true);
                 }
             }
         });
@@ -309,6 +320,7 @@ public class SetPriceActivity extends AppCompatActivity implements AsyncTaskList
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
 
                             AlertDialog alertDialog=new AlertDialog.Builder(SetPriceActivity.this).setMessage(jsonObject.getString("errMsg"))
+                                    .setCancelable(false)
                                     .setTitle("Success")
                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         @Override

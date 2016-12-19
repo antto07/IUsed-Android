@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity
     String short_name = "";
     private TextView txt_location=null;
     private LinearLayout card_location=null;
+    private TextView txt_current_location=null;
 //    public static SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -313,6 +314,7 @@ public class MainActivity extends AppCompatActivity
         listLocation = (ListView) findViewById(R.id.list_location);
         txt_location= (TextView) findViewById(R.id.txt_location);
         card_location= (LinearLayout) findViewById(R.id.card_location);
+        txt_current_location= (TextView) findViewById(R.id.txt_current_location);
 
         layoutLocationFilter = (RelativeLayout) findViewById(R.id.layout_location_filter);
         scalingAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.scaling_logo);
@@ -326,13 +328,18 @@ public class MainActivity extends AppCompatActivity
         try {
             if(mpref.getString("current_location","").equalsIgnoreCase(null)){
                 card_location.setVisibility(View.GONE);
+//                txt_current_location.setVisibility(View.GONE);
             }
             else {
                 txt_location.setText(mpref.getString("current_location",""));
+                txt_current_location.setText(mpref.getString("current_location",""));
             }
         }catch (Exception e){
             card_location.setVisibility(View.GONE);
+            txt_current_location.setVisibility(View.GONE);
         }
+
+//        txt_current_location.setText(mpref.getString("current_location",""));
 
 //        seekbar_price.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
 //            @Override
@@ -687,6 +694,7 @@ public class MainActivity extends AppCompatActivity
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
 
+                edtLocationSearch.setText("");
                 para_location = new HashMap<>();
                 para_location.put("placeid",locationBean.get(position).getPlace_id());
                 para_location.put("key","AIzaSyDhphpswcw1UOEQ9pZRAVzv1DpBQ9if--Y");
@@ -813,6 +821,19 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
+
+                img_categories.setImageResource(R.drawable.buy_black);
+                img_sell.setImageResource(R.drawable.sell_black);
+                img_orders.setImageResource(R.drawable.orders_black);
+                img_donate.setImageResource(R.drawable.donate_red);
+                img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                txt_categories.setTextColor(Color.parseColor(colorblack));
+                txt_sell.setTextColor(Color.parseColor(colorblack));
+                txt_orders.setTextColor(Color.parseColor(colorblack));
+                txt_donate.setTextColor(Color.parseColor(colorprimary));
+                txt_wishlist.setTextColor(Color.parseColor(colorblack));
+
 //                swipeRefreshLayout.setRefreshing(false);
                 if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
 //                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
@@ -835,17 +856,7 @@ public class MainActivity extends AppCompatActivity
 
                     }
 
-                    img_categories.setImageResource(R.drawable.buy_black);
-                    img_sell.setImageResource(R.drawable.sell_black);
-                    img_orders.setImageResource(R.drawable.orders_black);
-                    img_donate.setImageResource(R.drawable.donate_red);
-                    img_wishlist.setImageResource(R.drawable.wishlist_gray);
 
-                    txt_categories.setTextColor(Color.parseColor(colorblack));
-                    txt_sell.setTextColor(Color.parseColor(colorblack));
-                    txt_orders.setTextColor(Color.parseColor(colorblack));
-                    txt_donate.setTextColor(Color.parseColor(colorprimary));
-                    txt_wishlist.setTextColor(Color.parseColor(colorblack));
                 }
 
             }
@@ -946,6 +957,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.filter) {
 //            Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
@@ -976,7 +988,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 //        swipeRefreshLayout.setRefreshing(false);
-
+        item.setCheckable(false);
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -1420,6 +1432,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                                 else {
                                     txt_location.setText(mpref.getString("current_location",""));
+                                    txt_current_location.setText(mpref.getString("current_location",""));
                                 }
                             }catch (Exception e){
                                 card_location.setVisibility(View.GONE);
