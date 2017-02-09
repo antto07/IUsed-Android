@@ -1,5 +1,6 @@
 package com.iused.main;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +14,9 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
@@ -53,6 +56,8 @@ public class TermsandConditionsActivity extends AppCompatActivity implements Asy
 
         txt_terms= (TextView) findViewById(R.id.txt_terms);
         webview_terms= (WebView) findViewById(R.id.webView_terms);
+
+
 
         para = new HashMap<>();
 //        para.put("Datetime","");
@@ -111,11 +116,11 @@ public class TermsandConditionsActivity extends AppCompatActivity implements Asy
 //                        if(jsonObject.getString("errFlag").equalsIgnoreCase("Success")){
                             JSONObject object=jsonObject.getJSONObject("data");
                             if(object!=null){
-//                                txt_terms.setText(Html.fromHtml(object.getString("Terms")));
+                                txt_terms.setText(Html.fromHtml(object.getString("Terms")));
 //                                Log.e("terms",object.getString("Terms"));
 
-                                CharSequence trimmed = trimTrailingWhitespace(Html.fromHtml(object.getString("Terms"), null, new MyTagHandler()));
-                                txt_terms.setText(trimmed);
+//                                CharSequence trimmed = trimTrailingWhitespace(Html.fromHtml(object.getString("Terms"), null, new MyTagHandler()));
+//                                txt_terms.setText(trimmed);
                                 webview_terms.loadData(object.getString("Terms"),"text/html", "UTF-8");
                             }
 

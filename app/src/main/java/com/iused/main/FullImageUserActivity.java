@@ -13,7 +13,7 @@ import android.widget.ImageView;
 //import com.mykingdom.mypillows.utils.AsyncTaskListener;
 //import com.mykingdom.mypillows.utils.SettingSharedPrefs;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.ImageAdapter;
 
 import java.util.ArrayList;

@@ -34,7 +34,7 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_sign_in"
             android:layout_width="280dp"
-            android:layout_height="50dp"
+            android:layout_height="53dp"
             android:layout_gravity="center"
             />
 
@@ -48,7 +48,7 @@
             android:paddingBottom="15dp"
             android:layout_marginTop="20dp" />
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -58,7 +58,7 @@
             android:textSize="16dp"
             android:text="On continuing you agree to our"/>
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:id="@+id/txt_terms_and_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

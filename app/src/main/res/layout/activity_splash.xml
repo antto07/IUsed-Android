@@ -46,7 +46,7 @@
                 android:src="@drawable/location" />
 
 
-            <TextView
+            <com.iused.utils.CustomFontToolbarText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fetch_location"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp">
 
-                <EditText
+                <com.iused.utils.CustomFontEdittext
                     android:id="@+id/edt_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

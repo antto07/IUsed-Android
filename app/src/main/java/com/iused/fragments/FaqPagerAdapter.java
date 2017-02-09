@@ -17,13 +17,13 @@ public class FaqPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                CompeteWishlistFragment tab1 = new CompeteWishlistFragment();
+                Wishlist_Compete_Fragment tab1 = new Wishlist_Compete_Fragment();
                 return tab1;
             case 1:
-                FixedPriceWishlistFragment tab2 = new FixedPriceWishlistFragment();
+                Wishlist_Fixedprice_Fragment tab2 = new Wishlist_Fixedprice_Fragment();
                 return tab2;
             case 2:
-                DonationsFragment tab3 = new DonationsFragment();
+                Wishlist_Donations_Fragment tab3 = new Wishlist_Donations_Fragment();
                 return tab3;
         }
         return null;

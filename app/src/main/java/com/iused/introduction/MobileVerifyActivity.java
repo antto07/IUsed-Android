@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -22,7 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.fragments.Donate_Product_Activity;
 import com.iused.main.MainActivity;
 import com.iused.main.ProductDetailsActivity_Donate;
@@ -65,6 +66,7 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
     private Intent intent_direct=null;
     private TextView txt_timer_mobile_verify=null;
     private static CountDownTimer countDownTimer;
+    private Typeface face,face1=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +83,8 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 
         ins=this;
 
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
+
         progressDialog= new ProgressDialog(MobileVerifyActivity.this);
         edt_verify_code= (EditText) findViewById(R.id.edt_code);
         btn_submit= (Button) findViewById(R.id.btn_submit);
@@ -88,6 +92,8 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
         btn_resend_code_gray= (Button) findViewById(R.id.btn_resend_code_gray);
         txt_mobile_verify_text= (TextView) findViewById(R.id.txt_verify_message);
         txt_timer_mobile_verify= (TextView) findViewById(R.id.txt_timer_mobile_verify);
+
+        edt_verify_code.setTypeface(face);
 
         countDownTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -385,6 +391,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                             finish();
                         }
                         else {
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
                         }
                     }
@@ -406,6 +416,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                             finish();
                         }
                         else {
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
                         }
                     }
@@ -427,6 +441,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                             finish();
                         }
                         else {
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
 
                         }
@@ -450,6 +468,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
 
                         }
                         else {
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
                         }
                     }
@@ -471,6 +493,10 @@ public class MobileVerifyActivity extends AppCompatActivity implements AsyncTask
                             finish();
                         }
                         else {
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
                             Toast.makeText(getApplicationContext(),jsonObject.getString("errMsg"),Toast.LENGTH_LONG).show();
                         }
                     }

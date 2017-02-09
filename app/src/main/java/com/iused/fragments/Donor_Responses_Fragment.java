@@ -5,11 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -21,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.DonorOptionsAdapter;
 import com.iused.bean.DonorResponsesBean;
 import com.iused.main.DonatedProductsDetailsActivity;
@@ -66,6 +68,7 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
     private ArrayList<String> arr_list_user_phone = null;
 
     public String date=null;
+    private SwipeRefreshLayout swipeRefreshLayout_donor_responses;
 
 
     @Nullable
@@ -84,6 +87,8 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
         list_ordered_products.setNestedScrollingEnabled(false);
 
         txt_no_donor_responses= (TextView) view.findViewById(R.id.txt_no_doner_responses);
+        swipeRefreshLayout_donor_responses= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_donor_responses);
+        swipeRefreshLayout_donor_responses.setColorSchemeColors(Color.RED);
 
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -98,12 +103,30 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
         para.put("UserId", mpref.getString("user_id", ""));
         para.put("Datetime", date);
         para.put("For","0");
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+        swipeRefreshLayout_donor_responses.setRefreshing(true);
         Log.e("para_get_products", para.toString());
         HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
         httpAsync1.execute();
+
+        swipeRefreshLayout_donor_responses.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                para = new HashMap<>();
+                para.put("UserId", mpref.getString("user_id", ""));
+                para.put("Datetime", date);
+                para.put("For","0");
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+                swipeRefreshLayout_donor_responses.setRefreshing(true);
+                Log.e("para_get_products", para.toString());
+                HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
+                httpAsync1.execute();
+            }
+        });
 
         return view;
     }
@@ -117,7 +140,8 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
     public void onTaskComplete(String result, String tag) {
 
 
-        progressDialog.dismiss();
+        swipeRefreshLayout_donor_responses.setRefreshing(false);
+//        progressDialog.dismiss();
         if(result.equalsIgnoreCase("fail")){
             try {
                 Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
@@ -130,7 +154,7 @@ public class Donor_Responses_Fragment extends Fragment implements AsyncTaskListe
             if(tag.equalsIgnoreCase("my_orders")){
                 JSONObject jsonObject = null;
                 try {
-
+                    orderedProductsBean.clear();
 
                     jsonObject = new JSONObject(result);
                     if (jsonObject != null){

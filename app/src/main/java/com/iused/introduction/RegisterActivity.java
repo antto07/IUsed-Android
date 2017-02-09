@@ -29,8 +29,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.donate.R;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.iused.R;
 import com.iused.fcm.Config;
 import com.iused.fcm.NotificationUtils;
 import com.iused.utils.AsyncTaskListener;

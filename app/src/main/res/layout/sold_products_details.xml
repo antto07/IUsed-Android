@@ -51,7 +51,7 @@
                     android:layout_gravity="center"
                     android:gravity="center">
 
-                    <TextView
+                    <com.iused.utils.CustomFontToolbarText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Name"
@@ -73,7 +73,7 @@
                         android:visibility="gone"
                         android:id="@+id/txt_offered_till" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -84,7 +84,7 @@
                         android:textColor="@color/black"
                         android:id="@+id/txt_amount" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="100dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
@@ -93,7 +93,7 @@
                         android:layout_margin="3dp"
                         android:background="@drawable/settings_corner"
                         android:textColor="@color/white"/>
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -113,18 +113,18 @@
                         android:layout_margin="3dp"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Expiers in : "
+                            android:text="Expiers in  "
                             android:textSize="16dp"
                             android:layout_margin="3dp"
                             android:textColor="@color/black"
                             />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

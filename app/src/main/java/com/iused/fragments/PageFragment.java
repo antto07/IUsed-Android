@@ -16,6 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -23,18 +26,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.app.donate.R;
 import com.iused.adapters.ProductMainAdapterNonNegotiable;
 import com.iused.bean.MainProductsBean;
 import com.iused.introduction.LoginActivity;
 import com.iused.main.MainActivity;
-import com.iused.R;
 import com.iused.adapters.ProductMainAdapter;
 import com.iused.main.ProductDetailsActivity_Negotiable;
+import com.iused.main.ProductDetailsActivity_Negotiable_Viewpager;
 import com.iused.main.ProductDetailsActivity_Non_Negotiable;
 import com.iused.main.Sell_Products_Activity;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.EndlessRecyclerOnScrollListener;
+import com.iused.utils.HidingScrollListener;
 import com.iused.utils.HttpAsync;
 
 import org.json.JSONArray;
@@ -43,6 +48,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -101,6 +107,29 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
     private SwipeRefreshLayout swipeRefreshLayout_compete=null;
     private SwipeRefreshLayout swipeRefreshLayout_fixed=null;
     private SwipeRefreshLayout swipeRefreshLayout_no_products=null;
+
+    public static ArrayList<String> arrayList_negotiable_product_id=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_product_id=null;
+    public static ArrayList<String> arrayList_negotiable_product_name=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_product_name=null;
+    public static ArrayList<String> arrayList_negotiable_used_for=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_used_for=null;
+    public static ArrayList<String> arrayList_negotiable_description=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_description=null;
+    public static ArrayList<String> arrayList_negotiable_price=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_price=null;
+    public static ArrayList<String> arrayList_negotiable_condition=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_condition=null;
+    public static ArrayList<String> arrayList_negotiable_distance=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_distance=null;
+    public static ArrayList<String> arrayList_negotiable_posted_image=new ArrayList<String>();
+    public static ArrayList<String> arrayList_unique_negotiable_posted_image=null;
+
+
+    private ArrayList<String> arrayList_non_negotiable_id=new ArrayList<String>();
+    ArrayList<String> arrayList_unique_non_negotiable=null;
+    public static String[] str_arr_product_id_negotiable;
+    public static String[] str_arr_product_id_non_negotiable;
 
     // on scroll
 
@@ -263,7 +292,7 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
         grid_item = (RecyclerView) view.findViewById(R.id.list);
 //        adapter = new ProductMainAdapter(getActivity(), mainProductsBean);
         grid_item.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
         grid_item.setLayoutManager(layoutManager);
         grid_item.setNestedScrollingEnabled(false);
         mLayoutManager = new GridLayoutManager(getActivity(),2);
@@ -279,7 +308,7 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
         grid_item_non_negotiable = (RecyclerView) view.findViewById(R.id.list_non_negotiable);
 //        adapter_non_negotiable = new ProductMainAdapterNonNegotiable(getActivity(), mainProductsBean_non_negotiable);
         grid_item_non_negotiable.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager layoutManager1 = new GridLayoutManager(getActivity(), 2);
         grid_item_non_negotiable.setLayoutManager(layoutManager1);
         grid_item_non_negotiable.setNestedScrollingEnabled(false);
 //        grid_item_non_negotiable.setAdapter(adapter_non_negotiable);
@@ -314,8 +343,10 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
             @Override
             public void onClick(View v) {
 
+                MainActivity.linear_bottom_layout.setVisibility(View.VISIBLE);
+
                 txt_compete.setTextColor(Color.parseColor("#F14D57"));
-                txt_fixed_price.setTextColor(Color.parseColor("#B3B3B3"));
+                txt_fixed_price.setTextColor(Color.parseColor("#808080"));
 
                 if(int_negotiable==0){
                     swipeRefreshLayout_no_products.setVisibility(View.VISIBLE);
@@ -336,7 +367,9 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
             @Override
             public void onClick(View v) {
 
-                txt_compete.setTextColor(Color.parseColor("#B3B3B3"));
+                MainActivity.linear_bottom_layout.setVisibility(View.VISIBLE);
+
+                txt_compete.setTextColor(Color.parseColor("#808080"));
                 txt_fixed_price.setTextColor(Color.parseColor("#F14D57"));
 
                 if(int_non_negotiable==0){
@@ -385,9 +418,52 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
         });
 
 
+        grid_item.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                showViews();
+            }
+        });
+
+        grid_item_non_negotiable.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                showViews();
+            }
+        });
+
 
         return view;
     }
+
+
+    private void hideViews() {
+//        ExampleFragments.tabsStrip.animate().translationY(-ExampleFragments.tabsStrip.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+//        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)MainActivity.linear_bottom_layout.getLayoutParams();
+//        int fabBottomMargin = lp.bottomMargin;
+//        MainActivity.linear_bottom_layout.animate().translationY(MainActivity.fab.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+        MainActivity.linear_bottom_layout.setVisibility(View.GONE);
+//        ExampleFragments.tabsStrip.setVisibility(View.GONE);
+
+    }
+
+    private void showViews() {
+//        ExampleFragments.tabsStrip.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+//        MainActivity.linear_bottom_layout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        MainActivity.linear_bottom_layout.setVisibility(View.VISIBLE);
+//        ExampleFragments.tabsStrip.setVisibility(View.VISIBLE);
+    }
+
 
     private void loadMoreData(int current_page) {
         loadLimit = ival;
@@ -444,6 +520,25 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 //        rad_negotiable.setChecked(true);
 //    }
 
+    static ArrayList<String> removeDuplicates(ArrayList<String> list) {
+
+        // Store unique items in result.
+        ArrayList<String> result = new ArrayList<>();
+
+        // Record encountered Strings in HashSet.
+        HashSet<String> set = new HashSet<>();
+
+        // Loop over argument list.
+        for (String item : list) {
+
+            // If String is not in set, add it to the list and the set.
+            if (!set.contains(item)) {
+                result.add(item);
+                set.add(item);
+            }
+        }
+        return result;
+    }
 
 
     @Override
@@ -497,6 +592,34 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
                                         main_Products_Bean.setDescription(volumobject.getString("Description"));
                                         main_Products_Bean.setType(volumobject.getString("Type"));
                                         main_Products_Bean.setProductId(volumobject.getString("ProductId"));
+
+                                        arrayList_negotiable_product_id.add(volumobject.getString("ProductId"));
+                                        arrayList_unique_negotiable_product_id = removeDuplicates(arrayList_negotiable_product_id);
+
+                                        arrayList_negotiable_product_name.add(volumobject.getString("ProductName"));
+                                        arrayList_unique_negotiable_product_name = removeDuplicates(arrayList_negotiable_product_name);
+
+                                        arrayList_negotiable_used_for.add(volumobject.getString("UsedFor"));
+                                        arrayList_unique_negotiable_used_for = removeDuplicates(arrayList_negotiable_used_for);
+
+                                        arrayList_negotiable_description.add(volumobject.getString("Description"));
+                                        arrayList_unique_negotiable_description = removeDuplicates(arrayList_negotiable_description);
+
+                                        arrayList_negotiable_price.add(volumobject.getString("Price"));
+                                        arrayList_unique_negotiable_price = removeDuplicates(arrayList_negotiable_price);
+
+                                        arrayList_negotiable_condition.add(volumobject.getString("Condition"));
+                                        arrayList_unique_negotiable_condition = removeDuplicates(arrayList_negotiable_condition);
+
+                                        arrayList_negotiable_distance.add(volumobject.getString("Distance"));
+                                        arrayList_unique_negotiable_distance= removeDuplicates(arrayList_negotiable_distance);
+
+                                        arrayList_negotiable_posted_image.add(volumobject.getString("PostedByImage"));
+                                        arrayList_unique_negotiable_posted_image = removeDuplicates(arrayList_negotiable_posted_image);
+
+
+//                                        str_arr_product_id_negotiable=new String[arrayList_negotiable_id.size()];
+//                                        str_arr_product_id_negotiable=arrayList_negotiable_id.toArray(str_arr_product_id_negotiable);
 
                                         str_type_1 = volumobject.getString("Type");
 
@@ -554,6 +677,7 @@ public class PageFragment extends Fragment implements AsyncTaskListener {
 //                                                        makeSceneTransitionAnimation(getActivity(), imageView, "profile");
 //                                                startActivity(intent, options.toBundle());
 //                                            } else {
+//                                            intent.putExtra("negotiable_bean",mainProductsBean);
                                                 startActivity(intent);
 //                                            }
                                         } catch (Exception e) {

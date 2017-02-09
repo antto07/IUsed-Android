@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -46,7 +47,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.LocationAdapter;
 import com.iused.bean.LocationBean;
 import com.iused.bean.MainProductsBeanCategories;
@@ -64,6 +65,7 @@ import com.iused.introduction.RegisterActivity;
 import com.iused.introduction.Splash;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
+import com.iused.utils.CustomTypefaceSpan;
 import com.iused.utils.HttpAsync;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentManager fragment_manager = null;
 
-    public String colorprimary="#FF4F5A";
+    public String colorprimary="#FF8A00";
     public String colorblack="#000000";
 
     private ImageView img_categories= null;
@@ -183,6 +185,8 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout card_location=null;
     private TextView txt_current_location=null;
 //    public static SwipeRefreshLayout swipeRefreshLayout;
+    private Typeface face=null;
+    DrawerLayout drawer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,34 +214,38 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        toggle.setDrawerIndicatorEnabled(false);
 
+
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
 //        swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swiperefresh_new);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu m = navigationView.getMenu();
-//        for (int i=0;i<m.size();i++) {
-//            MenuItem mi = m.getItem(i);
-//
-//            //for aapplying a font to subMenu ...
-//            SubMenu subMenu = mi.getSubMenu();
-//            if (subMenu!=null && subMenu.size() >0 ) {
-//                for (int j=0; j <subMenu.size();j++) {
-//                    MenuItem subMenuItem = subMenu.getItem(j);
-//                    applyFontToMenuItem(subMenuItem);
-//                }
-//            }
-//
-//            //the method we have create in activity
-//            applyFontToMenuItem(mi);
-//        }
+        for (int i=0;i<m.size();i++) {
+            MenuItem mi = m.getItem(i);
+
+            //for aapplying a font to subMenu ...
+            SubMenu subMenu = mi.getSubMenu();
+            if (subMenu!=null && subMenu.size() >0 ) {
+                for (int j=0; j <subMenu.size();j++) {
+                    MenuItem subMenuItem = subMenu.getItem(j);
+                    applyFontToMenuItem(subMenuItem);
+                }
+            }
+
+            //the method we have create in activity
+            applyFontToMenuItem(mi);
+        }
 
         View header = navigationView.getHeaderView(0);
+
 
 //        navigationView.addHeaderView(header);
         txt_header_name= (TextView) header.findViewById(R.id.txt_header_username);
@@ -332,7 +340,13 @@ public class MainActivity extends AppCompatActivity
             }
             else {
                 txt_location.setText(mpref.getString("current_location",""));
-                txt_current_location.setText(mpref.getString("current_location",""));
+                if(mpref.getString("current_location","").length()>=15){
+                    txt_current_location.setText(mpref.getString("current_location","").substring(0,10)+"..");
+                }
+                else {
+                    txt_current_location.setText(mpref.getString("current_location",""));
+                }
+
             }
         }catch (Exception e){
             card_location.setVisibility(View.GONE);
@@ -741,39 +755,41 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-//                swipeRefreshLayout.setRefreshing(false);
-//                if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-//                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+//                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                    startActivity(intent);
-//                }
-//                else {
-                    Intent intent=new Intent(getApplicationContext(),Sell_Products_Activity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-//                }
+                    try {
+                        menu_filter.findItem(R.id.filter).setVisible(false);
+                        changeFragment(new Dontated_By_Others_Fragment());
 
- //               finish();
+                    }catch (Exception e){
 
-//                try {
-//                    changeFragment(new SellFragment());
-//                    menu_filter.findItem(R.id.filter).setVisible(false);
-//
-//                }catch (Exception e){
-//
-//                }
+                    }
+                }
+                else {
+                    try {
+                        menu_filter.findItem(R.id.filter).setVisible(false);
+                        changeFragment(new Dontated_By_Others_Fragment());
 
-//                img_categories.setImageResource(R.drawable.categories_gray);
-//                img_sell.setImageResource(R.drawable.sell_blue);
-//                img_orders.setImageResource(R.drawable.orders_gray);
-//                img_donate.setImageResource(R.drawable.donate_gray);
-//                img_wishlist.setImageResource(R.drawable.wishlist_gray);
-//
-//                txt_categories.setTextColor(Color.parseColor(colorblack));
-//                txt_sell.setTextColor(Color.parseColor(colorprimary));
-//                txt_orders.setTextColor(Color.parseColor(colorblack));
-//                txt_donate.setTextColor(Color.parseColor(colorblack));
-//                txt_wishlist.setTextColor(Color.parseColor(colorblack));
+                    }catch (Exception e){
+
+                    }
+
+                }
+
+
+                img_categories.setImageResource(R.drawable.buy_black);
+                img_sell.setImageResource(R.drawable.donate_orange);
+                img_orders.setImageResource(R.drawable.idonate_black);
+                img_donate.setImageResource(R.drawable.settings_black);
+                img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                txt_categories.setTextColor(Color.parseColor(colorblack));
+                txt_sell.setTextColor(Color.parseColor(colorprimary));
+                txt_orders.setTextColor(Color.parseColor(colorblack));
+                txt_donate.setTextColor(Color.parseColor(colorblack));
+                txt_wishlist.setTextColor(Color.parseColor(colorblack));
             }
         });
 
@@ -794,16 +810,16 @@ public class MainActivity extends AppCompatActivity
                 else {
                     try {
                         menu_filter.findItem(R.id.filter).setVisible(false);
-                        changeFragment(new OrdersFragments());
+                        changeFragment(new DonateFragment());
 
                     }catch (Exception e){
 
                     }
 
                     img_categories.setImageResource(R.drawable.buy_black);
-                    img_sell.setImageResource(R.drawable.sell_black);
-                    img_orders.setImageResource(R.drawable.orders_red);
-                    img_donate.setImageResource(R.drawable.donate_black);
+                    img_sell.setImageResource(R.drawable.donate_black);
+                    img_orders.setImageResource(R.drawable.idonate_orange);
+                    img_donate.setImageResource(R.drawable.settings_black);
                     img_wishlist.setImageResource(R.drawable.wishlist_gray);
 
                     txt_categories.setTextColor(Color.parseColor(colorblack));
@@ -822,42 +838,55 @@ public class MainActivity extends AppCompatActivity
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
 
-                img_categories.setImageResource(R.drawable.buy_black);
-                img_sell.setImageResource(R.drawable.sell_black);
-                img_orders.setImageResource(R.drawable.orders_black);
-                img_donate.setImageResource(R.drawable.donate_red);
-                img_wishlist.setImageResource(R.drawable.wishlist_gray);
+//                img_categories.setImageResource(R.drawable.buy_black);
+//                img_sell.setImageResource(R.drawable.donate_black);
+//                img_orders.setImageResource(R.drawable.idonate_black);
+//                img_donate.setImageResource(R.drawable.settings_orange);
+//                img_wishlist.setImageResource(R.drawable.wishlist_gray);
+//
+//                txt_categories.setTextColor(Color.parseColor(colorblack));
+//                txt_sell.setTextColor(Color.parseColor(colorblack));
+//                txt_orders.setTextColor(Color.parseColor(colorblack));
+//                txt_donate.setTextColor(Color.parseColor(colorprimary));
+//                txt_wishlist.setTextColor(Color.parseColor(colorblack));
 
-                txt_categories.setTextColor(Color.parseColor(colorblack));
-                txt_sell.setTextColor(Color.parseColor(colorblack));
-                txt_orders.setTextColor(Color.parseColor(colorblack));
-                txt_donate.setTextColor(Color.parseColor(colorprimary));
-                txt_wishlist.setTextColor(Color.parseColor(colorblack));
-
-//                swipeRefreshLayout.setRefreshing(false);
                 if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
-//                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-                    try {
-                        menu_filter.findItem(R.id.filter).setVisible(false);
-                        changeFragment(new Dontated_By_Others_Fragment());
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.putExtra("offer_negotiable","none");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
 
-                    }catch (Exception e){
-
-                    }
                 }
                 else {
-                    try {
-                        menu_filter.findItem(R.id.filter).setVisible(false);
-                        changeFragment(new DonateFragment());
-
-                    }catch (Exception e){
-
-                    }
-
-
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
+
+//                swipeRefreshLayout.setRefreshing(false);
+//                if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+////                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
+////                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                    startActivity(intent);
+//                    try {
+//                        menu_filter.findItem(R.id.filter).setVisible(false);
+//                        changeFragment(new Dontated_By_Others_Fragment());
+//
+//                    }catch (Exception e){
+//
+//                    }
+//                }
+//                else {
+//                    try {
+//                        menu_filter.findItem(R.id.filter).setVisible(false);
+//                        changeFragment(new DonateFragment());
+//
+//                    }catch (Exception e){
+//
+//                    }
+//
+//
+//                }
 
             }
         });
@@ -918,7 +947,21 @@ public class MainActivity extends AppCompatActivity
         progressDialog.show();
         new HttpAsync(getApplicationContext(), listener, Constants.BASE_URL+"UpdateLocation" , parameters_location, 2, "location").execute();
 
+
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+////            drawer.closeDrawer(GravityCompat.START);
+//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
+//        }
+
     }
+
+    private void applyFontToMenuItem(MenuItem mi) {
+        SpannableString mNewTitle = new SpannableString(mi.getTitle());
+        mNewTitle.setSpan(new CustomTypefaceSpan("" , face), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mi.setTitle(mNewTitle);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -960,12 +1003,15 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.filter) {
-//            Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
-//            swipeRefreshLayout.setRefreshing(false);
-            layoutLocationFilter.setAnimation(slideUp);
-            layoutLocationFilter.startAnimation(slideUp);
-            linear_main.setVisibility(View.GONE);
-            layoutLocationSearch.setVisibility(View.GONE);
+
+//            layoutLocationFilter.setAnimation(slideUp);
+//            layoutLocationFilter.startAnimation(slideUp);
+//            linear_main.setVisibility(View.GONE);
+//            layoutLocationSearch.setVisibility(View.GONE);
+            Intent intent=new Intent(getApplicationContext(),Activity_Filter.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
             return true;
         }
         if(id==R.id.search){
@@ -977,6 +1023,11 @@ public class MainActivity extends AppCompatActivity
             layoutLocationSearch.startAnimation(slideUp_Location);
             linear_main.setVisibility(View.GONE);
             layoutLocationFilter.setVisibility(View.GONE);
+        }
+        if(id==R.id.search_items){
+            Intent intent = new Intent(getApplicationContext(), WishlistActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -992,6 +1043,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+
+            drawer.closeDrawers();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(edtLocationSearch.getWindowToken(), 0);
 
@@ -1040,6 +1093,7 @@ public class MainActivity extends AppCompatActivity
             txt_donate.setTextColor(Color.parseColor(colorblack));
             txt_wishlist.setTextColor(Color.parseColor(colorblack));
 
+
         } else if (id == R.id.nav_gallery) {
 
 //            if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
@@ -1048,9 +1102,12 @@ public class MainActivity extends AppCompatActivity
 //                startActivity(intent);
 //            }
 //            else {
-                Intent intent=new Intent(getApplicationContext(),Sell_Products_Activity.class);
+                drawer.closeDrawers();
+                Intent intent=new Intent(getApplicationContext(),Donate_Product_Activity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
+
 //            }
 
 
@@ -1077,12 +1134,15 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_profile) {
             if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+                drawer.closeDrawers();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.putExtra("offer_negotiable","none");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
             }
             else {
+                drawer.closeDrawers();
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -1090,24 +1150,31 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if (id == R.id.nav_slideshow) {
+            drawer.closeDrawers();
             Intent intent = new Intent(getApplicationContext(), TermsandConditionsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
 
         } else if (id == R.id.nav_manage) {
+            drawer.closeDrawers();
             Intent intent = new Intent(getApplicationContext(), FAQsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+
         }
         else if (id == R.id.nav_privacy_policy) {
+            drawer.closeDrawers();
             Intent intent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+
+
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -1272,13 +1339,109 @@ public class MainActivity extends AppCompatActivity
 
                                 if(mainProductsBeanCategories.size()>0){
 
-                                    try {
-                                        changeFragment(new ExampleFragments());
+//                                    try {
+//                                        changeFragment(new ExampleFragments());
                                         linear_main.setVisibility(View.VISIBLE);
-                                    }catch (Exception e){
+//                                    }catch (Exception e){
+//
+//                                    }
+
+                                    if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+//                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+                                        try {
+                                            menu_filter.findItem(R.id.filter).setVisible(false);
+                                            changeFragment(new Dontated_By_Others_Fragment());
+
+                                            img_categories.setImageResource(R.drawable.buy_black);
+                                            img_sell.setImageResource(R.drawable.donate_orange);
+                                            img_orders.setImageResource(R.drawable.idonate_black);
+                                            img_donate.setImageResource(R.drawable.settings_black);
+                                            img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                                            txt_categories.setTextColor(Color.parseColor(colorblack));
+                                            txt_sell.setTextColor(Color.parseColor(colorprimary));
+                                            txt_orders.setTextColor(Color.parseColor(colorblack));
+                                            txt_donate.setTextColor(Color.parseColor(colorblack));
+                                            txt_wishlist.setTextColor(Color.parseColor(colorblack));
+
+                                        }catch (Exception e){
+
+                                        }
+                                    }
+                                    else {
+                                        try {
+                                            linear_main.setVisibility(View.VISIBLE);
+                                            menu_filter.findItem(R.id.filter).setVisible(false);
+                                            changeFragment(new Dontated_By_Others_Fragment());
+
+                                            img_categories.setImageResource(R.drawable.buy_black);
+                                            img_sell.setImageResource(R.drawable.donate_orange);
+                                            img_orders.setImageResource(R.drawable.idonate_black);
+                                            img_donate.setImageResource(R.drawable.settings_black);
+                                            img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                                            txt_categories.setTextColor(Color.parseColor(colorblack));
+                                            txt_sell.setTextColor(Color.parseColor(colorprimary));
+                                            txt_orders.setTextColor(Color.parseColor(colorblack));
+                                            txt_donate.setTextColor(Color.parseColor(colorblack));
+                                            txt_wishlist.setTextColor(Color.parseColor(colorblack));
+
+                                        }catch (Exception e){
+
+                                        }
 
                                     }
 
+                                }
+                                else {
+                                    if(mpref.getString("guest_status","").equalsIgnoreCase("0")){
+//                    Intent intent = new Intent(getApplicationContext(), Donate_Product_Activity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+                                        try {
+                                            menu_filter.findItem(R.id.filter).setVisible(false);
+                                            changeFragment(new Dontated_By_Others_Fragment());
+
+                                            img_categories.setImageResource(R.drawable.buy_black);
+                                            img_sell.setImageResource(R.drawable.donate_orange);
+                                            img_orders.setImageResource(R.drawable.idonate_black);
+                                            img_donate.setImageResource(R.drawable.settings_black);
+                                            img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                                            txt_categories.setTextColor(Color.parseColor(colorblack));
+                                            txt_sell.setTextColor(Color.parseColor(colorprimary));
+                                            txt_orders.setTextColor(Color.parseColor(colorblack));
+                                            txt_donate.setTextColor(Color.parseColor(colorblack));
+                                            txt_wishlist.setTextColor(Color.parseColor(colorblack));
+
+                                        }catch (Exception e){
+
+                                        }
+                                    }
+                                    else {
+                                        try {
+                                            menu_filter.findItem(R.id.filter).setVisible(false);
+                                            changeFragment(new Dontated_By_Others_Fragment());
+
+                                            img_categories.setImageResource(R.drawable.buy_black);
+                                            img_sell.setImageResource(R.drawable.donate_orange);
+                                            img_orders.setImageResource(R.drawable.idonate_black);
+                                            img_donate.setImageResource(R.drawable.settings_black);
+                                            img_wishlist.setImageResource(R.drawable.wishlist_gray);
+
+                                            txt_categories.setTextColor(Color.parseColor(colorblack));
+                                            txt_sell.setTextColor(Color.parseColor(colorprimary));
+                                            txt_orders.setTextColor(Color.parseColor(colorblack));
+                                            txt_donate.setTextColor(Color.parseColor(colorblack));
+                                            txt_wishlist.setTextColor(Color.parseColor(colorblack));
+
+                                        }catch (Exception e){
+
+                                        }
+
+                                    }
                                 }
 
 
@@ -1304,6 +1467,18 @@ public class MainActivity extends AppCompatActivity
                     jsonObject = new JSONObject(result);
                     if (jsonObject != null){
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
+
+//                            img_categories.setImageResource(R.drawable.buy_red);
+//                            img_sell.setImageResource(R.drawable.sell_black);
+//                            img_orders.setImageResource(R.drawable.orders_black);
+//                            img_donate.setImageResource(R.drawable.donate_black);
+//                            img_wishlist.setImageResource(R.drawable.wishlist_gray);
+//
+//                            txt_categories.setTextColor(Color.parseColor(colorprimary));
+//                            txt_sell.setTextColor(Color.parseColor(colorblack));
+//                            txt_orders.setTextColor(Color.parseColor(colorblack));
+//                            txt_donate.setTextColor(Color.parseColor(colorblack));
+//                            txt_wishlist.setTextColor(Color.parseColor(colorblack));
 
                             mpref = getSharedPreferences("user_details", MODE_PRIVATE);
                             SharedPreferences.Editor ed = mpref.edit();
@@ -1379,7 +1554,7 @@ public class MainActivity extends AppCompatActivity
                             }
                             else if (Type.equalsIgnoreCase("locality")) {
 //                                Country = short_name;
-                                Log.e("locality",zero2.getString("long_name"));
+//                                Log.e("locality",zero2.getString("long_name"));
                                 mpref = getSharedPreferences("user_details", MODE_PRIVATE);
                                 SharedPreferences.Editor ed = mpref.edit();
                                 ed.putString("current_location", zero2.getString("long_name"));
@@ -1398,6 +1573,7 @@ public class MainActivity extends AppCompatActivity
 //                        JSONObject jsonObject = job2.getJSONObject(3);
 //                        String add = jsonObject.getString("formatted_address");
 //                        Log.e("add",add);
+//                        Log.e("location_name",job2.getString("name"));
                         JSONObject jsonObject1 = job2.getJSONObject("geometry");
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("location");
                         try {
@@ -1431,8 +1607,14 @@ public class MainActivity extends AppCompatActivity
                                     card_location.setVisibility(View.GONE);
                                 }
                                 else {
-                                    txt_location.setText(mpref.getString("current_location",""));
-                                    txt_current_location.setText(mpref.getString("current_location",""));
+                                    txt_location.setText(job2.getString("name"));
+                                    if(job2.getString("name").length()>15){
+                                        txt_current_location.setText(job2.getString("name").substring(0,10)+"..");
+                                    }
+                                    else {
+                                        txt_current_location.setText(job2.getString("name"));
+                                    }
+
                                 }
                             }catch (Exception e){
                                 card_location.setVisibility(View.GONE);

@@ -13,7 +13,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/GalaxyZooThemeToolbarDarkOverflow" />
 
-    <TextView
+    <com.iused.utils.CustomFontTextview
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Enter Verification code"
@@ -21,7 +21,7 @@
         android:layout_marginTop="15dp"
         android:textSize="20dp"/>
 
-    <TextView
+    <com.iused.utils.CustomFontTextview
         android:id="@+id/txt_verify_message"
         android:layout_marginTop="12dp"
         android:layout_width="match_parent"
@@ -71,12 +71,13 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-        <Button
+        <com.iused.utils.CustomFontButton
             android:id="@+id/btn_submit"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:layout_marginTop="30dp"
             android:text="Submit"
+            android:textSize="16dp"
             android:textColor="@color/white"
             android:background="@drawable/settings_corner"/>
 
@@ -89,8 +90,7 @@
             android:layout_gravity="center"
             android:gravity="center">
 
-            <TextView
-
+            <com.iused.utils.CustomFontTextview
                 android:id="@+id/txt_timer_mobile_verify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,23 +106,25 @@
 
     </LinearLayout>
 
-    <Button
+    <com.iused.utils.CustomFontButton
         android:id="@+id/btn_resend_code_gray"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/gray"
         android:text="Resend Code"
+        android:textSize="17dp"
         android:textColor="@color/white"
         android:textStyle="bold" />
 
 
-    <Button
+    <com.iused.utils.CustomFontButton
         android:id="@+id/btn_resend_code"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/button_custom_app_color"
         android:text="Resend Code"
         android:visibility="gone"
+        android:textSize="17dp"
         android:textColor="@color/white"
         android:textStyle="bold" />
 

@@ -1,55 +1,27 @@
 {
   "project_info": {
-    "project_number": "998936107158",
-    "firebase_url": "https://iused-9fce4.firebaseio.com",
-    "project_id": "iused-9fce4",
-    "storage_bucket": "iused-9fce4.appspot.com"
+    "project_number": "225624400335",
+    "firebase_url": "https://donateapp-a371b.firebaseio.com",
+    "project_id": "donateapp-a371b",
+    "storage_bucket": "donateapp-a371b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:998936107158:android:d69967cce33aa90e",
+        "mobilesdk_app_id": "1:225624400335:android:e886b7bf2e62af83",
         "android_client_info": {
-          "package_name": "com.iused"
+          "package_name": "com.app.donate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "998936107158-jkrc8a5scfee1jsf07655m2lfbbielre.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.iused",
-            "certificate_hash": "5BF0D9B378C75C4E4DCFFC1E887FF739E87ED9A6"
-          }
-        },
-        {
-          "client_id": "998936107158-r13t2dbr1ea5id91lr34829intlrinbd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.iused",
-            "certificate_hash": "20C3F751FFC06A0FCB8D72DC15288090D277D66B"
-          }
-        },
-        {
-          "client_id": "998936107158-jadol4ihelman1r7oojl7gq0rui7r5ng.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.iused",
-            "certificate_hash": "2F238305DFCF7919F303938EADCB75BEDB596E6E"
-          }
-        },
-        {
-          "client_id": "998936107158-3k71a978v727d8vofcc60gvm0gpm75ud.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "998936107158-umvv1fmts1b7mc5u6d10sbh0h0c3kpk7.apps.googleusercontent.com",
+          "client_id": "225624400335-snlq466bo8tq0istpmqus4kb9h7h6pg7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHUsp77mXi-QzyaXbuLHaYaOuYNIXjpOw"
+          "current_key": "AIzaSyBQlFeYZ6MoTEuXXJDn8emX15uFLumg3sw"
         }
       ],
       "services": {
@@ -60,7 +32,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "998936107158-3k71a978v727d8vofcc60gvm0gpm75ud.apps.googleusercontent.com",
+              "client_id": "225624400335-snlq466bo8tq0istpmqus4kb9h7h6pg7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

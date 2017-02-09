@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.bean.DonatedProductsBean;
 import com.iused.bean.DonorResponsesBean;
 import com.squareup.picasso.Callback;
@@ -86,6 +87,7 @@ public class DonatedProductsAdapter extends RecyclerView.Adapter<DonatedProducts
         try {
             Picasso.with(context)
                     .load(main_Products_Bean.get(position).getProductImage())
+                    .placeholder(R.drawable.no_image)
                     //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
                     //.error(R.drawable.user_placeholder_error)
                     .fit().centerInside()
@@ -93,6 +95,7 @@ public class DonatedProductsAdapter extends RecyclerView.Adapter<DonatedProducts
         }catch (Exception e){
             Picasso.with(context)
                     .load("http://52.41.70.254/pics/user.jpg")
+                    .placeholder(R.drawable.no_image)
                     //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
                     //.error(R.drawable.user_placeholder_error)
                     .fit().centerInside()
@@ -120,6 +123,8 @@ public class DonatedProductsAdapter extends RecyclerView.Adapter<DonatedProducts
             this.txt_title=(TextView)view.findViewById(R.id.txt_title);
             this.txt_no_of_requests= (TextView) view.findViewById(R.id.txt_no_of_requests);
             this.txt_status= (TextView) view.findViewById(R.id.txt_status_sold);
+
+            this.txt_no_of_requests.bringToFront();
 
             view.setOnClickListener(this);
 

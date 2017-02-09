@@ -4,11 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.SoldProductsAdapter;
 import com.iused.bean.SoldProductsBean;
 import com.iused.introduction.LoginActivity;
@@ -63,6 +65,7 @@ public class Sold_Products_Fragment extends Fragment implements AsyncTaskListene
     private ArrayList<String> arr_list_phone = null;
     private ArrayList<String> arr_list_currency = null;
     String date = null;
+    private SwipeRefreshLayout swipeRefreshLayout_sold_products;
 
     @Nullable
     @Override
@@ -79,6 +82,8 @@ public class Sold_Products_Fragment extends Fragment implements AsyncTaskListene
         list_ordered_products.setNestedScrollingEnabled(false);
 
         txt_no_sold_products= (TextView) view.findViewById(R.id.txt_no_sold_products);
+        swipeRefreshLayout_sold_products= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_sold_products);
+        swipeRefreshLayout_sold_products.setColorSchemeColors(Color.RED);
 
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -100,13 +105,38 @@ public class Sold_Products_Fragment extends Fragment implements AsyncTaskListene
             para.put("UserId", mpref.getString("user_id", ""));
             para.put("Datetime", date);
             para.put("For","1");
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+            swipeRefreshLayout_sold_products.setRefreshing(true);
             Log.e("para_get_products", para.toString());
             HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
             httpAsync1.execute();
         }
+
+        swipeRefreshLayout_sold_products.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(mpref.getString("user_id", "").equalsIgnoreCase("")){
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+                else {
+                    para = new HashMap<>();
+                    para.put("UserId", mpref.getString("user_id", ""));
+                    para.put("Datetime", date);
+                    para.put("For","1");
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+                    swipeRefreshLayout_sold_products.setRefreshing(true);
+                    Log.e("para_get_products", para.toString());
+                    HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
+                    httpAsync1.execute();
+                }
+            }
+        });
 
         return view;
     }
@@ -142,7 +172,8 @@ public class Sold_Products_Fragment extends Fragment implements AsyncTaskListene
     @Override
     public void onTaskComplete(String result, String tag) {
 
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
+        swipeRefreshLayout_sold_products.setRefreshing(false);
         if(result.equalsIgnoreCase("fail")){
             try {
                 Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();

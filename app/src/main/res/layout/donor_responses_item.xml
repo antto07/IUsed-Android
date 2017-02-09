@@ -20,9 +20,11 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="170dp"
                 android:src="@drawable/no_image"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:id="@+id/img_product" />
 
             <RelativeLayout
@@ -40,7 +42,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="New Text"
@@ -49,7 +51,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:id="@+id/txt_title" />
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
@@ -80,7 +82,7 @@
                         android:textSize="16dp"
                         android:id="@+id/txt_no_of_requests" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontToolbarText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"

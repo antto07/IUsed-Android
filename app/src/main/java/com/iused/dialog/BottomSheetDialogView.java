@@ -15,7 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.fragments.PageFragment;
 
 public class BottomSheetDialogView {

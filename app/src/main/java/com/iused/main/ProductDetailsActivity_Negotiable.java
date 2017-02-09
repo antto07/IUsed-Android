@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,8 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.FullImageAdapter;
+import com.iused.bean.MainProductsBean;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
@@ -69,6 +71,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
     private Button btn_buy_now= null;
     private EditText edt_offer_price= null;
     private EditText edt_offer_minutes= null;
+    private EditText edt_deadline_type= null;
 
     private HashMap<String, String> para = null;
     public static HashMap<String, String> para_buy_request = null;
@@ -92,6 +95,8 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
     private CircleImageView img_seller_image=null;
     private ImageView img_play_video=null;
     public String str_video_link=null;
+    private Typeface face,face1=null;
+    MainProductsBean mainProductsBean=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +110,9 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setTitle("Product Details");
+
+//        mainProductsBean= (MainProductsBean) getIntent().getSerializableExtra("negotiable_bean");
+//        Log.e("product_name",mainProductsBean.getProductName());
 
         progressDialog= new ProgressDialog(ProductDetailsActivity_Negotiable.this);
         listener = ProductDetailsActivity_Negotiable.this;
@@ -121,6 +129,7 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         txt_product_description= (TextView) findViewById(R.id.txt_description);
         edt_offer_price= (EditText) findViewById(R.id.edt_offer_price);
         edt_offer_minutes= (EditText) findViewById(R.id.edt_deadline);
+        edt_deadline_type= (EditText) findViewById(R.id.edt_deadline_type);
         btn_buy_now = (Button) findViewById(R.id.btn_buy_now_negotiable);
         txt_product_name= (TextView) findViewById(R.id.txt_product_name);
         txt_used_for= (TextView) findViewById(R.id.txt_used_for);
@@ -132,6 +141,10 @@ public class ProductDetailsActivity_Negotiable extends AppCompatActivity impleme
         img_play_video= (ImageView) findViewById(R.id.img_play_video);
 
 //        gallery=new ArrayList<String>();
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolbd.otf");
+//        edt_offer_price.setTypeface(face);
+        edt_offer_minutes.setTypeface(face);
+        edt_deadline_type.setTypeface(face);
 
         txt_product_name.setText(intent.getStringExtra("name"));
         txt_used_for.setText(intent.getStringExtra("used_for")+" Old");

@@ -19,7 +19,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="170dp"
+
                 >
 
                 <ImageView
@@ -27,11 +28,38 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/no_image"
                     android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
                     android:id="@+id/img_product" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    >
+
+                    <com.iused.utils.CustomFontTextview
+                        android:text="1 Request(s)"
+                        android:id="@+id/txt_no_of_requests"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="@color/gray1"
+                        android:alpha="0.8"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+
+
+                </LinearLayout>
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:alpha="0.9"
+                    android:visibility="gone"
                     android:background="@color/lightgray"
                     android:layout_height="wrap_content">
 
@@ -42,18 +70,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="4dp"
                         android:visibility="gone"
-                        android:src="@drawable/location_icon" />
+                        android:src="@drawable/ic_gps_fixed_white_24px" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1 Request(s)"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:layout_margin="5dp"
-                        android:textSize="16dp"
-                        android:id="@+id/txt_no_of_requests" />
                 </LinearLayout>
 
 
@@ -76,7 +94,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
 
-                    <TextView
+                    <com.iused.utils.CustomFontToolbarText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="New Text"
@@ -96,7 +114,7 @@
                         android:id="@+id/imageView2" />
 
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextviewItalic
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"

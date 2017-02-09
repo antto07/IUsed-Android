@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.FullImageAdapter;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
@@ -78,6 +79,7 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
     String locale ="";
     String timezone="";
     private EditText edt_offer_minutes= null;
+    private EditText edt_deadline_type= null;
     private List<String> gallery = null;
     private ArrayList<String> gallery_images=null;
     ViewPager viewPager;
@@ -86,6 +88,8 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
     private CircleImageView img_seller_image_non=null;
     private ImageView img_play_video=null;
     public String str_video_link=null;
+    private Typeface face,face1=null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,11 +120,16 @@ public class ProductDetailsActivity_Non_Negotiable extends AppCompatActivity imp
         txt_product_name= (TextView) findViewById(R.id.txt_product_name);
         txt_used_for= (TextView) findViewById(R.id.txt_used_for);
         edt_offer_minutes= (EditText) findViewById(R.id.edt_deadline);
+        edt_deadline_type= (EditText) findViewById(R.id.edt_deadline_type);
         txt_distance= (TextView) findViewById(R.id.txt_distance);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         img_seller_image_non= (CircleImageView) findViewById(R.id.img_seller_image_non);
         txt_condition= (TextView) findViewById(R.id.txt_condition);
         img_play_video= (ImageView) findViewById(R.id.img_play_video);
+
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolbd.otf");
+        edt_offer_minutes.setTypeface(face);
+        edt_deadline_type.setTypeface(face);
 
         txt_product_name.setText(intent.getStringExtra("name"));
         txt_used_for.setText(intent.getStringExtra("used_for")+" Old");

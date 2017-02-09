@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
@@ -50,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskListe
     private ProgressDialog progressDialog= null;
     private LinearLayout linear_editable=null;
     private LinearLayout linear_name=null;
+    private Typeface face,face1=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +81,12 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskListe
         btn_save_profile= (Button) findViewById(R.id.btn_save_profile);
         linear_editable= (LinearLayout) findViewById(R.id.linear_name_editable);
         linear_name= (LinearLayout) findViewById(R.id.linear_name);
+
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
+        edt_name.setTypeface(face);
+        edt_email.setTypeface(face);
+        edt_mobile_number.setTypeface(face);
+        edt_name_editable.setTypeface(face);
 
         try {
             edt_name.setText(mpref.getString("username",""));

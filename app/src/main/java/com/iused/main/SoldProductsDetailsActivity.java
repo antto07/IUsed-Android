@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.SoldProductsDetailsAdapter;
 import com.iused.bean.SoldProductsBean;
 import com.iused.dialog.DonatedByOthersContactDialog;

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;

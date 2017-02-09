@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.DonatedProductsAdapter;
 import com.iused.bean.DonatedProductsBean;
 import com.iused.introduction.LoginActivity;
@@ -63,6 +65,7 @@ public class Donated_Products_Fragment extends Fragment implements AsyncTaskList
     private Button btn_donate_product=null;
     private TextView txt_no_donated_products=null;
     public String date=null;
+    private SwipeRefreshLayout swipeRefreshLayout_donated_products;
 
     @Nullable
     @Override
@@ -77,6 +80,8 @@ public class Donated_Products_Fragment extends Fragment implements AsyncTaskList
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
         list_ordered_products.setLayoutManager(layoutManager);
         list_ordered_products.setNestedScrollingEnabled(false);
+        swipeRefreshLayout_donated_products= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_donated_products);
+        swipeRefreshLayout_donated_products.setColorSchemeColors(Color.RED);
 
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -103,19 +108,47 @@ public class Donated_Products_Fragment extends Fragment implements AsyncTaskList
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+
         }
         else {
             para = new HashMap<>();
             para.put("UserId", mpref.getString("user_id", ""));
             para.put("Datetime", date);
             para.put("For","0");
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+            swipeRefreshLayout_donated_products.setRefreshing(true);
             Log.e("para_get_products", para.toString());
             HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
             httpAsync1.execute();
         }
+
+        swipeRefreshLayout_donated_products.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(mpref.getString("user_id", "").equalsIgnoreCase("")){
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+                else {
+                    para = new HashMap<>();
+                    para.put("UserId", mpref.getString("user_id", ""));
+                    para.put("Datetime", date);
+                    para.put("For","0");
+    //            progressDialog.setMessage("Loading...");
+    //            progressDialog.setCancelable(false);
+    //            progressDialog.show();
+                    swipeRefreshLayout_donated_products.setRefreshing(true);
+                    Log.e("para_get_products", para.toString());
+                    HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
+                    httpAsync1.execute();
+                }
+
+            }
+        });
 
         return view;
     }
@@ -127,9 +160,10 @@ public class Donated_Products_Fragment extends Fragment implements AsyncTaskList
         para.put("UserId", mpref.getString("user_id", ""));
         para.put("Datetime", date);
         para.put("For","0");
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+        swipeRefreshLayout_donated_products.setRefreshing(true);
         Log.e("para_get_products", para.toString());
         HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
         httpAsync1.execute();
@@ -144,7 +178,8 @@ public class Donated_Products_Fragment extends Fragment implements AsyncTaskList
     public void onTaskComplete(String result, String tag) {
 
 
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
+        swipeRefreshLayout_donated_products.setRefreshing(false);
         if(result.equalsIgnoreCase("fail")){
             try {
                 Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();

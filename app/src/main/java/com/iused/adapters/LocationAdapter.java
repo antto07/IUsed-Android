@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.bean.LocationBean;
 
 import java.util.List;

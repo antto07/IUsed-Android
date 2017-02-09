@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:textSize="18dp"
         android:text="Name"
         android:layout_height="wrap_content" />
@@ -17,7 +17,7 @@
         android:id="@+id/linear_call"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal">
@@ -73,7 +73,7 @@
             android:layout_weight="0.50"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:src="@android:drawable/ic_menu_call"/>
+            android:src="@drawable/ic_phone_call"/>
 
         <Button
             android:id="@+id/btn_ok"
@@ -95,7 +95,7 @@
             android:layout_weight="0.50"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:src="@android:drawable/ic_menu_call"/>
+            android:src="@drawable/ic_whatsapp_logo"/>
 
 
     </LinearLayout>

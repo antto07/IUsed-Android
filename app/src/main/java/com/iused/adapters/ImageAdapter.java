@@ -12,7 +12,8 @@ import android.widget.LinearLayout;
 //import com.mykingdom.mypillows.R;
 //import com.mykingdom.mypillows.utils.VolleySingleton;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

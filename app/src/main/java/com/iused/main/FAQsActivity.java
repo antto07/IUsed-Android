@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
@@ -110,11 +110,11 @@ public class FAQsActivity extends AppCompatActivity implements AsyncTaskListener
 //                        if(jsonObject.getString("errFlag").equalsIgnoreCase("Success")){
                         JSONObject object=jsonObject.getJSONObject("data");
                         if(object!=null){
-//                                txt_terms.setText(Html.fromHtml(object.getString("Terms")));
+                                txt_terms.setText(Html.fromHtml(object.getString("Faqs")));
 //                                Log.e("terms",object.getString("Terms"));
 
-                            CharSequence trimmed = trimTrailingWhitespace(Html.fromHtml(object.getString("Faqs"), null, new MyTagHandler()));
-                            txt_terms.setText(trimmed);
+//                            CharSequence trimmed = trimTrailingWhitespace(Html.fromHtml(object.getString("Faqs"), null, new MyTagHandler()));
+//                            txt_terms.setText(trimmed);
                             webview_terms.loadData(object.getString("Faqs"),"text/html", "UTF-8");
                         }
 

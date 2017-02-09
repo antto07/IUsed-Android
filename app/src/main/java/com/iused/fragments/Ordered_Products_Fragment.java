@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.OrderedProductsAdapter;
 import com.iused.bean.OrderedProductsBean;
 import com.iused.main.OrderedProductsDetailsActivity;
@@ -49,6 +51,7 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
     private ProgressDialog progressDialog= null;
     private TextView txt_no_bought_products=null;
     public String date=null;
+    private SwipeRefreshLayout swipeRefreshLayout_ordered_products;
 
     @Nullable
     @Override
@@ -65,6 +68,8 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
         list_ordered_products.setNestedScrollingEnabled(false);
 
         txt_no_bought_products= (TextView) view.findViewById(R.id.txt_no_bought_products);
+        swipeRefreshLayout_ordered_products= (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_ordered_products);
+        swipeRefreshLayout_ordered_products.setColorSchemeColors(Color.RED);
 
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -79,12 +84,30 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
         para.put("UserId", mpref.getString("user_id", ""));
         para.put("Datetime", date);
         para.put("For","1");
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+        swipeRefreshLayout_ordered_products.setRefreshing(true);
         Log.e("para_get_products", para.toString());
         HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
         httpAsync1.execute();
+
+        swipeRefreshLayout_ordered_products.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                para = new HashMap<>();
+                para.put("UserId", mpref.getString("user_id", ""));
+                para.put("Datetime", date);
+                para.put("For","1");
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+                swipeRefreshLayout_ordered_products.setRefreshing(true);
+                Log.e("para_get_products", para.toString());
+                HttpAsync httpAsync1 = new HttpAsync(getActivity(), listener, Constants.BASE_URL+"GetProductPurchaseRequests", para, 2, "my_orders");
+                httpAsync1.execute();
+            }
+        });
 
         return view;
     }
@@ -97,7 +120,8 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
     @Override
     public void onTaskComplete(String result, String tag) {
 
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
+        swipeRefreshLayout_ordered_products.setRefreshing(false);
         if(result.equalsIgnoreCase("fail")){
             try {
                 Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
@@ -110,6 +134,7 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
                 JSONObject jsonObject = null;
                 try {
 
+                    orderedProductsBean.clear();
                     jsonObject = new JSONObject(result);
                     if (jsonObject != null){
                         if(jsonObject.getString("errFlag").equalsIgnoreCase("0")){
@@ -186,7 +211,7 @@ public class Ordered_Products_Fragment extends Fragment implements AsyncTaskList
 
                             }
                             else {
-                                list_ordered_products.setVisibility(View.GONE);
+                                swipeRefreshLayout_ordered_products.setVisibility(View.GONE);
                                 txt_no_bought_products.setVisibility(View.VISIBLE);
                             }
                         }

@@ -41,7 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.GalleryAdapter;
 import com.iused.adapters.GridviewAdapter;
 import com.iused.bean.CustomGallery;

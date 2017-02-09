@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.FullImageAdapter;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;
@@ -84,7 +85,7 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private CircleImageView img_seller_image=null;
-
+    private Typeface face=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,16 +128,19 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
         txt_condition.setText(intent.getStringExtra("Condition"));
         txt_distance.setText(Math.round(Double.parseDouble(intent.getStringExtra("distance")))+" Km(s) away");
 
-        img_product = (ImageView) findViewById(R.id.img_product);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            img_product.setTransitionName("profile");
-        }
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
+        edt_message.setTypeface(face);
 
-        Picasso.with(getApplicationContext())
-                .load(intent.getStringExtra("image"))
-                //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
-                //.error(R.drawable.user_placeholder_error)
-                .into(img_product,new PicassoCallback(intent.getStringExtra("image")));
+        img_product = (ImageView) findViewById(R.id.img_product);
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//            img_product.setTransitionName("profile");
+//        }
+
+//        Picasso.with(getApplicationContext())
+//                .load(intent.getStringExtra("image"))
+//                //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
+//                //.error(R.drawable.user_placeholder_error)
+//                .into(img_product,new PicassoCallback(intent.getStringExtra("image")));
 
         locale = getApplicationContext().getResources().getConfiguration().locale.getDisplayCountry();
         Date today = Calendar.getInstance().getTime();
@@ -370,24 +374,24 @@ public class ProductDetailsActivity_Donate extends AppCompatActivity implements 
 
     }
 
-    class PicassoCallback implements Callback {
-
-        String thumbnail_poster;
-
-        public PicassoCallback(String thumbnail) {
-            this.thumbnail_poster=thumbnail;
-        }
-
-        @Override
-        public void onSuccess() {
-
-        }
-
-        @Override
-        public void onError() {
-//            loadRottenPoster=true;
-            Picasso.with(getApplicationContext()).load("http://52.41.70.254/pics/user.jpg").into(img_product);
-        }
-    }
+//    class PicassoCallback implements Callback {
+//
+//        String thumbnail_poster;
+//
+//        public PicassoCallback(String thumbnail) {
+//            this.thumbnail_poster=thumbnail;
+//        }
+//
+//        @Override
+//        public void onSuccess() {
+//
+//        }
+//
+//        @Override
+//        public void onError() {
+////            loadRottenPoster=true;
+//            Picasso.with(getApplicationContext()).load("http://52.41.70.254/pics/user.jpg").into(img_product);
+//        }
+//    }
 
 }

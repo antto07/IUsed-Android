@@ -17,12 +17,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:layout_margin="10dp"
             android:id="@+id/txt_product_name"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="22dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -46,7 +46,7 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.iused.utils.CustomFontToolbarText
             android:layout_margin="10dp"
             android:id="@+id/txt_user_name"
             android:layout_gravity="center"
@@ -58,7 +58,7 @@
             android:textColor="@color/colorPrimary"
             android:text="Name"/>
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:id="@+id/txt_phone_number"
             android:textSize="24dp"
             android:text="+919999999999"
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="-----------------------------------"
@@ -79,12 +79,12 @@
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-        <TextView
+        <com.iused.utils.CustomFontTextview
             android:id="@+id/txt_emotional_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Message"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_margin="10dp"

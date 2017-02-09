@@ -9,7 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.iused.R;
+import com.app.donate.R;
+
 
 /**
  * Created by Antto on 05-10-2016.
@@ -31,15 +32,15 @@ public class DonateFragment extends Fragment {
         tabHost.addTab(tabHost.newTabSpec("Tab1").setIndicator("I Donate"),
                 Donated_Products_Fragment.class, arg1);
 
-        Bundle arg2 = new Bundle();
-        arg2.putInt("Arg for Frag2", 2);
-        tabHost.addTab(tabHost.newTabSpec("Tab2").setIndicator("Donated by Others"),
-                Dontated_By_Others_Fragment.class, arg2);
+//        Bundle arg2 = new Bundle();
+//        arg2.putInt("Arg for Frag2", 2);
+//        tabHost.addTab(tabHost.newTabSpec("Tab2").setIndicator("Donated by Others"),
+//                Dontated_By_Others_Fragment.class, arg2);
 
         Bundle arg3 = new Bundle();
         arg3.putInt("Arg for Frag3", 3);
         tabHost.addTab(tabHost.newTabSpec("Tab3").setIndicator("Donor Responses"),
-                Donor_Responses_Fragment.class, arg2);
+                Donor_Responses_Fragment.class, arg3);
 
         return tabHost;
     }

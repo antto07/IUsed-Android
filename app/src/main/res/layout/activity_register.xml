@@ -42,7 +42,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <EditText
+                        <com.iused.utils.CustomFontEdittext
                             android:id="@+id/edt_name"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
@@ -94,13 +94,13 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/icon_add_image"
+                            android:src="@drawable/no_image"
                             app:civ_border_width="3dp"
                             app:civ_border_color="@color/gray1"
                             android:layout_gravity="center"
                             />
 
-                        <EditText
+                        <com.iused.utils.CustomFontEdittext
                             android:id="@+id/edt_email"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
@@ -166,7 +166,7 @@
                                 android:weightSum="2"
                                 >
 
-                                <TextView
+                                <com.iused.utils.CustomFontToolbarText
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:id="@+id/txt_mobile_code"
@@ -182,7 +182,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@color/gray"></LinearLayout>
 
-                                <EditText
+                                <com.iused.utils.CustomFontEdittext
                                     android:id="@+id/edt_mobile"
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
@@ -267,10 +267,11 @@
 
 
 
-        <Button
+        <com.iused.utils.CustomFontButton
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Sign Up"
+            android:textSize="18dp"
             android:background="@drawable/button_custom_app_color"
             android:textColor="@color/white"
             android:textStyle="bold"

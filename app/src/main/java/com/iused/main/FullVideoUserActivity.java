@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 
+import com.app.donate.R;
 import com.github.rtoshiro.view.video.FullscreenVideoLayout;
-import com.iused.R;
 
 import java.io.IOException;
 

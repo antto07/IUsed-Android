@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.utils.AsyncTaskListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;

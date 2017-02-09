@@ -13,37 +13,17 @@
         android:layout_margin="10dp">
 
         <LinearLayout
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.80"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:src="@drawable/no_image"
-                app:civ_border_width="3dp"
-                app:civ_border_color="@color/gray1"
-                android:id="@+id/img_product_photo" />
-
-
-        </LinearLayout>
-
             <LinearLayout
 
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_weight="0.20"
                 android:layout_height="match_parent">
 
                 <LinearLayout
@@ -53,11 +33,11 @@
                     android:layout_gravity="center"
                     android:gravity="center">
 
-                    <TextView
+                    <com.iused.utils.CustomFontToolbarText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Name"
-                        android:layout_margin="5dp"
+                        android:layout_margin="2dp"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
                         android:textSize="18dp"
@@ -65,16 +45,34 @@
                         android:gravity="center"
                         android:id="@+id/txt_user_name" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Name nbdvhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhjhj"
-                        android:layout_margin="2dp"
-                        android:textColor="@color/black"
-                        android:textSize="16dp"
                         android:layout_gravity="center"
-                        android:gravity="center"
-                        android:id="@+id/txt_emotional_msg" />
+                        android:orientation="horizontal">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/no_image"
+                            app:civ_border_width="3dp"
+                            app:civ_border_color="@color/gray1"
+                            android:id="@+id/img_product_photo" />
+
+                        <com.iused.utils.CustomFontCheckedTextview
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Message"
+                            android:layout_margin="2dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/txt_emotional_msg" />
+
+                    </LinearLayout>
+
+
 
                     <TextView
                         android:layout_width="match_parent"
@@ -86,15 +84,15 @@
                         android:visibility="gone"
                         android:id="@+id/txt_offered_till" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontToolbarText
                         android:id="@+id/txt_contact"
                         android:text="View Contact"
                         android:textColor="@color/white"
                         android:background="@drawable/settings_corner"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_margin="5dp"
                         android:textStyle="bold"
+                        android:layout_margin="2dp"
                         android:layout_width="130dp"
                         android:layout_height="30dp" />
 

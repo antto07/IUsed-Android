@@ -37,7 +37,7 @@ package com.iused.utils;
         import android.view.animation.Interpolator;
         import android.widget.FrameLayout;
 
-        import com.iused.R;
+        import com.app.donate.R;
 
 
 public class CollapsingTitleLayout extends FrameLayout {

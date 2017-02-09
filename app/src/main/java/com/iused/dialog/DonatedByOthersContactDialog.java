@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.fragments.Dontated_By_Others_Fragment;
 
 /**

@@ -19,7 +19,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Patterns;
 
-import com.iused.R;
+import com.app.donate.R;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,8 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.donate.R;
 import com.astuetz.PagerSlidingTabStrip;
-import com.iused.R;
+
 import com.iused.introduction.Splash;
 
 import org.json.JSONArray;
@@ -38,10 +40,11 @@ import java.util.HashMap;
 public class ExampleFragments extends Fragment {
 
     private ViewPager viewPager;
-    PagerSlidingTabStrip tabsStrip;
+    public static PagerSlidingTabStrip tabsStrip;
     View view = null;
     private String[] title = null;
     private String[] ids = null;
+    private Typeface face=null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,8 +57,13 @@ public class ExampleFragments extends Fragment {
             title = bundle.getStringArray("pages");
             ids = bundle.getStringArray("ids");
 
+            face= Typeface.createFromAsset(getActivity().getAssets(), "fonts/bariolbd.otf");
+
             // Give the PagerSlidingTabStrip the ViewPager
             tabsStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_strip);
+
+            tabsStrip.setTypeface(face,0);
+            tabsStrip.setTextSize(28);
 
             viewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager(), title.length, title, ids));
 //        viewPager.setOffscreenPageLimit(0);

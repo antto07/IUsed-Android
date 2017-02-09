@@ -10,11 +10,13 @@
         app:pstsShouldExpand="true"
         app:pstsTextAllCaps="false"
         app:pstsDividerColor="@android:color/transparent"
-        app:pstsIndicatorHeight="4dp"
-        app:pstsIndicatorColor="@color/colorPrimary"
+        app:pstsIndicatorHeight="2dp"
+        app:pstsIndicatorColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/btn"
         app:pstsUnderlineColor="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="45dp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

@@ -41,9 +41,9 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
+import com.app.donate.R;
 import com.bumptech.glide.Glide;
 
-import com.iused.R;
 import com.iused.main.MainActivity;
 import com.iused.main.SetPriceActivity;
 import com.iused.utils.AsyncTaskListener;

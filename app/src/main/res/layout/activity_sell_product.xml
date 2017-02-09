@@ -40,12 +40,12 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_add_image"
+                        android:src="@drawable/ic_photo_camera"
                         android:id="@+id/img_add_galery"
                         android:layout_gravity="center"
                         android:gravity="center"/>
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Add Image(s)"
@@ -59,18 +59,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.50"
-                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_add_video"
+                        android:src="@drawable/ic_video_camera"
                         android:id="@+id/img_add_video"
                         android:layout_gravity="center"
                         android:gravity="center"/>
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Add Video"
@@ -108,9 +107,10 @@
                 android:layout_height="80dp"
                 android:id="@+id/thumbview_video"
                 android:layout_below="@+id/gridGallery"
-                android:layout_gravity="center"
                 android:visibility="gone"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_margin="3dp"
+                >
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -132,7 +132,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/clear"
+                    android:src="@android:drawable/ic_delete"
                     android:layout_alignTop="@+id/img_video"
                     android:layout_alignRight="@+id/img_video"
                     android:layout_alignEnd="@+id/img_video"
@@ -230,6 +230,7 @@
                                     android:layout_margin="6dp"
                                     android:hint="Item Name *"
                                     android:maxLines="1"
+                                    android:inputType="text"
                                     android:singleLine="true"
                                     android:textSize="18dp"
                                     android:background="@android:color/transparent"
@@ -240,7 +241,7 @@
 
                         </RelativeLayout>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="How Old?"
@@ -400,29 +401,30 @@
                         </RelativeLayout>
 
 
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/edit_text_bottom_border_green"
-                            android:gravity="center">
+                        <!--<android.support.design.widget.TextInputLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_margin="10dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:background="@drawable/edit_text_bottom_border_green"-->
+                            <!--android:gravity="center">-->
 
-                            <android.support.v7.widget.AppCompatEditText
-                                android:id="@+id/edt_description"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:ems="10"
-                                android:layout_margin="6dp"
-                                android:hint="Please specify the details..*"
-                                android:textSize="18dp"
-                                android:maxLength="1000"
-                                android:background="@android:color/transparent"
-                                android:textColor="@color/black"
-                                />
+                            <!--<android.support.v7.widget.AppCompatEditText-->
+                                <!--android:id="@+id/edt_description"-->
+                                <!--android:layout_width="fill_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:ems="10"-->
+                                <!--android:layout_margin="6dp"-->
+                                <!--android:hint="Please specify the details..*"-->
+                                <!--android:textSize="18dp"-->
+                                <!--android:maxLength="1000"-->
+                                <!--android:background="@android:color/transparent"-->
+                                <!--android:textColor="@color/black"-->
+                                <!--/>-->
 
-                        </android.support.design.widget.TextInputLayout>
+                        <!--</android.support.design.widget.TextInputLayout>-->
+
 
 
                         <!--<EditText-->
@@ -444,6 +446,44 @@
 
                 </android.support.v7.widget.CardView>
 
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="2dp"
+                    android:background="@color/white"
+                    android:layout_margin="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.iused.utils.CustomFontTextview
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="22dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="Description* (atleast 100 words) :"/>
+
+                        <com.iused.utils.CustomFontEdittext
+                            android:id="@+id/edt_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/editexttheme_gray"
+                            android:gravity="center"
+                            android:textColorHint="@color/gray1"
+                            android:hint="The history proves that any item with poor description / low quality image / high price  would not attract many buyers. Please do not blame us for that :))"
+                            android:inputType="textNoSuggestions|textMultiLine"
+                            android:lines="6" />
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
             </LinearLayout>
 
 
@@ -453,21 +493,23 @@
     </ScrollView>
 
 
-    <Button
+    <com.iused.utils.CustomFontButton
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Next"
+        android:textSize="18dp"
         android:textStyle="bold"
         android:visibility="gone"
         android:background="@drawable/button_custom_app_color"
         android:textColor="@color/white" />
 
-    <Button
+    <com.iused.utils.CustomFontButton
         android:id="@+id/btn_next_gray"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Next"
+        android:textSize="18dp"
         android:textStyle="bold"
         android:background="@color/gray"
         android:textColor="@color/white" />

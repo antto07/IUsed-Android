@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '25'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
-        applicationId "com.iused"
+        applicationId "com.app.donate"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 40
-        versionName "1.4.0"
+        versionCode 2
+        versionName "1.0.2"
         multiDexEnabled true
     }
     buildTypes {
@@ -36,8 +36,6 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile files('libs/http-core-4.1.jar')
-    compile files('libs/httpclient-4.2.jar')
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
@@ -57,6 +55,9 @@ dependencies {
     compile files('libs/aws-android-sdk-2.1.7-core.jar')
     compile files('libs/aws-android-sdk-2.1.7-s3.jar')
     compile 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
+    compile 'com.yovenny.VideoCompress:videocompress:1.0.0'
+    compile files('libs/http-core-4.1.jar')
+    compile files('libs/httpclient-4.2.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'

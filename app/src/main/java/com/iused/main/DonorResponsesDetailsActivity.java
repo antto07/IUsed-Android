@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

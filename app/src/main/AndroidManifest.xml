@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iused"
+    package="com.app.donate"
     android:installLocation="auto">
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -31,10 +33,9 @@
         android:allowBackup="true"
         android:icon="@drawable/iused_mobile_icon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <receiver
             android:name="com.iused.utils.MyReceiver"
             android:enabled="true"
@@ -44,19 +45,17 @@
             </intent-filter>
         </receiver>
 
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".introduction.Splash"
-            android:screenOrientation="portrait"
+            android:name="com.iused.introduction.Splash"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,84 +63,95 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity android:name=".main.MainActivity"
+        <activity
+            android:name="com.iused.main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".main.ProductDetailsActivity_Negotiable"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.iused.main.ProductDetailsActivity_Negotiable"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.ProductDetailsActivity_Non_Negotiable"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.SetPriceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.introduction.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.introduction.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.introduction.MobileVerifyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.SoldProductsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.TermsandConditionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.fragments.Donate_Product_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.ProductDetailsActivity_Donate"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.DonatedProductsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.Sell_Products_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.FAQsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.PrivacyPolicyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.WishlistActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.DonorResponsesDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.FullImageUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.OrderedProductsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.UpadteSellProductActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.iused.main.FullVideoUserActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.iused.main.Activity_Filter"
             android:screenOrientation="portrait"/>
-
-        <activity android:name=".main.ProductDetailsActivity_Non_Negotiable"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".main.SetPriceActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".introduction.LoginActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".introduction.RegisterActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".introduction.MobileVerifyActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".main.SoldProductsDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.TermsandConditionsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".fragments.Donate_Product_Activity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ProductDetailsActivity_Donate"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.DonatedProductsDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.Sell_Products_Activity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.FAQsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.PrivacyPolicyActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.WishlistActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.DonorResponsesDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.FullImageUserActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.OrderedProductsDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.UpadteSellProductActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.FullVideoUserActivity"
-            android:screenOrientation="portrait"/>
-
 
         <!-- Firebase Notifications -->
-        <service android:name=".fcm.MyFirebaseMessagingService">
+        <service android:name="com.iused.fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service android:name=".fcm.MyFirebaseInstanceIDService">
+        <service android:name="com.iused.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- ./Firebase Notifications -->
 
-
-
+        <activity android:name="com.iused.main.ProductDetailsActivity_Negotiable_Viewpager"></activity>
     </application>
-
 
 </manifest>

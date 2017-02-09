@@ -38,7 +38,7 @@
                     android:orientation="vertical">
 
 
-                    <CheckBox
+                    <com.iused.utils.CustomFontCheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -50,7 +50,7 @@
                         android:checked="true"
                         android:id="@+id/chk_negotiable" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Let the buyers offer a better price"
@@ -61,7 +61,7 @@
                         android:textColor="@color/black"
                         android:id="@+id/textView7" />
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Lowest price you can offer"
@@ -84,7 +84,7 @@
                         android:weightSum="2"
                         >
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:id="@+id/curr_code_neg"
@@ -101,7 +101,7 @@
                             android:visibility="invisible"
                             android:background="@color/gray"></LinearLayout>
 
-                        <EditText
+                        <com.iused.utils.CustomFontEdittext
                             android:id="@+id/edt_price_negotiable"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -164,7 +164,7 @@
                     android:orientation="vertical">
 
 
-                    <CheckBox
+                    <com.iused.utils.CustomFontCheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -176,7 +176,7 @@
                         android:id="@+id/chk_non_negotiable" />
 
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Best price you can offer"
@@ -199,7 +199,7 @@
                         android:weightSum="2"
                         >
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:id="@+id/curr_code_non_neg"
@@ -216,7 +216,7 @@
                             android:layout_height="match_parent"
                             android:background="@color/gray"></LinearLayout>
 
-                        <EditText
+                        <com.iused.utils.CustomFontEdittext
                             android:id="@+id/edt_price_non_negotiable"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -261,7 +261,7 @@
 
                     <!--</android.support.design.widget.TextInputLayout>-->
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Special Offer if paid online"
@@ -342,7 +342,7 @@
                         android:visibility="gone"
                         android:layout_height="60dp">
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="User get offer of"
@@ -351,7 +351,7 @@
                             android:layout_weight="0.50"
                             android:id="@+id/textView10" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Within (minutes)"
@@ -371,11 +371,12 @@
 
     </ScrollView>
 
-    <Button
+    <com.iused.utils.CustomFontButton
         android:id="@+id/btn_sell"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Sell"
+        android:textSize="18dp"
         android:textStyle="bold"
         android:background="@drawable/button_custom_app_color"
         android:textColor="@color/white" />

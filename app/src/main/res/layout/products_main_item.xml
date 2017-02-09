@@ -36,18 +36,24 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/img_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/no_image"
-                    android:layout_gravity="center"
-                     />
+                <com.iused.utils.CustomFontToolbarText
+                    android:id="@+id/txt_distance_main"
+                    android:layout_width="130dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="-35dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:rotation="-45"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:text="10 kms" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:background="@color/lightgray"
                     android:alpha="0.7"
+                    android:visibility="gone"
                     android:layout_height="24dp">
 
                     <ImageView
@@ -56,16 +62,8 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="4dp"
-                        android:src="@drawable/location_icon_home" />
+                        android:src="@drawable/ic_gps_fixed_white_24px" />
 
-                    <TextView
-                        android:id="@+id/txt_distance_main"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="4dp"
-                        android:textColor="@color/black"
-                        android:text="10 kms" />
                 </LinearLayout>
 
                 <View
@@ -89,6 +87,16 @@
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/img_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/no_image"
+                    android:layout_gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
             </RelativeLayout>
 
@@ -117,7 +125,7 @@
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <TextView
+                            <com.iused.utils.CustomFontToolbarText
                                 android:id="@+id/txt_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -131,7 +139,7 @@
 
                         </LinearLayout>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_used_for"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -147,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <TextView
+                            <com.iused.utils.CustomFontTextviewItalic
                                 android:id="@+id/txt_condition"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -159,7 +167,7 @@
                                 android:textStyle="italic" />
 
 
-                            <TextView
+                            <com.iused.utils.CustomFontToolbarText
                                 android:id="@+id/txt_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

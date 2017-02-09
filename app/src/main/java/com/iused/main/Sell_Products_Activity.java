@@ -14,9 +14,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +32,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -57,13 +61,15 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.adapters.GalleryAdapter;
 import com.iused.adapters.GridviewAdapter;
 import com.iused.bean.CustomGallery;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.HotelierUploadGalleryImgs;
 import com.iused.utils.UploadSellProductVideo;
+import com.yovenny.videocompress.MediaController;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -179,6 +185,26 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
     private ImageView img_delete_video=null;
     public static String str_video_url=null;
     private Button btn_next_gray=null;
+    String path_video;
+    String picture_path_trimmed_video;
+    private Typeface face=null;
+
+    String video_outPath;
+    String video_outpath_trimmed_video;
+    public static final String APP_DIR = "VideoCompressor";
+    public static final String COMPRESSED_VIDEOS_DIR = "/Compressed Videos/";
+    public static final String TEMP_DIR = "/Temp/";
+
+
+    public static void try2CreateCompressDir() {
+        File f = new File(Environment.getExternalStorageDirectory(), File.separator + APP_DIR);
+        f.mkdirs();
+        f = new File(Environment.getExternalStorageDirectory(), File.separator + APP_DIR + COMPRESSED_VIDEOS_DIR);
+        f.mkdirs();
+        f = new File(Environment.getExternalStorageDirectory(), File.separator + APP_DIR + TEMP_DIR);
+        f.mkdirs();
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -222,6 +248,13 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
 
 //        viewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
 //        viewSwitcher.setDisplayedChild(1);
+        img_delete_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str_video_url="";
+                relativelayout_video.setVisibility(View.GONE);
+            }
+        });
 
         image_uris=new ArrayList<>();
         item = new CustomGallery();
@@ -286,6 +319,30 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         edt_used_for.setKeyListener(null);
         edt_select_category.setTag(edt_select_category.getKeyListener());
         edt_select_category.setKeyListener(null);
+
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
+        edt_item_name.setTypeface(face);
+        edt_used_for.setTypeface(face);
+        edt_used_for_type.setTypeface(face);
+        edt_condition.setTypeface(face);
+        edt_select_category.setTypeface(face);
+
+
+//        InputFilter filter = new InputFilter() {
+//            public CharSequence filter(CharSequence source, int start, int end,
+//                                       Spanned dest, int dstart, int dend) {
+//                for (int i = start; i < end; i++) {
+//                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+//                        return "";
+//                    }
+//                }
+//                return null;
+//            }
+//        };
+//        edt_item_name.setFilters(new InputFilter[] { filter });
+//        edt_description.setFilters(new InputFilter[] { filter });
+
+//        edt_description.setTypeface(face);
 
 //        gridGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -597,6 +654,15 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 else if(edt_item_name.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Enter item name",Toast.LENGTH_SHORT).show();
                 }
+                else if (!edt_item_name.getText().toString().matches("[a-zA-Z0-9.? ]*")) {
+                    Toast aviso = Toast
+                            .makeText(
+                                    getApplicationContext(),
+                                    "Please Remove Special Character from Item Name",
+                                    Toast.LENGTH_LONG);
+                    aviso.show();
+
+                }
                 else if(edt_used_for.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Enter the age of item",Toast.LENGTH_SHORT).show();
                 }
@@ -612,6 +678,18 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 else if(edt_description.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Please provide the item description",Toast.LENGTH_SHORT).show();
                 }
+                else if(edt_description.getText().toString().length()<100){
+                    Toast.makeText(getApplicationContext(),"Description too short",Toast.LENGTH_SHORT).show();
+                }
+                else if (!edt_description.getText().toString().matches("[a-zA-Z0-9.? ]*")) {
+                    Toast aviso = Toast
+                            .makeText(
+                                    getApplicationContext(),
+                                    "Please Remove Special Character from Description",
+                                    Toast.LENGTH_LONG);
+                    aviso.show();
+
+                }
                 else {
                     Intent intent=new Intent(getApplicationContext(),SetPriceActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -623,12 +701,12 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                         intent.putExtra("video_url","");
                     }
 
-                    intent.putExtra("item_name",edt_item_name.getText().toString());
+                    intent.putExtra("item_name",edt_item_name.getText().toString().trim());
                     intent.putExtra("used_for",edt_used_for.getText().toString());
                     intent.putExtra("used_for_type",edt_used_for_type.getText().toString());
                     intent.putExtra("category_id",str_category_id);
                     intent.putExtra("condition",edt_condition.getText().toString());
-                    intent.putExtra("decription",edt_description.getText().toString());
+                    intent.putExtra("decription",edt_description.getText().toString().trim());
                     startActivity(intent);
                 }
 
@@ -1024,108 +1102,108 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
         startActivityForResult(calVideo, VIDEO_REQUEST_CODE);
     }
 
-    private void buildDialog() {
-
-        final Dialog dialog = new Dialog(Sell_Products_Activity.this);
-        dialog.setContentView(R.layout.dialog_take_select_photo);
-//        dialog.setTitle("This is my custom dialog box");
-        dialog.setCancelable(true);
-
-
-        TextView txt_take_photo= (TextView) dialog.findViewById(R.id.txt_take_photo);
-        TextView txt_add_photo= (TextView) dialog.findViewById(R.id.txt_add_photo);
-        TextView txt_cancel= (TextView) dialog.findViewById(R.id.txt_cancel);
-
-        txt_take_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-//                    if (Build.VERSION.SDK_INT >= 23) {
-//                        //Marshmallow
-//                        // demo();
-//                        marshmellowPermissionCamera();
-//                        //  mainTask();
-//                    } else {
-//                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                        File f = new File(android.os.Environment
-//                                .getExternalStorageDirectory(), "temp.jpg");
-//                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                        startActivityForResult(intent, CAMERA_REQUEST);
-//                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
-
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//    private void buildDialog() {
 //
-//                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//        final Dialog dialog = new Dialog(Sell_Products_Activity.this);
+//        dialog.setContentView(R.layout.dialog_take_select_photo);
+////        dialog.setTitle("This is my custom dialog box");
+//        dialog.setCancelable(true);
 //
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 //
-//                    // start the image capture Intent
-//                    startActivityForResult(intent, CAMERA_REQUEST);
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(photoFile));
-                        startActivityForResult(takePictureIntent, CAMERA_REQUEST);
-                    }
-                }
+//        TextView txt_take_photo= (TextView) dialog.findViewById(R.id.txt_take_photo);
+//        TextView txt_add_photo= (TextView) dialog.findViewById(R.id.txt_add_photo);
+//        TextView txt_cancel= (TextView) dialog.findViewById(R.id.txt_cancel);
+//
+//        txt_take_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+////                    if (Build.VERSION.SDK_INT >= 23) {
+////                        //Marshmallow
+////                        // demo();
+////                        marshmellowPermissionCamera();
+////                        //  mainTask();
+////                    } else {
+////                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                        File f = new File(android.os.Environment
+////                                .getExternalStorageDirectory(), "temp.jpg");
+////                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+////                        startActivityForResult(intent, CAMERA_REQUEST);
+////                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//////                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+////                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+//
+////                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////
+////                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+////
+////                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+////
+////                    // start the image capture Intent
+////                    startActivityForResult(intent, CAMERA_REQUEST);
+//
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                // Ensure that there's a camera activity to handle the intent
+//                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                    // Create the File where the photo should go
+//                    File photoFile = null;
+//                    try {
+//                        photoFile = createImageFile();
+//                    } catch (IOException ex) {
+//                        // Error occurred while creating the File
+//
 //                    }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                            //                                          int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for Activity#requestPermissions for more details.
-//                            return;
-//                        }
-//                        }
-                }
-            }
-        });
-
-        txt_add_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent intent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-
-                startActivityForResult(
-                        Intent.createChooser(intent, "Select File"),
-                        SELECT_FILE);
-            }
-        });
-
-        txt_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RESULT_OK=0;
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-    }
+//                    // Continue only if the File was successfully created
+//                    if (photoFile != null) {
+//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                                Uri.fromFile(photoFile));
+//                        startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+//                    }
+//                }
+////                    }
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+////                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+////                            // TODO: Consider calling
+////                            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+////                            // here to request the missing permissions, and then overriding
+////                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+////                            //                                          int[] grantResults)
+////                            // to handle the case where the user grants the permission. See the documentation
+////                            // for Activity#requestPermissions for more details.
+////                            return;
+////                        }
+////                        }
+//                }
+//            }
+//        });
+//
+//        txt_add_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                Intent intent = new Intent(
+//                        Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/*");
+//
+//                startActivityForResult(
+//                        Intent.createChooser(intent, "Select File"),
+//                        SELECT_FILE);
+//            }
+//        });
+//
+//        txt_cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RESULT_OK=0;
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//
+//    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -1364,16 +1442,29 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
                 Uri video_uri = data.getData();
                 Log.e("video_uri",video_uri.toString());
 
-                String path = getRealPathFromURI(video_uri);
-                Log.e("video_path",path);
+                path_video = getRealPathFromURI(video_uri);
+                Log.e("video_path",path_video);
 //                Toast.makeText(getApplicationContext(),path, Toast.LENGTH_LONG).show();
 
-                String picture_path_trimmed=path.substring(path.lastIndexOf("/") + 1);
-                Log.e("trimmed",picture_path_trimmed);
+                picture_path_trimmed_video=path_video.substring(path_video.lastIndexOf("/") + 1);
+                Log.e("trimmed",picture_path_trimmed_video);
 
-                new UploadSellProductVideo(Sell_Products_Activity.this, picture_path_trimmed,path).execute();
+                try2CreateCompressDir();
+                video_outPath=Environment.getExternalStorageDirectory()
+                        + File.separator
+                        + APP_DIR
+                        + COMPRESSED_VIDEOS_DIR
+                        +"VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                Log.e("new_path",video_outPath);
+                video_outpath_trimmed_video=video_outPath.substring(video_outPath.lastIndexOf("/") + 1);
+                Log.e("trimmed",video_outpath_trimmed_video);
 
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(path,
+                new VideoCompressor().execute(path_video,video_outPath);
+
+//                new UploadSellProductVideo(Sell_Products_Activity.this, picture_path_trimmed_video,path_video).execute();
+
+
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(path_video,
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
                 img_video_image.setBackgroundDrawable(bitmapDrawable);
@@ -1393,6 +1484,35 @@ public class Sell_Products_Activity extends AppCompatActivity implements AsyncTa
             }
         }
 
+    }
+
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            progressBar.setVisibility(View.VISIBLE);
+            Log.e(TAG,"Start video compression");
+            progressDialog.setMessage("Compressing Video...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return MediaController.getInstance().convertVideo(params[0],params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+//            progressBar.setVisibility(View.GONE);
+            if(compressed){
+                Log.e(TAG,"Compression successfully!");
+                new UploadSellProductVideo(Sell_Products_Activity.this, video_outpath_trimmed_video,video_outPath).execute();
+                progressDialog.dismiss();
+            }
+        }
     }
 
     public String getPathNew(Uri uri) {

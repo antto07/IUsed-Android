@@ -15,6 +15,11 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent">-->
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh_ordered_products"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <android.support.v7.widget.RecyclerView
                 android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
@@ -23,14 +28,19 @@
 
             </android.support.v7.widget.RecyclerView>
 
-        <TextView
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+        <com.iused.utils.CustomFontTextview
             android:id="@+id/txt_no_bought_products"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="18dp"
+            android:textSize="22dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
+            android:textColor="@color/colorPrimary"
             android:text="No Products Bought"
             />
 

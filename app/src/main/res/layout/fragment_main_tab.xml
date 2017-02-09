@@ -19,7 +19,7 @@
             android:layout_weight="0.50"
             >
 
-            <TextView
+            <com.iused.utils.CustomFontToolbarText
                 android:id="@+id/txt_compete"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
@@ -47,7 +47,7 @@
             android:layout_weight="0.50"
             >
 
-            <TextView
+            <com.iused.utils.CustomFontToolbarText
                 android:id="@+id/txt_fixed_price"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
@@ -200,21 +200,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F2F2F2"
-                android:contentDescription="@string/app_name"
-                android:drawSelectorOnTop="true"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                >
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#F2F2F2"
+                    android:contentDescription="@string/app_name"
+                    android:drawSelectorOnTop="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    >
 
-            </android.support.v7.widget.RecyclerView>
-
+                </android.support.v7.widget.RecyclerView>
 
             </android.support.v4.widget.SwipeRefreshLayout>
+
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swiperefresh_fixed"
@@ -250,20 +250,20 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.iused.utils.CustomFontTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="No items found at this location now"
-                        android:textSize="16dp"
+                        android:textSize="20dp"
                         android:textColor="@color/colorPrimary"
                         android:layout_gravity="center"
                         android:gravity="center"/>
-                    <TextView
+                    <com.iused.utils.CustomFontTextviewItalic
                         android:id="@+id/txt_sell_product"
                         android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16dp"
+                        android:textSize="20dp"
                         android:text="Do you want to sell any item(s)?"
                         android:textStyle="italic"
                         android:textColor="@color/colorPrimary"

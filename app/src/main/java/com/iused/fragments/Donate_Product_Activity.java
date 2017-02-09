@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -50,7 +55,7 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.adapters.GalleryAdapter;
 import com.iused.adapters.GalleryAdapter_Donate;
 import com.iused.bean.CustomGallery;
@@ -130,6 +135,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
     private EditText edt_item_name= null;
     private EditText edt_message= null;
     private Button btn_submit= null;
+    private Button btn_submit_gray= null;
 
     private static final int MY_PERMISSIONS_CAMERA = 104;
     private static final int MY_PERMISSIONS_STORAGE = 106;
@@ -179,6 +185,7 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
     //    ViewSwitcher viewSwitcher;
     public static CustomGallery item = null;
     public static ArrayList<String> list_images;
+    private Typeface face,face1=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -192,6 +199,8 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Donate a Product");
+
+        face= Typeface.createFromAsset(getAssets(), "fonts/bariolreg.otf");
 
         mSelectedImagesContainer = (LinearLayout) findViewById(R.id.selected_photos_container);
         horizontalScrollView= (HorizontalScrollView) findViewById(R.id.hori_scroll_view);
@@ -223,7 +232,16 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_description= (EditText) findViewById(R.id.edt_more_info);
         edt_message= (EditText) findViewById(R.id.edt_message);
         btn_submit= (Button) findViewById(R.id.btn_submit);
+        btn_submit_gray= (Button) findViewById(R.id.btn_submit_gray);
         edt_item_name= (EditText) findViewById(R.id.edt_item_name);
+
+        edt_item_name.setTypeface(face);
+        edt_used_for.setTypeface(face);
+        edt_used_for_type.setTypeface(face);
+        edt_condition.setTypeface(face);
+        edt_select_category.setTypeface(face);
+//        edt_description.setTypeface(face);
+        edt_message.setTypeface(face);
 
         progressDialog= new ProgressDialog(Donate_Product_Activity.this);
         listener=Donate_Product_Activity.this;
@@ -238,6 +256,20 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_used_for.setKeyListener(null);
         edt_select_category.setTag(edt_select_category.getKeyListener());
         edt_select_category.setKeyListener(null);
+
+//        InputFilter filter = new InputFilter() {
+//            public CharSequence filter(CharSequence source, int start, int end,
+//                                       Spanned dest, int dstart, int dend) {
+//                for (int i = start; i < end; i++) {
+//                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+//                        return "";
+//                    }
+//                }
+//                return null;
+//            }
+//        };
+//        edt_item_name.setFilters(new InputFilter[] { filter });
+//        edt_description.setFilters(new InputFilter[] { filter });
 
 //        gridGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -289,6 +321,11 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_used_for_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(edt_description.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Donate_Product_Activity.this);
                 builder.setTitle("Select a Type");
                 builder.setSingleChoiceItems(str_array_duration_type, pos_duration_type, new DialogInterface.OnClickListener() {
@@ -309,6 +346,10 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_used_for.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(edt_description.getWindowToken(), 0);
 
                 if(edt_used_for_type.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Select a duration type",Toast.LENGTH_SHORT).show();
@@ -377,6 +418,10 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_condition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(edt_description.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Donate_Product_Activity.this);
                 builder.setTitle("Select Condition");
                 builder.setSingleChoiceItems(str_array_condition, pos_condition, new DialogInterface.OnClickListener() {
@@ -395,6 +440,11 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         edt_select_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edt_item_name.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(edt_description.getWindowToken(), 0);
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Donate_Product_Activity.this);
                 builder.setTitle("Select a Category");
                 builder.setSingleChoiceItems(str_array_categories, pos_category, new DialogInterface.OnClickListener() {
@@ -408,6 +458,31 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                 });
 
                 builder.show();
+            }
+        });
+
+        edt_description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(edt_description.getText().toString().equalsIgnoreCase("")){
+                    btn_submit_gray.setVisibility(View.VISIBLE);
+                    btn_submit.setVisibility(View.GONE);
+                }
+                else {
+                    btn_submit_gray.setVisibility(View.GONE);
+                    btn_submit.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -515,6 +590,15 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                 else if(edt_item_name.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Enter item name",Toast.LENGTH_SHORT).show();
                 }
+                else if (!edt_item_name.getText().toString().matches("[a-zA-Z0-9.? ]*")) {
+                    Toast aviso = Toast
+                            .makeText(
+                                    getApplicationContext(),
+                                    "Please Remove Special Character from Item Name",
+                                    Toast.LENGTH_LONG);
+                    aviso.show();
+
+                }
                 else if(edt_used_for.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Enter the age of item",Toast.LENGTH_SHORT).show();
                 }
@@ -530,9 +614,18 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
                 else if(edt_description.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(getApplicationContext(),"Please provide the item description",Toast.LENGTH_SHORT).show();
                 }
-//                else if(edt_message.getText().toString().equalsIgnoreCase("")){
-//                    Toast.makeText(getApplicationContext(),"Enter Message",Toast.LENGTH_SHORT).show();
-//                }
+                else if(edt_description.getText().toString().length()<100){
+                    Toast.makeText(getApplicationContext(),"Description too short",Toast.LENGTH_SHORT).show();
+                }
+                else if (!edt_description.getText().toString().matches("[a-zA-Z0-9.? ]*")) {
+                    Toast aviso = Toast
+                            .makeText(
+                                    getApplicationContext(),
+                                    "Please Remove Special Character from Description",
+                                    Toast.LENGTH_LONG);
+                    aviso.show();
+
+                }
                 else {
 
 //                    if(mpref.getString("user_id","").equalsIgnoreCase("")){
@@ -543,8 +636,8 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
 //                    else {
                         para = new HashMap<>();
                         para.put("UserId", mpref.getString("user_id",""));
-                        para.put("Name", edt_item_name.getText().toString());
-                        para.put("Description",edt_description.getText().toString());
+                        para.put("Name", edt_item_name.getText().toString().trim());
+                        para.put("Description",edt_description.getText().toString().trim());
                         para.put("Price","");
                         para.put("Qty","1");
                         para.put("UsedFor",edt_used_for.getText().toString());
@@ -1143,106 +1236,106 @@ public class Donate_Product_Activity extends AppCompatActivity implements AsyncT
         builder.show();
     }
 
-    private void buildDialog() {
-
-        final Dialog dialog = new Dialog(Donate_Product_Activity.this);
-        dialog.setContentView(R.layout.dialog_take_select_photo);
-//        dialog.setTitle("This is my custom dialog box");
-        dialog.setCancelable(true);
-        dialog.show();
-
-        TextView txt_take_photo= (TextView) dialog.findViewById(R.id.txt_take_photo);
-        TextView txt_add_photo= (TextView) dialog.findViewById(R.id.txt_add_photo);
-        TextView txt_cancel= (TextView) dialog.findViewById(R.id.txt_cancel);
-
-        txt_take_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-//                    if (Build.VERSION.SDK_INT >= 23) {
-//                        //Marshmallow
-//                        // demo();
-//                        marshmellowPermissionCamera();
-//                        //  mainTask();
-//                    } else {
-//                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                        File f = new File(android.os.Environment
-//                                .getExternalStorageDirectory(), "temp.jpg");
-//                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                        startActivityForResult(intent, CAMERA_REQUEST);
-//                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
-
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//    private void buildDialog() {
 //
-//                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//        final Dialog dialog = new Dialog(Donate_Product_Activity.this);
+//        dialog.setContentView(R.layout.dialog_take_select_photo);
+////        dialog.setTitle("This is my custom dialog box");
+//        dialog.setCancelable(true);
+//        dialog.show();
 //
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//        TextView txt_take_photo= (TextView) dialog.findViewById(R.id.txt_take_photo);
+//        TextView txt_add_photo= (TextView) dialog.findViewById(R.id.txt_add_photo);
+//        TextView txt_cancel= (TextView) dialog.findViewById(R.id.txt_cancel);
 //
-//                    // start the image capture Intent
-//                    startActivityForResult(intent, CAMERA_REQUEST);
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(photoFile));
-                        startActivityForResult(takePictureIntent, CAMERA_REQUEST);
-                    }
-                }
+//        txt_take_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+////                    if (Build.VERSION.SDK_INT >= 23) {
+////                        //Marshmallow
+////                        // demo();
+////                        marshmellowPermissionCamera();
+////                        //  mainTask();
+////                    } else {
+////                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                        File f = new File(android.os.Environment
+////                                .getExternalStorageDirectory(), "temp.jpg");
+////                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+////                        startActivityForResult(intent, CAMERA_REQUEST);
+////                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//////                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+////                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+//
+////                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////
+////                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+////
+////                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+////
+////                    // start the image capture Intent
+////                    startActivityForResult(intent, CAMERA_REQUEST);
+//
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                // Ensure that there's a camera activity to handle the intent
+//                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                    // Create the File where the photo should go
+//                    File photoFile = null;
+//                    try {
+//                        photoFile = createImageFile();
+//                    } catch (IOException ex) {
+//                        // Error occurred while creating the File
+//
 //                    }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                            //                                          int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for Activity#requestPermissions for more details.
-//                            return;
-//                        }
-//                        }
-                }
-            }
-        });
-
-        txt_add_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent intent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-
-                startActivityForResult(
-                        Intent.createChooser(intent, "Select File"),
-                        SELECT_FILE);
-            }
-        });
-
-        txt_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RESULT_OK=0;
-                dialog.dismiss();
-            }
-        });
-
-    }
+//                    // Continue only if the File was successfully created
+//                    if (photoFile != null) {
+//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                                Uri.fromFile(photoFile));
+//                        startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+//                    }
+//                }
+////                    }
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+////                        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+////                            // TODO: Consider calling
+////                            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+////                            // here to request the missing permissions, and then overriding
+////                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+////                            //                                          int[] grantResults)
+////                            // to handle the case where the user grants the permission. See the documentation
+////                            // for Activity#requestPermissions for more details.
+////                            return;
+////                        }
+////                        }
+//                }
+//            }
+//        });
+//
+//        txt_add_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                Intent intent = new Intent(
+//                        Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/*");
+//
+//                startActivityForResult(
+//                        Intent.createChooser(intent, "Select File"),
+//                        SELECT_FILE);
+//            }
+//        });
+//
+//        txt_cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RESULT_OK=0;
+//                dialog.dismiss();
+//            }
+//        });
+//
+//    }
 
     private File createImageFile() throws IOException {
         // Create an image file name

@@ -21,11 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <com.iused.utils.CustomFontTextview
                 android:id="@+id/txt_terms"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:textColor="@color/gray"
                 android:layout_margin="5dp"/>
 

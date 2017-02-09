@@ -22,15 +22,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
+import com.iused.bean.DonatedByOthersBean;
 import com.iused.bean.MainProductsBean;
 import com.iused.bean.WishListProductsBeanDonations;
 import com.iused.bean.WishListProductsBeanNegotiable;
 import com.iused.bean.WishListProductsBeanNonNegotiable;
 import com.iused.fragments.FaqPagerAdapter;
+import com.iused.fragments.Wishlist_Compete_Fragment;
+import com.iused.fragments.Wishlist_Donations_Fragment;
+import com.iused.fragments.Wishlist_Fixedprice_Fragment;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
 import com.iused.utils.HttpAsync;
@@ -55,11 +62,14 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
     private AsyncTaskListener listener = null;
     TabLayout tabLayout = null;
     private ProgressDialog progressDialog= null;
+    private TextView txt_search_items=null;
 
     public static ArrayList<MainProductsBean> wishlistProductsBeanNegotiable = null;
     public static ArrayList<MainProductsBean> wishlistProductsBeanNonNegotiable = null;
-    public static ArrayList<MainProductsBean> wishlistProductsBeanDonations = null;
+    public static ArrayList<DonatedByOthersBean> wishlistProductsBeanDonations = null;
 
+    SearchView searchViewAndroidActionBar;
+    public static Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,22 +77,25 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
         this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_wishlist);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search For Products");
 
         tabLayout = (TabLayout) findViewById(R.id.faqtab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Compete"));
-        tabLayout.addTab(tabLayout.newTab().setText("Fixed Price"));
-        tabLayout.addTab(tabLayout.newTab().setText("Donations"));
 
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         context = getApplicationContext();
         progressDialog= new ProgressDialog(WishlistActivity.this);
 
         faq_viewPager = (ViewPager) findViewById(R.id.faq_pager);
+        txt_search_items= (TextView) findViewById(R.id.txt_search_items);
+
+
+        wishlistProductsBeanNegotiable = new ArrayList<MainProductsBean>();
+        wishlistProductsBeanNonNegotiable = new ArrayList<MainProductsBean>();
+        wishlistProductsBeanDonations = new ArrayList<DonatedByOthersBean>();
 
 
         mpref = getSharedPreferences("user_details", MODE_PRIVATE);
@@ -99,13 +112,21 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchViewAndroidActionBar.setQueryHint("Enter item name");
+        searchViewAndroidActionBar.setIconifiedByDefault(false);
+        searchViewAndroidActionBar.requestFocus();
+
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(searchViewAndroidActionBar, InputMethodManager.SHOW_IMPLICIT);
 
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchViewAndroidActionBar.clearFocus();
-                Log.e("jkvchj", query);
+                Log.e("query", query);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchViewAndroidActionBar.getWindowToken(), 0);
 
                 para = new HashMap<>();
                 para.put("UserId", mpref.getString("user_id", ""));
@@ -128,6 +149,25 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchViewAndroidActionBar.getWindowToken(), 0);
+            searchViewAndroidActionBar.clearFocus();
+        }catch (Exception e){
+
+        }
+
+    }
+
+    @Override
     public void onTaskCancelled(String data) {
 
     }
@@ -136,6 +176,12 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
     public void onTaskComplete(String result, String tag) {
 
         progressDialog.dismiss();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchViewAndroidActionBar.getWindowToken(), 0);
+        faq_viewPager.setVisibility(View.VISIBLE);
+        tabLayout.setVisibility(View.VISIBLE);
+        txt_search_items.setVisibility(View.GONE);
+
         if (result.equalsIgnoreCase("fail")) {
             try {
                 Toast.makeText(getApplicationContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
@@ -145,8 +191,16 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
         } else {
             if (tag.equalsIgnoreCase("products")) {
                 JSONObject jsonObject = null;
-//                mainProductsBean.clear();
-//                mainProductsBean_non_negotiable.clear();
+
+                wishlistProductsBeanNegotiable.clear();
+                wishlistProductsBeanNonNegotiable.clear();
+                wishlistProductsBeanDonations.clear();
+
+                tabLayout.removeAllTabs();
+                tabLayout.addTab(tabLayout.newTab().setText("Compete"));
+                tabLayout.addTab(tabLayout.newTab().setText("Fixed Price"));
+                tabLayout.addTab(tabLayout.newTab().setText("Donations"));
+
 
                 try {
 
@@ -154,12 +208,36 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
                     if (jsonObject != null) {
                         if (jsonObject.getString("errFlag").equalsIgnoreCase("0")) {
 
-                            faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+//                            tabLayout.removeAllTabs();
+//                            tabLayout.refreshDrawableState();
+//                            faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
+
+//                            faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+//                            faq_viewPager.setAdapter(faq_adapter);
+//                            faq_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//                            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//                                @Override
+//                                public void onTabSelected(TabLayout.Tab tab) {
+//                                    faq_viewPager.setCurrentItem(tab.getPosition());
+//
+//                                }
+//
+//                                @Override
+//                                public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onTabReselected(TabLayout.Tab tab) {
+//
+//                                }
+//                            });
 
 
                             JSONArray jsonsendarr = jsonObject.optJSONArray("Negotiable");
                             if (jsonsendarr.length() > 0) {
-                                wishlistProductsBeanNegotiable = new ArrayList<MainProductsBean>();
+
                                 for (int i = 0; i < jsonsendarr.length(); i++) {
                                     if (jsonObject != null) {
 
@@ -167,8 +245,10 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
                                         JSONObject volumobject = jsonsendarr.getJSONObject(i);
 
                                         main_Products_Bean.setUsedFor(volumobject.getString("UsedFor"));
+                                        main_Products_Bean.setCondition(volumobject.getString("Condition"));
                                         main_Products_Bean.setPostedBy(volumobject.getString("PostedBy"));
                                         main_Products_Bean.setProductName(volumobject.getString("ProductName"));
+//                                        main_Products_Bean.setPostedByImage(volumobject.getString("PostedByImage"));
                                         main_Products_Bean.setDistance(volumobject.getString("Distance"));
                                         main_Products_Bean.setImage(volumobject.getString("Image"));
                                         main_Products_Bean.setPrice(volumobject.getString("Price"));
@@ -182,7 +262,7 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
 
                                         wishlistProductsBeanNegotiable.add(main_Products_Bean);
 
-
+                                        faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
                                         faq_viewPager.setAdapter(faq_adapter);
                                         faq_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                                         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -206,57 +286,25 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
                                     }
                                 }
 
-//                                if (mainProductsBean.size() > 0) {
-//                                    try {
-//                                        Log.e("products", mainProductsBean.size()+" ");
-//                                        adapter = new ProductMainAdapter(getActivity(), mainProductsBean);
-//                                        grid_item.setAdapter(adapter);
-////                                        grid_item.setVisibility(View.VISIBLE);
-//
-//                                    } catch (Exception e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-
-
-//                                adapter.SetOnItemClickListener(new ProductMainAdapter.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(View view, int position) {
-//
-//                                        try {
-//                                            Intent intent = new Intent(getActivity(), ProductDetailsActivity_Negotiable.class);
-//                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                            intent.putExtra("image", mainProductsBean.get(position).getImage());
-//                                            intent.putExtra("name", mainProductsBean.get(position).getProductName());
-//                                            intent.putExtra("price", mainProductsBean.get(position).getPrice());
-//                                            intent.putExtra("product_name", mainProductsBean.get(position).getProductName());
-//                                            intent.putExtra("product_id", mainProductsBean.get(position).getProductId());
-//                                            intent.putExtra("description", mainProductsBean.get(position).getDescription());
-//                                            intent.putExtra("distance", mainProductsBean.get(position).getDistance());
-//                                            intent.putExtra("qty_remaining", mainProductsBean.get(position).getQtyRemaining());
-//                                            intent.putExtra("type", mainProductsBean.get(position).getType());
-//                                            intent.putExtra("used_for", mainProductsBean.get(position).getUsedFor());
-//                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                                ImageView imageView = (ImageView) view.findViewById(R.id.img_product);
-//                                                ActivityOptionsCompat options = ActivityOptionsCompat.
-//                                                        makeSceneTransitionAnimation(getActivity(), imageView, "profile");
-//                                                startActivity(intent, options.toBundle());
-//                                            } else {
-//                                                startActivity(intent);
-//                                            }
-//                                        } catch (Exception e) {
-//
-//                                        }
-//
-//                                    }
-//                                });
-
+                            }
+                            else{
+                                try {
+                                    Wishlist_Compete_Fragment.adapter.notifyDataSetChanged();
+                                    Wishlist_Compete_Fragment.recyclerView_compete.setVisibility(View.GONE);
+                                    Wishlist_Compete_Fragment.txt_no_items.setVisibility(View.VISIBLE);
+                                }catch (Exception e){
+//                                    Wishlist_Compete_Fragment.adapter.notifyDataSetChanged();
+//                                    Wishlist_Compete_Fragment.recyclerView_compete.setVisibility(View.GONE);
+//                                    Wishlist_Compete_Fragment.txt_no_items.setVisibility(View.VISIBLE);
+                                    faq_viewPager.setVisibility(View.GONE);
+                                    txt_search_items.setVisibility(View.VISIBLE);
+                                }
 
                             }
 
                             JSONArray jsonsendarr1 = jsonObject.optJSONArray("NonNegotiable");
                             if (jsonsendarr1.length() > 0) {
-                                wishlistProductsBeanNonNegotiable = new ArrayList<MainProductsBean>();
+
                                 Log.e("non_neg_length", jsonsendarr1.length() + " ");
                                 for (int i = 0; i < jsonsendarr1.length(); i++) {
                                     if (jsonObject != null) {
@@ -264,8 +312,10 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
                                         JSONObject volumobject = jsonsendarr1.getJSONObject(i);
 
                                         main_Products_Bean.setUsedFor(volumobject.getString("UsedFor"));
+                                        main_Products_Bean.setCondition(volumobject.getString("Condition"));
                                         main_Products_Bean.setPostedBy(volumobject.getString("PostedBy"));
                                         main_Products_Bean.setProductName(volumobject.getString("ProductName"));
+//                                        main_Products_Bean.setPostedByImage(volumobject.getString("PostedByImage"));
                                         main_Products_Bean.setDistance(volumobject.getString("Distance"));
                                         main_Products_Bean.setImage(volumobject.getString("Image"));
                                         main_Products_Bean.setPrice(volumobject.getString("Price"));
@@ -279,127 +329,106 @@ public class WishlistActivity extends AppCompatActivity implements AsyncTaskList
 
                                         wishlistProductsBeanNonNegotiable.add(main_Products_Bean);
 //                                        mainProductsBean.add(main_Products_Bean);
+
+                                        faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                                        faq_viewPager.setAdapter(faq_adapter);
+                                        faq_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                                        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                            @Override
+                                            public void onTabSelected(TabLayout.Tab tab) {
+                                                faq_viewPager.setCurrentItem(tab.getPosition());
+
+                                            }
+
+                                            @Override
+                                            public void onTabUnselected(TabLayout.Tab tab) {
+
+                                            }
+
+                                            @Override
+                                            public void onTabReselected(TabLayout.Tab tab) {
+
+                                            }
+                                        });
                                     }
                                 }
 
-//                                if (mainProductsBean_non_negotiable.size() > 0) {
-//                                    try {
-//                                        Log.e("products_non", mainProductsBean_non_negotiable.size()+" ");
-//                                        adapter_non_negotiable = new ProductMainAdapterNonNegotiable(getActivity(), mainProductsBean_non_negotiable);
-//                                        grid_item_non_negotiable.setAdapter(adapter_non_negotiable);
-////                                        grid_item_non_negotiable.setVisibility(View.VISIBLE);
-//
-//                                    } catch (Exception e) {
-//                                    }
-//                                }
-//
-//                                adapter_non_negotiable.SetOnItemClickListener(new ProductMainAdapterNonNegotiable.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(View view, int position) {
-//
-//                                        try {
-//                                            Intent intent = new Intent(getActivity(), ProductDetailsActivity_Non_Negotiable.class);
-//                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                            intent.putExtra("image", mainProductsBean_non_negotiable.get(position).getImage());
-//                                            intent.putExtra("name", mainProductsBean_non_negotiable.get(position).getProductName());
-//                                            intent.putExtra("price", mainProductsBean_non_negotiable.get(position).getPrice());
-//                                            intent.putExtra("product_name", mainProductsBean_non_negotiable.get(position).getProductName());
-//                                            intent.putExtra("product_id", mainProductsBean_non_negotiable.get(position).getProductId());
-//                                            intent.putExtra("description", mainProductsBean_non_negotiable.get(position).getDescription());
-//                                            intent.putExtra("distance", mainProductsBean_non_negotiable.get(position).getDistance());
-//                                            intent.putExtra("qty_remaining", mainProductsBean_non_negotiable.get(position).getQtyRemaining());
-//                                            intent.putExtra("type", mainProductsBean_non_negotiable.get(position).getType());
-//                                            intent.putExtra("used_for", mainProductsBean_non_negotiable.get(position).getUsedFor());
-//                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                                ImageView imageView = (ImageView) view.findViewById(R.id.img_product);
-//                                                ActivityOptionsCompat options = ActivityOptionsCompat.
-//                                                        makeSceneTransitionAnimation(getActivity(), imageView, "profile");
-//                                                startActivity(intent, options.toBundle());
-//                                            } else {
-//                                                startActivity(intent);
-//                                            }
-//                                        } catch (Exception e) {
-//
-//                                        }
-//
-//                                    }
-//                                });
-
+                            }
+                            else {
+                                try {
+                                    Wishlist_Fixedprice_Fragment.adapter.notifyDataSetChanged();
+                                    Wishlist_Fixedprice_Fragment.recyclerView_fixed_price.setVisibility(View.GONE);
+                                    Wishlist_Fixedprice_Fragment.txt_no_items.setVisibility(View.VISIBLE);
+                                }catch (Exception e){
+//                                    Wishlist_Fixedprice_Fragment.adapter.notifyDataSetChanged();
+//                                    Wishlist_Fixedprice_Fragment.recyclerView_fixed_price.setVisibility(View.GONE);
+//                                    Wishlist_Fixedprice_Fragment.txt_no_items.setVisibility(View.VISIBLE);
+                                    faq_viewPager.setVisibility(View.GONE);
+                                    txt_search_items.setVisibility(View.VISIBLE);
+                                }
 
                             }
 
                             JSONArray jsonsendarr2 = jsonObject.optJSONArray("Donation");
                             if (jsonsendarr2.length() > 0) {
-                                wishlistProductsBeanDonations = new ArrayList<MainProductsBean>();
-                                Log.e("non_neg_length", jsonsendarr2.length() + " ");
+
+                                Log.e("donation", jsonsendarr2.length() + " ");
                                 for (int i = 0; i < jsonsendarr2.length(); i++) {
                                     if (jsonObject != null) {
-                                        MainProductsBean main_Products_Bean = new MainProductsBean();
+                                        DonatedByOthersBean ordered_Products_Bean=new DonatedByOthersBean();
                                         JSONObject volumobject = jsonsendarr2.getJSONObject(i);
 
-                                        main_Products_Bean.setUsedFor(volumobject.getString("UsedFor"));
-                                        main_Products_Bean.setPostedBy(volumobject.getString("PostedBy"));
-                                        main_Products_Bean.setProductName(volumobject.getString("ProductName"));
-                                        main_Products_Bean.setDistance(volumobject.getString("Distance"));
-                                        main_Products_Bean.setImage(volumobject.getString("Image"));
-                                        main_Products_Bean.setPrice(volumobject.getString("Price"));
-                                        main_Products_Bean.setQtyRemaining(volumobject.getString("QtyRemaining"));
-                                        main_Products_Bean.setFavorite(volumobject.getString("Favorite"));
-                                        main_Products_Bean.setDescription(volumobject.getString("Description"));
-                                        main_Products_Bean.setType(volumobject.getString("Type"));
-                                        main_Products_Bean.setProductId(volumobject.getString("ProductId"));
+                                        ordered_Products_Bean.setUsedFor(volumobject.getString("UsedFor"));
+                                        ordered_Products_Bean.setPostedBy(volumobject.getString("PostedBy"));
+//                                        ordered_Products_Bean.setPostedByUserName(volumobject.getString("PostedByUserName"));
+//                                        ordered_Products_Bean.setPostedByPhone(volumobject.getString("PostedByPhone"));
+                                        ordered_Products_Bean.setCondition(volumobject.getString("Condition"));
+                                        ordered_Products_Bean.setProductName(volumobject.getString("ProductName"));
+//                                        ordered_Products_Bean.setPostedByImage(volumobject.getString("PostedByImage"));
+                                        ordered_Products_Bean.setDistance(volumobject.getString("Distance"));
+                                        ordered_Products_Bean.setImage(volumobject.getString("Image"));
+                                        ordered_Products_Bean.setPrice(volumobject.getString("Price"));
+//                                        ordered_Products_Bean.setQtyRemaining(volumobject.getString("QtyRemaining"));
+//                                        ordered_Products_Bean.setFavorite(volumobject.getString("Favorite"));
+                                        ordered_Products_Bean.setDescription(volumobject.getString("Description"));
+                                        ordered_Products_Bean.setType(volumobject.getString("Type"));
+                                        ordered_Products_Bean.setProductId(volumobject.getString("ProductId"));
 
 //                                        str_type_2 = volumobject.getString("Type");
 
-                                        wishlistProductsBeanDonations.add(main_Products_Bean);
+                                        wishlistProductsBeanDonations.add(ordered_Products_Bean);
 //                                        mainProductsBean.add(main_Products_Bean);
+
+                                        faq_adapter = new FaqPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                                        faq_viewPager.setAdapter(faq_adapter);
+                                        faq_viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                                        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                            @Override
+                                            public void onTabSelected(TabLayout.Tab tab) {
+                                                faq_viewPager.setCurrentItem(tab.getPosition());
+
+                                            }
+
+                                            @Override
+                                            public void onTabUnselected(TabLayout.Tab tab) {
+
+                                            }
+
+                                            @Override
+                                            public void onTabReselected(TabLayout.Tab tab) {
+
+                                            }
+                                        });
                                     }
                                 }
 
-//                                if (mainProductsBean_non_negotiable.size() > 0) {
-//                                    try {
-//                                        Log.e("products_non", mainProductsBean_non_negotiable.size()+" ");
-//                                        adapter_non_negotiable = new ProductMainAdapterNonNegotiable(getActivity(), mainProductsBean_non_negotiable);
-//                                        grid_item_non_negotiable.setAdapter(adapter_non_negotiable);
-////                                        grid_item_non_negotiable.setVisibility(View.VISIBLE);
-//
-//                                    } catch (Exception e) {
-//                                    }
-//                                }
-//
-//                                adapter_non_negotiable.SetOnItemClickListener(new ProductMainAdapterNonNegotiable.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(View view, int position) {
-//
-//                                        try {
-//                                            Intent intent = new Intent(getActivity(), ProductDetailsActivity_Non_Negotiable.class);
-//                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                            intent.putExtra("image", mainProductsBean_non_negotiable.get(position).getImage());
-//                                            intent.putExtra("name", mainProductsBean_non_negotiable.get(position).getProductName());
-//                                            intent.putExtra("price", mainProductsBean_non_negotiable.get(position).getPrice());
-//                                            intent.putExtra("product_name", mainProductsBean_non_negotiable.get(position).getProductName());
-//                                            intent.putExtra("product_id", mainProductsBean_non_negotiable.get(position).getProductId());
-//                                            intent.putExtra("description", mainProductsBean_non_negotiable.get(position).getDescription());
-//                                            intent.putExtra("distance", mainProductsBean_non_negotiable.get(position).getDistance());
-//                                            intent.putExtra("qty_remaining", mainProductsBean_non_negotiable.get(position).getQtyRemaining());
-//                                            intent.putExtra("type", mainProductsBean_non_negotiable.get(position).getType());
-//                                            intent.putExtra("used_for", mainProductsBean_non_negotiable.get(position).getUsedFor());
-//                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                                ImageView imageView = (ImageView) view.findViewById(R.id.img_product);
-//                                                ActivityOptionsCompat options = ActivityOptionsCompat.
-//                                                        makeSceneTransitionAnimation(getActivity(), imageView, "profile");
-//                                                startActivity(intent, options.toBundle());
-//                                            } else {
-//                                                startActivity(intent);
-//                                            }
-//                                        } catch (Exception e) {
-//
-//                                        }
-//
-//                                    }
-//                                });
-
-
+                            }
+                            else {
+//                                Wishlist_Donations_Fragment.adapter.notifyDataSetChanged();
+//                                Wishlist_Donations_Fragment.recyclerView_donations.setVisibility(View.GONE);
+//                                Wishlist_Donations_Fragment.txt_no_items.setVisibility(View.VISIBLE);
+                                faq_viewPager.setVisibility(View.GONE);
+                                txt_search_items.setVisibility(View.VISIBLE);
                             }
 
                         }

@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.iused.R;
+import com.app.donate.R;
+
 
 /**
  * Created by Antto on 10-10-2016.

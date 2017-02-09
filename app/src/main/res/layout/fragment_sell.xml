@@ -24,14 +24,14 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.50"
-                    android:src="@drawable/icon_add_image"
+                    android:src="@drawable/ic_photo_camera"
                     android:id="@+id/img_add_galery" />
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.50"
-                    android:src="@drawable/icon_add_video"
+                    android:src="@drawable/ic_video_camera"
                     android:id="@+id/img_add_video" />
             </LinearLayout>
 

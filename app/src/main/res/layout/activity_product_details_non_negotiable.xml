@@ -145,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:orientation="vertical">
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_product_name"
                             android:layout_gravity="center"
                             android:gravity="center"
@@ -156,7 +156,7 @@
                             android:textColor="@color/colorPrimary"
                             android:textSize="22dp"/>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_used_for"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                             android:gravity="center"
                             android:text="20 mins"/>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextviewItalic
                             android:id="@+id/txt_condition"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                             android:text="New"/>
 
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_distance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                                     android:gravity="center"
                                     android:layout_marginLeft="4dp">
 
-                                    <TextView
+                                    <com.iused.utils.CustomFontTextview
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:text="A"
@@ -256,7 +256,7 @@
                                         android:layout_gravity="center"
                                         android:gravity="center">
 
-                                        <TextView
+                                        <com.iused.utils.CustomFontTextview
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:text="---"
@@ -273,7 +273,7 @@
                                             android:layout_gravity="center"
                                             android:gravity="center">
 
-                                            <TextView
+                                            <com.iused.utils.CustomFontTextview
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="match_parent"
                                                 android:text=" is offering for "
@@ -282,7 +282,7 @@
                                                 android:gravity="center"
                                                 android:id="@+id/textView2" />
 
-                                            <TextView
+                                            <com.iused.utils.CustomFontToolbarText
                                                 android:layout_marginTop="6dp"
                                                 android:layout_marginBottom="6dp"
                                                 android:layout_width="wrap_content"
@@ -296,7 +296,7 @@
                                                 android:id="@+id/txt_product_price" />
                                         </LinearLayout>
 
-                                        <TextView
+                                        <com.iused.utils.CustomFontTextview
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="(Fixed Price only)"
@@ -398,19 +398,19 @@
                         </LinearLayout>
 
 
-                        <Button
+                        <com.iused.utils.CustomFontButton
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:text="I'd like to buy"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:layout_margin="20dp"
-                            android:background="@drawable/settings_corner"
+                            android:background="@drawable/button_custom_app_color"
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:id="@+id/btn_want_to_buy" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -422,7 +422,7 @@
                             android:visibility="gone"
                             android:id="@+id/textView4" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -450,7 +450,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -461,7 +461,7 @@
                             android:gravity="center"
                             android:id="@+id/textView5" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="4dp"
                             android:layout_width="match_parent"

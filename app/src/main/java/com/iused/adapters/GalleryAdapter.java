@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.bean.CustomGallery;
 import com.iused.main.Sell_Products_Activity;
 import com.squareup.picasso.Picasso;

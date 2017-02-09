@@ -31,7 +31,7 @@
                 android:layout_gravity="center"
                 android:gravity="center">
 
-                <TextView
+                <com.iused.utils.CustomFontTextview
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
@@ -39,6 +39,7 @@
                     android:textSize="18dp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:id="@+id/txt_title" />
 
                 <ImageView
@@ -49,7 +50,7 @@
                     android:visibility="gone"
                     android:id="@+id/imageView2" />
 
-                <TextView
+                <com.iused.utils.CustomFontTextview
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$ 1100"
@@ -60,7 +61,7 @@
                     android:textColor="@color/black"
                     android:id="@+id/txt_price" />
 
-                <TextView
+                <com.iused.utils.CustomFontTextview
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"

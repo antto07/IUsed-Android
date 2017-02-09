@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.bean.DonorResponsesBean;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -83,19 +84,21 @@ public class DonorOptionsAdapter extends RecyclerView.Adapter<DonorOptionsAdapte
         try {
             Picasso.with(context)
                     .load(main_Products_Bean.get(position).getProductImage())
+                    .placeholder(R.drawable.no_image)
                     //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(200,200)
                     .fit().centerInside()
-                    .into(holder.img_product);
+                    .into(holder.img_product,new PicassoCallback(main_Products_Bean.get(position).getProductImage(),holder));
         }catch (Exception e){
             Picasso.with(context)
                     .load("http://52.41.70.254/pics/user.jpg")
+                    .placeholder(R.drawable.no_image)
                     //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(200,200)
                     .fit().centerInside()
-                    .into(holder.img_product);
+                    .into(holder.img_product,new PicassoCallback(main_Products_Bean.get(position).getProductImage(),holder));
         }
 
     }

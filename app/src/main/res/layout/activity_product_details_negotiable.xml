@@ -146,7 +146,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:orientation="vertical">
-                        <TextView
+
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_product_name"
                             android:layout_gravity="center"
                             android:gravity="center"
@@ -157,7 +158,7 @@
                             android:textColor="@color/colorPrimary"
                             android:textSize="22dp"/>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_used_for"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -166,7 +167,7 @@
                             android:gravity="center"
                             android:text="2 months Old"/>
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextviewItalic
                             android:id="@+id/txt_condition"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -177,7 +178,7 @@
                             android:text="New"/>
 
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:id="@+id/txt_distance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -218,7 +219,7 @@
                                 android:gravity="center"
                                 android:layout_marginLeft="4dp">
 
-                                <TextView
+                                <com.iused.utils.CustomFontTextview
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:text="A"
@@ -252,7 +253,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center">
 
-                                    <TextView
+                                    <com.iused.utils.CustomFontTextview
                                         android:layout_width="match_parent"
                                         android:layout_gravity="center"
                                         android:gravity="center"
@@ -262,7 +263,7 @@
                                         android:textColor="@color/colorPrimary"
                                         android:id="@+id/txt_name" />
 
-                                    <TextView
+                                    <com.iused.utils.CustomFontTextview
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:text="  is looking for a better offer than "
@@ -271,7 +272,7 @@
                                         android:gravity="center"
                                         android:id="@+id/textView2" />
 
-                                    <TextView
+                                    <com.iused.utils.CustomFontToolbarText
                                         android:layout_marginBottom="6dp"
                                         android:layout_marginTop="6dp"
                                         android:layout_width="match_parent"
@@ -312,7 +313,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -323,7 +324,7 @@
                             android:gravity="center"
                             android:id="@+id/textView4" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -351,7 +352,7 @@
                                 android:weightSum="2"
                                 >
 
-                                <TextView
+                                <com.iused.utils.CustomFontTextview
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:id="@+id/curr_code"
@@ -368,7 +369,7 @@
                                     android:visibility="invisible"
                                     android:background="@color/gray"></LinearLayout>
 
-                                <EditText
+                                <com.iused.utils.CustomFontEdittext
                                     android:id="@+id/edt_offer_price"
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
@@ -498,7 +499,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -509,7 +510,7 @@
                             android:gravity="center"
                             android:id="@+id/textView5" />
 
-                        <TextView
+                        <com.iused.utils.CustomFontTextview
                             android:layout_marginTop="6dp"
                             android:layout_marginBottom="4dp"
                             android:layout_width="match_parent"
@@ -524,14 +525,14 @@
 
                 </android.support.v7.widget.CardView>
 
-                <Button
+                <com.iused.utils.CustomFontButton
                     android:id="@+id/btn_buy_now_negotiable"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_margin="20dp"
                     android:text="I'd like to buy"
                     android:textStyle="bold"
-                    android:background="@drawable/settings_corner"
+                    android:background="@drawable/button_custom_app_color"
                     android:textColor="@color/white"/>
 
             </LinearLayout>

@@ -19,18 +19,20 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@android:drawable/sym_def_app_icon" />
 
-    <TextView
+    <com.iused.utils.CustomFontToolbarText
         android:id="@+id/txt_header_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Android Studio"
         android:layout_marginLeft="8dp"
+        android:textSize="14dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
+    <com.iused.utils.CustomFontTextview
         android:id="@+id/txt_header_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="10dp"
         android:text="android.studio@android.com" />

@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iused.R;
+import com.app.donate.R;
 import com.iused.fragments.SellFragment;
 import com.iused.introduction.LoginActivity;
 import com.iused.utils.AsyncTaskListener;

@@ -1,9 +1,11 @@
 package com.iused.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Antto on 07-10-2016.
  */
-public class MainProductsBean {
+public class MainProductsBean implements Serializable{
 
     public String UsedFor;
     public String PostedBy;

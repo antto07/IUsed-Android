@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iused.R;
+
+import com.app.donate.R;
 import com.iused.bean.MainProductsBean;
 import com.iused.bean.MainProductsBeanCategories;
 import com.squareup.picasso.Picasso;
@@ -80,6 +81,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
         try {
             Picasso.with(context)
                     .load(main_Products_Bean.get(position).getImage())
+                    .placeholder(R.drawable.no_image)
                     //.placeholder(R.drawable.user_placeholder) not considering has thumbnails are small size
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(600,200)
@@ -92,6 +94,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
                     //.error(R.drawable.user_placeholder_error)
 //                    .resize(600,200)
                     .fit().centerInside()
+                    .placeholder(R.drawable.no_image)
                     .into(holder.img_product,new PicassoCallback(main_Products_Bean.get(position).getImage(),holder));
         }
 
@@ -121,6 +124,8 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
             this.txt_price= (TextView) view.findViewById(R.id.txt_price);
             this.txt_used_for= (TextView) view.findViewById(R.id.txt_used_for);
             this.txt_condition= (TextView) view.findViewById(R.id.txt_condition);
+
+            this.txt_distance.bringToFront();
 
             view.setOnClickListener(this);
 

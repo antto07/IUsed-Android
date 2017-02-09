@@ -2,8 +2,10 @@ package com.iused.introduction;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -11,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +40,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.donate.R;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -48,10 +53,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.iused.R;
 import com.iused.adapters.LocationAdapter;
 import com.iused.bean.LocationBean;
-import com.iused.main.LocationActivity;
 import com.iused.main.MainActivity;
 import com.iused.utils.AsyncTaskListener;
 import com.iused.utils.Constants;
@@ -121,6 +124,8 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
     private HashMap<String, String> parameters_location = null;
     private HashMap<String, String> parameters_guest = null;
     public static String short_name = "";
+    int status;
+    Intent browserIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +145,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
         slideUp = AnimationUtils.loadAnimation(Splash.this, R.anim.bottom_up);
         slideDown = AnimationUtils.loadAnimation(Splash.this, R.anim.bottom_down);
 
+        status = GooglePlayServicesUtil.isGooglePlayServicesAvailable( getApplicationContext());
 
         pref = getSharedPreferences("user_details", MODE_PRIVATE);
         if (pref != null)
@@ -293,9 +299,43 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
         }
         else if (Build.VERSION.SDK_INT >= 23) {
             //Marshmallow
-            Splashtask();
+
+            if(status == ConnectionResult.SUCCESS) {
+                //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                Splashtask();
+            }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                        .setCancelable(false)
+                        .setPositiveButton("Update Play Service", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                startActivity(browserIntent);
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+
         } else {
-            Splashtask();
+            if(status == ConnectionResult.SUCCESS) {
+                //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                Splashtask();
+            }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                        .setCancelable(false)
+                        .setPositiveButton("Update Play Service", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                startActivity(browserIntent);
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
         }
 
 
@@ -395,7 +435,23 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                     new String[]{Manifest.permission.READ_PHONE_STATE},
                     MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
         } else {
-            Splashtask();
+            if(status == ConnectionResult.SUCCESS) {
+                //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                Splashtask();
+            }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                        .setCancelable(false)
+                        .setPositiveButton("Update Play Service", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                startActivity(browserIntent);
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
         }
 
     }
@@ -411,7 +467,23 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                     case Activity.RESULT_OK: {
                         // All required changes were successfully made
 
-                        Splashtask();
+                        if(status == ConnectionResult.SUCCESS) {
+                            //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                            Splashtask();
+                        }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                            AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Update Play Service", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                            startActivity(browserIntent);
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                        }
 //
 //                        new Handler().postDelayed(new Runnable() {
 //
@@ -547,7 +619,23 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                 break;
             case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Splashtask();
+                    if(status == ConnectionResult.SUCCESS) {
+                        //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                        Splashtask();
+                    }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                        AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                        startActivity(browserIntent);
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
 
                 } else {
                     finish();
@@ -556,7 +644,23 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                 break;
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Splashtask();
+                    if(status == ConnectionResult.SUCCESS) {
+                        //alarm to go and install Google Play Services
+//                Toast.makeText(getApplicationContext(),"you have google play service",Toast.LENGTH_SHORT).show();
+                        Splashtask();
+                    }else if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED){
+//                Toast.makeText(getApplicationContext(),"please udpate your google play service",Toast.LENGTH_SHORT).show();
+                        AlertDialog alertDialog=new AlertDialog.Builder(Splash.this).setMessage("Please Update Your Google Play Service to Continue")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                                        startActivity(browserIntent);
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
 
                 } else {
 
